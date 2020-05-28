@@ -1,0 +1,55 @@
+NextTemplateName: header
+<h2 class="text-center pb-3 m-0 text-white" style="text-shadow: 2px 2px 7px #000000;">@str.header <sup><small class="text-warning" style="text-shadow: 0px 0px 3px #000;">[*jsontext.val1*]</small></sup></h2>
+
+
+
+NextTemplateName: logo
+<h5 class="text-center text-success pb-3 m-0">@str.logo <sup><small class="text-warning">[*jsontext.val2*]</small></sup></h5>
+
+
+
+NextTemplateName: form
+<div class="form-group">
+    <input placeholder="@str.login" type="text" name="username" id="username" class="form-control" value="@str.login - example">
+</div>
+<div class="form-group">
+    <input placeholder="@str.password" type="text" name="password" id="password" class="form-control">
+</div>
+<div class="form-group text-left">
+    <label for="remember-me" class="text-muted m-0 p-0"><span><input id="remember-me" name="remember" type="checkbox" value=1></span> <span>@str.remember</span></label><br>
+</div>
+<div class="form-group text-center mt-2">
+    <input type="submit" class="btn btn-outline-success w-50" value="@str.submit">
+</div>
+
+
+NextTemplateName: page
+<div class="container p-0 m-0">
+    <div id="headerContainer">
+        {{header}}
+    </div>
+
+    <div id="login-row">
+        <div id="login-column">
+            <div id="login-box">
+                <form id="login-form" class="form m-0 p-4" action="#" method="get" onsubmit="return checkLogin();">
+                    <div id="logoContainer">
+                        {{logo}}
+                    </div>
+                    <div id="formContainer">
+                        {{form}}
+                    </div>
+                    <div class="form-group text-center mt-0 p-0">
+                        <select onchange="setLanguage($(this).val());" class="w-50 custom-select custom-select-sm" id="inlineLanguageSelect">
+                            <option value="en" selected="">English</option>
+                            <option value="es">Español</option>
+                            <option value="ru">Русский</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

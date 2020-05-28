@@ -1,8 +1,8 @@
 import sys
 import datetime
+from _common.api import auth
 
-from common.api import auth
-def htmlPage(check_auth: bool=True, fail_redirection: str="login_form.py"):
+def htmlPage(check_auth: bool=True, fail_redirection: str="../login/index.py"):
     if check_auth:
         if auth.access_levels==0:
             print("Location: "+fail_redirection.strip())
@@ -33,4 +33,3 @@ def jsonAPI(check_auth: bool=True):
         if auth.access_levels == 0:
             print('{"error":{"state":true,"code":401,"title":"Unauthorized","message":"Please open login form"}}')
             sys.exit()
-

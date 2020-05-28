@@ -4,7 +4,6 @@ import http.cookies
 import json
 import sys
 
-
 req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
 req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:20]
 req_method=(os.environ.get("REQUEST_METHOD") or "").strip()[:10]

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <title>Example page</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../../json2html.js"></script>
+
+
+    <!--------------------------------------------->
+    <!-- Other CSS and JS-Scripts tags put below -->
+    <!--------------------------------------------->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/custom.css">
+    <script type="text/javascript" src="js/functions.js"></script>
+
+    <script type="text/javascript">
+        //------------------------------------------------------------------------------------------------------------
+        //this is unnecessary code. It must be generated on server side. Read below... Only one language must be here.
+        //------------------------------------------------------------------------------------------------------------
+        var translates = {
+            en: {
+                login: "UserName",
+                password: "Password",
+                submit: "LogIn",
+                header: "Website Title",
+                logo: "Company Name",
+                remember: "Remember me"
+            },
+            fr: {
+                login: "Nom d'utilisateur",
+                password: "Mot de passe",
+                submit: "S'identifier",
+                header: "Titre du site Web",
+                logo: "Nom de la compagnie",
+                remember: "Souviens-toi de moi"
+            },
+            ru: {
+                login: "Имя",
+                password: "Пароль",
+                submit: "Вход",
+                header: "Заголовок Сайта",
+                logo: "Имя компании",
+                remember: "Запомнить меня"
+            },
+            es: {
+                login: "Nombre de usuario",
+                password: "Contraseña",
+                submit: "Iniciar sesión",
+                header: "Título del sitio web",
+                logo: "nombre de empresa",
+                remember: "Recuérdame"
+            },
+            de: {
+                login: "Benutzername",
+                password: "Passwort",
+                submit: "Anmelden",
+                header: "Website-Titel",
+                logo: "Firmenname",
+                remember: "Login speichern"
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <div id="content">
+        ===================================================================================
+        ====== This text will be replaced after loading all information from server. ======
+        ===================================================================================
+    </div>
+</body>
+<script type="text/javascript">
+    // ----------------------------------------------
+    // ------------- NECESSARY CODE -----------------
+    // ----------------------------------------------
+    var templates = {};
+
+    function init() {
+        //before loading any templates, you need to set translation array, if you want multilanguage support
+        //Inline data from server as parameter e.g. PHP, Python and others, that check Cookie "lang" before generating JSON
+        //Or AJAX request to server for json, and only after that you can load templates with "J2H.loadTemplatesArray"
+        J2H.setTranslationArray(translates.en); // optional
+        J2H.loadTemplatesArray(templates, ["html/templates.html"], loadingCallback);
+
+        $("#content").hide(); // optional
+    }
+
+    function loadingCallback() {
+        //if all templates loaded correctly.
+        //If this function was not called - some of the file is not exists
+        buildWebUI();
+    }
+
+    init(); //Run it immediately after loading page
+
+
+
+
+
+
+
+
+    //-----------------------------------------------------
+    //------------- login page special code ---------------
+    //-----------------------------------------------------
+    function buildWebUI() { //create all elements inside page (Structure of page)
+        J2H.getJSON("api/response.json", function(json) {
+            if (isGoodResponse(json)) {
+                $('#content').html(J2H.process(templates, "page", json));
+                //language code
+                //TODO need to check if language already correct.
+                var lang = getCookie('lang');
+                lang = setLanguage(lang);
+                $("#inlineLanguageSelect").val(lang);
+            }
+        })
+    }
+
+    //Only in language setting and login page this code is needed. In other places it's not necessary
+    function setLanguage(selectedLang) {
+        if ((selectedLang != "en") && (selectedLang != "es") && (selectedLang != "ru") && (selectedLang != "fr") && (selectedLang != "de")) {
+            selectedLang = "en";
+        }
+        setCookie('lang', selectedLang, 365, "/example/");
+        J2H.setTranslationArray(translates[selectedLang])
+        J2H.loadTemplatesArray(templates, ["html/templates.html"], function() {
+            J2H.getJSON("api/response.json", function(json) { //change only some parts of page
+                if (isGoodResponse(json)) {
+                    $('#headerContainer').html(J2H.process(templates, "header", json));
+                    $('#logoContainer').html(J2H.process(templates, "logo", json));
+                    $('#formContainer').html(J2H.process(templates, "form", json));
+                    $('#content').fadeIn(50);
+                }
+            })
+
+        })
+        return selectedLang;
+    }
+
+    // in HTML-Form
+    // onsubmit="return checkLogin();"
+    function checkLogin() {
+        var formData = $("#login-form").serializeHtmlForm(); // from JST library - force add unchecked checkboxes with postfix "__false" to it values.
+        alert("Posted object:\n" + J2H.printObject(formData, 2)); // from JST library - printObject(object, [deep level]);
+        J2H.postJSON("api/check_login.json", formData, function(json) {
+            if (json.error !== undefined && json.error.state !== undefined && json.error.state) {
+                //display error message from json.error.title and json.error.message
+                alert(json.error.title + "\n" + json.error.message);
+                window.location.href = "../content/";
+            } else {
+                window.location.href = "../content/";
+            }
+        })
+        return false;
+    }
+</script>
+
+</html>

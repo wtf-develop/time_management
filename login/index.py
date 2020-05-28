@@ -3,10 +3,13 @@
 import os,sys,inspect,cgitb
 cgitb.enable()
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-sys.path.insert(0,currentdir)
+sys.path.insert(0,os.path.dirname(currentdir)) #one level up "os.path.dirname()"
 
 from _common.api import auth
 from _common.api import headers
 
-headers.htmlPage(True,"login/index.py")
-print("Under construction")
+
+
+headers.htmlPage(False)
+
+print("Login Under construction")
