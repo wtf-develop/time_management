@@ -4,7 +4,7 @@ import cgi, os, http.cookies, json, sys, hashlib, time
 def buildCredentials(uid: int, login: str, passwd: str, remember_me: bool, some_state: int = 0):
     timestamp = 0
     remember = "0"
-    if remember:
+    if remember_me:
         timestamp = int(time.time()) + 90 * 24 * 60 * 60
         remember = "1"
     else:
@@ -17,7 +17,7 @@ def buildCredentials(uid: int, login: str, passwd: str, remember_me: bool, some_
 def checkCredentials(arr: list):
     if len(arr) == 5:
         timestamp = 0
-        remember = 0
+        remember = "0"
         uid = 0
         some_state = 0
         hash = ''
@@ -37,9 +37,9 @@ def checkCredentials(arr: list):
             timestamp = 0
 
         try:
-            remember = int(arr[1])
+            remember = str(int(arr[1]))
         except Exception as ex:
-            remember = 0
+            remember = "0"
 
         try:
             some_state = int(arr[3])
