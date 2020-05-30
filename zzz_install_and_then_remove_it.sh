@@ -1,0 +1,1 @@
+chmod -R a+x,u+x,g+x ./*.py
