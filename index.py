@@ -9,18 +9,22 @@ sys.path.insert(0, currentdir)
 from _common.api import auth
 from _common.api import headers
 
-#headers.htmlPage(True, "login/index.py")
-headers.htmlPage(False)
+headers.htmlPage(True, "login/index.py")
+#headers.htmlPage(False)
 print("""
 <!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Reminder web application">
     <meta name="author" content="Arefev Leonid">
     <title>WEB-Reminder</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="_common/css/bootstrap.min.css" rel="stylesheet">
     <link href="_common/css/custom.css" rel="stylesheet">
 </head>
@@ -34,6 +38,7 @@ print("""
     <script type="text/javascript" src="_common/js/json2html.js"></script>
     <script type="text/javascript" src="_common/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_common/js/feather.min.js"></script>
+    <script type="text/javascript" src="_common/js/project_functions.js"></script>
     <script type="text/javascript" src="main/js/functions.js"></script>
 
     <script type="text/javascript">

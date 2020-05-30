@@ -21,10 +21,29 @@ function getCookie(cname) {
     return "";
 }
 
-function isGoodResponse(json) {
-    if (json.error !== undefined && json.error.state !== undefined && json.error.state) {
-        alert(json.error.title + "\n" + json.error.message); // replace to your own implementation
-        return false;
-    }
-    return true;
+
+
+function setLanguage(selectedLang) {
+        if ((selectedLang != "en") && (selectedLang != "es") && (selectedLang != "ru") && (selectedLang != "fr") && (selectedLang != "de")) {
+            selectedLang = "en";
+        }
+        setCookie('lang', selectedLang, 365, "/example/");
+        J2H.setTranslationArray(translates[selectedLang])
+        J2H.loadTemplatesArray(templates, ["html/templates.html"], function() {
+            J2H.getJSON("api/response.json", function(json) { //change only some parts of page
+                if (isGoodResponse(json)) {
+                    $('#headerContainer').html(J2H.process(templates, "header", json));
+                    $('#logoContainer').html(J2H.process(templates, "logo", json));
+                    $('#formContainer').html(J2H.process(templates, "form", json));
+                    $('#content').fadeIn(50);
+                }
+            })
+
+        })
+        return selectedLang;
+}
+
+
+function checkLogin() {
+     return false;
 }
