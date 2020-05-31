@@ -1,12 +1,12 @@
-function setCookie(cname, cvalue, exdays, path) {
+function storeLang(cvalue) {
     var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=" + path;
+    document.cookie = "lang=" + cvalue + ";" + expires;
 }
 
-function getCookie(cname) {
-    var name = cname + "=";
+function getLang() {
+    var name = "lang=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
     for (var i = 0; i < ca.length; i++) {
@@ -18,28 +18,22 @@ function getCookie(cname) {
             return c.substring(name.length, c.length);
         }
     }
-    return "";
+    var browserLang = navigator.language || navigator.userLanguage;
+    if(browserLang===undefined || browserLang==null){
+        return ""
+    }
+    return browserLang;
 }
 
 
 
 function setLanguage(selectedLang) {
-        if ((selectedLang != "en") && (selectedLang != "es") && (selectedLang != "ru") && (selectedLang != "fr") && (selectedLang != "de")) {
+        if ((selectedLang != "en") && (selectedLang != "ru") && (selectedLang != "de")) {
             selectedLang = "en";
         }
-        setCookie('lang', selectedLang, 365, "/example/");
-        J2H.setTranslationArray(translates[selectedLang])
-        J2H.loadTemplatesArray(templates, ["html/templates.html"], function() {
-            J2H.getJSON("api/response.json", function(json) { //change only some parts of page
-                if (isGoodResponse(json)) {
-                    $('#headerContainer').html(J2H.process(templates, "header", json));
-                    $('#logoContainer').html(J2H.process(templates, "logo", json));
-                    $('#formContainer').html(J2H.process(templates, "form", json));
-                    $('#content').fadeIn(50);
-                }
-            })
-
-        })
+        storeLang(selectedLang);
+        //J2H.setTranslationArray(translates.en); // optional
+        J2H.loadTemplatesArray(templates, ["html/templates.html"], loadingCallback);
         return selectedLang;
 }
 

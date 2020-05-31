@@ -6,7 +6,7 @@ body {
   padding: 0;
   height: 100vh;
   font-size: 14px;
-  background-color: #131c24;
+  background-color: #0e151b;
 }
 #content{
     height: 100vh;
@@ -21,6 +21,12 @@ body {
   height: 100vh;
   min-height: 100%;
   padding: 20px;
+    background: url(../img/back.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover; /* For WebKit*/
+    -moz-background-size: cover;    /* Mozilla*/
+    -o-background-size: cover;      /* Opera*/
+    background-size: cover;         /* Generic*/
+
 }
 
 #login-row {
@@ -31,20 +37,20 @@ body {
   max-width: 350px;
   position: relative;
   padding: 0px;
-  margin-bottom:20px;
-  -webkit-box-shadow: 0 0px 30px 0 rgba(0,0,0,0.6);
-  box-shadow: 0 0px 30px 0 rgba(0,0,0,0.6);
+  margin-bottom:50px;
+  -webkit-box-shadow: 0 0px 35px 0 rgba(0,0,0,0.4);
+  box-shadow: 0 0px 35px 0 rgba(0,0,0,0.4);
   text-align: center;
 }
 
 .google-link{
     color: #eee;
     text-decoration: none;
-    opacity: 0.2;
+    opacity: 0.3;
 }
 
 .google-link:hover{
     color: #eee;
     text-decoration: none;
-    opacity: 0.6;
+    opacity: 0.8;
 }

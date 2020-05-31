@@ -45,8 +45,7 @@ print("""
     var templates = {};
 
     function init() {
-        //J2H.setTranslationArray(translates.en); // optional
-        J2H.loadTemplatesArray(templates, ["html/templates.html"], loadingCallback);
+        setLanguage(getLang())
         $("#content").hide(); // optional
     }
 
