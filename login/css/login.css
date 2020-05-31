@@ -37,7 +37,7 @@ body {
   max-width: 350px;
   position: relative;
   padding: 0px;
-  margin-bottom:50px;
+  margin-bottom:10px;
   -webkit-box-shadow: 0 0px 35px 0 rgba(0,0,0,0.4);
   box-shadow: 0 0px 35px 0 rgba(0,0,0,0.4);
   text-align: center;
@@ -46,11 +46,23 @@ body {
 .google-link{
     color: #eee;
     text-decoration: none;
-    opacity: 0.3;
+    opacity: 0.4;
 }
 
 .google-link:hover{
     color: #eee;
     text-decoration: none;
-    opacity: 0.8;
+    opacity: 0.9;
+}
+
+.github-link{
+    color: #eee;
+    text-decoration: none;
+    opacity: 0.05;
+}
+
+.github-link:hover{
+    color: #eee;
+    text-decoration: none;
+    opacity: 0.7;
 }
