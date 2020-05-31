@@ -27,16 +27,6 @@ function getLang() {
 
 
 
-function setLanguage(selectedLang) {
-        if ((selectedLang != "en") && (selectedLang != "ru") && (selectedLang != "de")) {
-            selectedLang = "en";
-        }
-        storeLang(selectedLang);
-        //J2H.setTranslationArray(translates.en); // optional
-        J2H.loadTemplatesArray(templates, ["html/templates.html"], loadingCallback);
-        return selectedLang;
-}
-
 
 function checkLogin() {
      return false;

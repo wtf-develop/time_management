@@ -6,6 +6,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 sys.path.insert(0,os.path.dirname(currentdir)) #one level up "os.path.dirname()"
 
 from _common.api import auth
+from _common.api import translation
 from _common.api import headers
 
 
@@ -49,15 +50,29 @@ print("""
         $("#content").hide(); // optional
     }
 
-    function loadingCallback() {
-        buildWebUI();
-    }
-
     init(); //Run it immediately after loading page
 
+
+    function setLanguage(selectedLang) {
+        if ((selectedLang != "en") && (selectedLang != "ru") && (selectedLang != "de")) {
+            selectedLang = "en";
+        }
+        storeLang(selectedLang);
+        J2H.getJSON('api/get_login_translation.py',function(json){
+            if(isGoodResponse(json)){
+                J2H.setTranslationArray(json.data);
+                extLang=json.code;
+                storeLang(extLang);
+                J2H.loadTemplatesArray(templates, ["html/templates.html"], buildWebUI);
+            }        
+        });
+        return selectedLang;
+    }
+
+    var extLang='en';
     function buildWebUI() { //create all elements inside page (Structure of page)
-        $("#content").html(J2H.process(templates,"page",{}));
-        $("#content").fadeIn(200);
+        $("#content").html(J2H.process(templates,"page",{code:extLang}));
+        $("#content").fadeIn(150);
     }
 
 </script>

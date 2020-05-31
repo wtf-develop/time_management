@@ -9,7 +9,7 @@ NextTemplateName: form
     <label for="remember-me" class="text-muted m-0 p-0"><span><input id="remember-me" name="remember" type="checkbox" value=1></span> <span>@str.remember</span></label><br>
 </div>
 <div class="form-group text-center mt-2 mb-0">
-    <input type="submit" class="btn btn-outline-primary w-50 mb-0" value="@str.submit">
+    <input type="submit" class="btn btn-outline-primary w-50 mb-0" value="@str.submit_login">
 </div>
 
 
@@ -18,7 +18,6 @@ NextTemplateName: page
     <div id="login-row">
         <div id="login-column">
             <div id="login-box">
-
                 <form id="login-form" class="form m-0 pl-4 pr-4 pb-4 pt-4" action="#" method="get" onsubmit="return checkLogin();">
                     <h3 class="text-center pb-3 m-0"><a class="text-secondary google-link" href="https://play.google.com/store/apps/details?id=ru.mcsar.schedule" target="_blank"><img src="../_common/img/app.png" width="40" height="40" border="0" /> @str.application</a></h3>
                     <div id="formContainer">
@@ -26,9 +25,9 @@ NextTemplateName: page
                     </div>
                     <div class="form-group text-center mt-3 p-0 mb-0">
                         <select onchange="setLanguage($(this).val());" class="w-50 mb-0 custom-select custom-select-sm" id="inlineLanguageSelect">
-                            <option value="en" selected="">English</option>
-                            <option value="ru">Русский</option>
-                            <option value="de">Deutsch</option>
+                            <option value="en" [*code,if=`en`then`selected`else``*]>English</option>
+                            <option value="ru" [*code,if=`ru`then`selected`else``*]>Русский</option>
+                            <option value="de" [*code,if=`de`then`selected`else``*]>Deutsch</option>
                         </select>
                     </div>
                 </form>
