@@ -34,3 +34,8 @@ def jsonAPI(check_auth: bool = True):
         if auth.access_levels == 0:
             print('{"error":{"state":true,"code":401,"title":"Unauthorized","message":"Please open login page"}}')
             sys.exit()
+
+
+def errorResponse(title: str, message: str='', code: int=0):
+    print('{"error":{"state":true,"title": "'+title+'","message":"'+message+'","code":'+str(code)+'}}')
+    sys.exit()

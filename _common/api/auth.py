@@ -1,23 +1,22 @@
-import cgi, os, http.cookies, json, sys, hashlib, time
+import os, http.cookies, hashlib, time
+from _common.api._database import mydb,mydb_connection
 
 
-def buildCredentials(uid: int, login: str, passwd: str, remember_me: bool, some_state: int = 0):
+def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
     timestamp = 0
-    remember = "0"
-    if remember_me:
+    if remember == 1:
         timestamp = int(time.time()) + 90 * 24 * 60 * 60
-        remember = "1"
     else:
         timestamp = int(time.time()) + 30 * 60
-    hash = hashlib.md5((str(timestamp) + str(some_state) + login + remember + str(uid) + passwd + 'WASSUP!').encode(
+    hash = hashlib.md5((str(timestamp) + str(some_state) + login + str(remember) + str(uid) + passwd + 'WASSUP!').encode(
         'utf-8')).hexdigest()
-    return str(timestamp) + '_' + remember + '_' + str(uid) + '_' + str(some_state) + '_' + hash
+    return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hash
 
 
 def checkCredentials(arr: list):
     if len(arr) == 5:
         timestamp = 0
-        remember = "0"
+        remember = 0
         uid = 0
         some_state = 0
         hash = ''
@@ -37,9 +36,9 @@ def checkCredentials(arr: list):
             timestamp = 0
 
         try:
-            remember = str(int(arr[1]))
+            remember = int(arr[1])
         except Exception as ex:
-            remember = "0"
+            remember = 0
 
         try:
             some_state = int(arr[3])
@@ -48,9 +47,26 @@ def checkCredentials(arr: list):
 
         hash = arr[4]
         # TODO SQL request to database for login and password with selected uid
+        if uid != 0:
+            mydb.execute('select * from users where id='+str(uid)+' and status=0')
+            row = mydb.fetchone()
+            if row is None:
+                uid = 0
+                user_id = 0
+                user_role = "GUEST"
+                user_login = ''
+                user_password = ''
+                user_remember = 0
+                user_some_state = 0
+                return False
+            else:
+                user_id = uid
+                user_role = row['role']
+                login = row['login']
+                passwd = row['password']
 
         hash2 = hashlib.md5(
-            (str(timestamp) + str(some_state) + login + remember + str(uid) + passwd + 'WASSUP!').encode(
+            (str(timestamp) + str(some_state) + login + str(remember) + str(uid) + passwd + 'WASSUP!').encode(
                 'utf-8')).hexdigest()
         if hash == hash2:
             user_id = uid
@@ -59,8 +75,13 @@ def checkCredentials(arr: list):
             user_remember = remember
             user_some_state = some_state
             return True
-    else:
-        return False
+    uid = 0
+    user_id = 0
+    user_role = "GUEST"
+    user_login = ''
+    user_password = ''
+    user_remember = 0
+    user_some_state = 0
     return False
 
 
@@ -92,7 +113,7 @@ if not (user_lang is None):
 else:
     user_lang = 'en'
 
-user_role = "guest"
+user_role = "GUEST"
 access_levels = 0
 user_id = 0
 user_login = ''
@@ -101,52 +122,16 @@ user_remember = 0
 user_some_state = 0
 if credentials is None:
     access_levels = 0
-    credentials = buildCredentials(0, '', '', False, 0)
+    credentials = buildCredentials(0, '', '', 0, 0)
 else:
     credentials = str(credentials).strip()[:150]
     if checkCredentials(credentials.split('_', 7)):
-        credentials = buildCredentials(user_id, user_login, user_password, user_remember == 1, user_some_state)
+        credentials = buildCredentials(user_id, user_login, user_password, user_remember, user_some_state)
         user_password = ''  # reset MD5 hashed password from global variable
+        access_levels = 1
     else:
         access_levels = 0
-        credentials = buildCredentials(0, '', '', False, 0)
+        credentials = buildCredentials(0, '', '', 0, 0)
 
-user_password = ''  # reset MD5 hashed password from global variable
-req_rawpost = ""
-req_jsonpost = None
-contentid = 0
-typeid = 0
-detailid = 0
-req_params = None
+user_password = ''  # clear MD5 hashed password from global variable
 
-# TODO check access levels before any other actions - DONE!
-if access_levels != 0:
-    if req_method == "POST":
-        req_rawpost = sys.stdin.read()
-    try:
-        req_jsonpost = json.loads(req_rawpost)
-    except Exception as ex:
-        req_jsonpost = None
-
-req_params = cgi.FieldStorage()
-contentid = 0
-typeid = 0
-detailid = 0
-
-if "contentid" in req_params and not (req_params["contentid"] is None):
-    try:
-        contentid = int(req_params["contentid"])
-    except Exception as ex:
-        contentid = 0
-
-if "typeid" in req_params and not (req_params["typeid"] is None):
-    try:
-        typeid = int(req_params["typeid"])
-    except Exception as ex:
-        typeid = 0
-
-if "detailid" in req_params and not (req_params["detailid"] is None):
-    try:
-        detailid = int(req_params["detailid"])
-    except Exception as ex:
-        detailid = 0

@@ -6,7 +6,10 @@ lang = {
         'login': 'User',
         'password': 'Password',
         'remember': 'Remember me',
-        'submit_login': 'LogIn'
+        'submit_login': 'LogIn',
+        'error': 'Error',
+        'bad_request': 'Bad request',
+        'not_found': 'Not found'
 
     },
     'ru': {
@@ -14,7 +17,10 @@ lang = {
         'login': 'Имя пользователя',
         'password': 'Пароль',
         'remember': 'Запомнить',
-        'submit_login': 'Вход'
+        'submit_login': 'Вход',
+        'error': 'Ошибка',
+        'bad_request': 'Неверный запрос',
+        'not_found': 'Не найдено'
 
     },
     'de': {
@@ -22,7 +28,10 @@ lang = {
         'login': 'Benutzer',
         'password': 'Passwort',
         'remember': 'Erinnere mich',
-        'submit_login': 'Anmelden'
+        'submit_login': 'Anmelden',
+        'error': 'Fehler',
+        'bad_request': 'Ungültige Anforderung',
+        'not_found': 'Nicht gefunden'
 
     }
 

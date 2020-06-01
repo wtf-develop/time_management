@@ -1,6 +1,6 @@
 NextTemplateName: form
 <div class="form-group">
-    <input placeholder="@str.login" type="text" name="username" id="username" class="form-control text-body" value="">
+    <input placeholder="@str.login" type="text" name="login" id="username" class="form-control text-body" value="">
 </div>
 <div class="form-group">
     <input placeholder="@str.password" type="password" name="password" id="password" class="form-control text-body">
@@ -18,7 +18,7 @@ NextTemplateName: page
     <div id="login-row">
         <div id="login-column">
             <div id="login-box">
-                <form id="login-form" class="form m-0 pl-4 pr-4 pb-4 pt-4" action="#" method="get" onsubmit="return checkLogin();">
+                <form id="login-form" class="form m-0 pl-4 pr-4 pb-4 pt-4" action="#" method="post" onsubmit="return checkLogin($(this).serializeHtmlForm());">
                     <h3 class="text-center pb-3 m-0"><a class="text-secondary google-link" href="https://play.google.com/store/apps/details?id=ru.mcsar.schedule" target="_blank"><img src="../_common/img/app.png" width="40" height="40" border="0" /> @str.application</a></h3>
                     <div id="formContainer">
                         {{form}}

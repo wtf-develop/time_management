@@ -6,9 +6,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 sys.path.insert(0,os.path.dirname(currentdir)) #one level up "os.path.dirname()"
 
 from _common.api import auth
-from _common.api import translation
 from _common.api import headers
-
 
 
 headers.htmlPage(False)
