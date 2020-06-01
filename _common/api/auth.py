@@ -1,19 +1,25 @@
 import os, http.cookies, hashlib, time
-from _common.api._database import mydb,mydb_connection
+from _common.api._database import mydb, mydb_connection
 
 
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
+    global req_agent, req_scheme, req_language
+    if uid == 0:
+        return ''
     timestamp = 0
     if remember == 1:
         timestamp = int(time.time()) + 90 * 24 * 60 * 60
     else:
         timestamp = int(time.time()) + 30 * 60
-    hash = hashlib.md5((str(timestamp) + str(some_state) + login + str(remember) + str(uid) + passwd + 'WASSUP!').encode(
-        'utf-8')).hexdigest()
-    return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hash
+    hashstr = hashlib.md5(
+        (str(timestamp) + str(some_state) + login + str(remember) + str(
+            uid) + passwd + 'WASSUP!' + req_agent + req_scheme + req_language).encode(
+            'utf-8')).hexdigest()
+    return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hashstr
 
 
 def checkCredentials(arr: list):
+    global user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
     if len(arr) == 5:
         timestamp = 0
         remember = 0
@@ -48,7 +54,7 @@ def checkCredentials(arr: list):
         hash = arr[4]
         # TODO SQL request to database for login and password with selected uid
         if uid != 0:
-            mydb.execute('select * from users where id='+str(uid)+' and status=0')
+            mydb.execute('select * from users where id=' + str(uid) + ' and status=0')
             row = mydb.fetchone()
             if row is None:
                 uid = 0
@@ -66,7 +72,8 @@ def checkCredentials(arr: list):
                 passwd = row['password']
 
         hash2 = hashlib.md5(
-            (str(timestamp) + str(some_state) + login + str(remember) + str(uid) + passwd + 'WASSUP!').encode(
+            (str(timestamp) + str(some_state) + login + str(remember) + str(
+                uid) + passwd + 'WASSUP!' + req_agent + req_scheme + req_language).encode(
                 'utf-8')).hexdigest()
         if hash == hash2:
             user_id = uid
@@ -134,4 +141,3 @@ else:
         credentials = buildCredentials(0, '', '', 0, 0)
 
 user_password = ''  # clear MD5 hashed password from global variable
-

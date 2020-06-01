@@ -8,6 +8,7 @@ sys.path.insert(0, currentdir)
 
 from _common.api import auth
 from _common.api import headers
+from _common.api import translation
 
 headers.htmlPage(True, "login/index.py")
 
@@ -43,13 +44,11 @@ print("""<!DOCTYPE html>
         var templates = {};
 
         function init() {
-            //J2H.setTranslationArray(translates.en); // optional
+            J2H.setTranslationArray("""+translation.get_array(auth.user_lang)+"""); // optional
             J2H.loadTemplatesArray(templates, ["main/html/navigation.html"], loadingCallback);
         }
 
         function loadingCallback() {
-            $("#content").html(J2H.process(templates, "page_structure", {}));
-            feather.replace()
             buildWebUI();
         }
         init(); //Run it immediately after loading page

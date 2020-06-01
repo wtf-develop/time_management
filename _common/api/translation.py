@@ -9,7 +9,9 @@ lang = {
         'submit_login': 'LogIn',
         'error': 'Error',
         'bad_request': 'Bad request',
-        'not_found': 'Not found'
+        'not_found': 'Not found',
+        'logout': 'LogOut',
+        'search': 'Search'
 
     },
     'ru': {
@@ -20,7 +22,9 @@ lang = {
         'submit_login': 'Вход',
         'error': 'Ошибка',
         'bad_request': 'Неверный запрос',
-        'not_found': 'Не найдено'
+        'not_found': 'Не найдено',
+        'logout': 'Выход',
+        'search': 'Поиск'
 
     },
     'de': {
@@ -31,7 +35,9 @@ lang = {
         'submit_login': 'Anmelden',
         'error': 'Fehler',
         'bad_request': 'Ungültige Anforderung',
-        'not_found': 'Nicht gefunden'
+        'not_found': 'Nicht gefunden',
+        'logout': 'Ausloggen',
+        'search': 'Suche'
 
     }
 
