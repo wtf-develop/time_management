@@ -48,6 +48,9 @@ if row is None:
     time.sleep(2)
     headers.errorResponse('@str.error', '@str.not_found', 404)
 
+mydb.execute('update users set lastlogin='+str(int(time.time()*1000))+' where id='+str(row['id']))
+
+
 auth.credentials = auth.buildCredentials(int(row['id']), row['login'], row['password'], jsonpost['remember'], 0)
 headers.jsonAPI(False)
 print('{"accepted": true}')
