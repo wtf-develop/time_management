@@ -13,10 +13,8 @@ from _common.api import headers
 
 headers.htmlPage(False)
 
-print("""
-<!DOCTYPE html>
-<html lang="en">
-
+print("""<!DOCTYPE html>
+<html lang='"""+auth.user_lang+"""'>
 <head>
     <title>Time and Place reminder application - WEB Login page</title>
     <meta name="description" content="The application will notify the user about various events. By place - location based reminder. Reminder by time. List for the day (simple todo). List without date (colored notes). Countdown (short intervals). Widgets: Today, Colored Notes, Microphone, Calendar. Sync timers and tasks (notes) with Google Calendar and Google Tasks">
@@ -54,15 +52,14 @@ print("""
 
 
     function setLanguage(selectedLang) {
-        if ((selectedLang != "en") && (selectedLang != "ru") && (selectedLang != "de")) {
-            selectedLang = "en";
-        }
         storeLang(selectedLang);
         J2H.getJSON('api/get_login_translation.py',function(json){
             if(isGoodResponse(json)){
                 J2H.setTranslationArray(json.data);
                 extLang=json.code;
                 storeLang(extLang);
+                J2H.loadTemplatesArray(templates, ["html/templates.html"], buildWebUI);
+            }else{
                 J2H.loadTemplatesArray(templates, ["html/templates.html"], buildWebUI);
             }        
         });
@@ -77,5 +74,4 @@ print("""
 
 </script>
 </body>
-</html>
-""")
+</html>""")

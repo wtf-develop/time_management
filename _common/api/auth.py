@@ -65,7 +65,7 @@ def checkCredentials(arr: list):
 
 
 def credentialsHeader():
-    return "Set-Cookie: credentials=" + credentials + "; HttpOnly; SameSite=Strict"
+    return "Set-Cookie: credentials=" + credentials + "; path=/; HttpOnly; SameSite=Strict"
 
 
 # -------- run part -------
@@ -73,7 +73,6 @@ def credentialsHeader():
 # -------- run part -------
 
 req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
-#req_cookie.load("lang=ru; vienna=finger")
 req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:20]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]
 req_agent = (os.environ.get("HTTP_USER_AGENT") or "").strip()[:50]

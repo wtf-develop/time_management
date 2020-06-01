@@ -10,11 +10,9 @@ from _common.api import auth
 from _common.api import headers
 
 headers.htmlPage(True, "login/index.py")
-#headers.htmlPage(False)
-print("""
-<!doctype html>
-<html lang="en">
 
+print("""<!DOCTYPE html>
+<html lang='"""+auth.user_lang+"""'>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -58,5 +56,4 @@ print("""
     </script>
 </body>
 
-</html>
-      """)
+</html>""")
