@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))  # one level up
 from _common.api._database import mydb, mydb_connection
 from _common.api import auth
 from _common.api import headers
+from _common.api import utils
 
 rawpost = ''
 jsonpost = None
@@ -39,6 +40,7 @@ try:
 except Exception as ex:
     jsonpost['remember'] = 0
 
+jsonpost['login'] = utils.clearUserLogin(jsonpost['login'])
 jsonpost['password'] = hashlib.md5((jsonpost['password']).encode('utf-8')).hexdigest()
 mydb.execute(
     'select * from users where login="' + jsonpost['login'] + '" and password="' + jsonpost['password'] + '" and state>0')

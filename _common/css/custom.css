@@ -1,5 +1,5 @@
 body {
-  font-size: .875rem;
+  font-size: .9rem;
   height: 100%;
   margin:0;
   padding:0;
@@ -11,6 +11,11 @@ body {
   vertical-align: text-bottom;
 }
 
+#sidebarMenu .feather {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+}
 /*
  * Sidebar
  */
@@ -21,7 +26,7 @@ body {
   bottom: 0;
   left: 0;
   z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
+  padding: 55px 0 0; /* Height of navbar */
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
 
@@ -48,22 +53,35 @@ body {
 }
 
 .sidebar .nav-link {
-  font-weight: 500;
-  color: #333;
+  font-weight: 400;
+  color: #ccc;
+  padding: .8rem 1rem;
 }
 
 .sidebar .nav-link .feather {
-  margin-right: 4px;
-  color: #999;
+  margin-right: 6px;
+  color: #aaa;
 }
+
 
 .sidebar .nav-link.active {
-  color: #007bff;
+  border-bottom:2px solid #373d43;
+  border-top:1px solid #373d43;
+  background-color:#30363c;
 }
 
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
-  color: inherit;
+.sidebar .nav-link.active:hover,
+.sidebar .nav-link.active:hover .feather,
+.sidebar .nav-link.active,
+ .sidebar .nav-link.active .feather{
+  color: #58c;
+  font-weight: 600;
+  cursor: default;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link:hover .feather {
+  color: #fff;
 }
 
 .sidebar-heading {

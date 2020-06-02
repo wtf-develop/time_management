@@ -1,5 +1,6 @@
 import os, http.cookies, hashlib, time
 from _common.api._database import mydb, mydb_connection
+from _common.api import utils
 
 
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
@@ -7,6 +8,7 @@ def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_stat
     if uid == 0:
         return ''
     timestamp = 0
+    login = utils.clearUserLogin(login)
     if remember == 1:
         timestamp = int(time.time()) + 90 * 24 * 60 * 60
     else:
@@ -68,7 +70,7 @@ def checkCredentials(arr: list):
             else:
                 user_id = uid
                 user_role = row['role']
-                login = row['login']
+                login = utils.clearUserLogin(row['login'])
                 passwd = row['password']
 
         hash2 = hashlib.md5(
@@ -77,7 +79,7 @@ def checkCredentials(arr: list):
                 'utf-8')).hexdigest()
         if myhash == hash2:
             user_id = uid
-            user_login = login
+            user_login = utils.clearUserLogin(login)
             user_password = passwd
             user_remember = remember
             user_some_state = some_state

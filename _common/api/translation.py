@@ -13,7 +13,17 @@ lang = {
         'logout': 'LogOut',
         'search': 'Search',
         'video_link': 'https://youtu.be/J_iGJ9E2TtU',
-        'information': 'Information'
+        'information': 'Information',
+        'settings': 'Settings',
+
+        'device_sync': 'Your devices',
+        'common_tasks': 'Common tasks',
+        'list_global_plan': 'Plan for the day',
+        'list_timers': 'Exact timers',
+        'list_daily': 'Flexible tasks',
+        'list_calendar': 'Calendar view',
+        'list_notes': 'Notes list',
+        'list_geo': 'Points on map'
 
     },
     'ru': {
@@ -28,7 +38,17 @@ lang = {
         'logout': 'Выход',
         'search': 'Поиск',
         'video_link': 'https://youtu.be/cv3NzFa1VyU',
-        'information': 'Информация'
+        'information': 'Информация',
+        'settings': 'Настройки',
+
+        'device_sync': 'Ваши устройства',
+        'common_tasks': 'Общие задачи',
+        'list_global_plan': 'План на день',
+        'list_timers': 'Точное время',
+        'list_daily': 'Гибкие задачи',
+        'list_calendar': 'Просмотр календаря',
+        'list_notes': 'Список заметок',
+        'list_geo': 'Дела на карте'
 
     },
     'de': {
@@ -42,7 +62,9 @@ lang = {
         'not_found': 'Nicht gefunden',
         'logout': 'Ausloggen',
         'search': 'Suche',
-        'information': 'Information'
+        'information': 'Information',
+        'settings': 'Einstellungen'
+
 
     }
 
