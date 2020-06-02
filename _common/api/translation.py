@@ -12,7 +12,8 @@ lang = {
         'not_found': 'Not found',
         'logout': 'LogOut',
         'search': 'Search',
-        'video_link': 'https://youtu.be/J_iGJ9E2TtU'
+        'video_link': 'https://youtu.be/J_iGJ9E2TtU',
+        'information': 'Information'
 
     },
     'ru': {
@@ -26,7 +27,8 @@ lang = {
         'not_found': 'Не найдено',
         'logout': 'Выход',
         'search': 'Поиск',
-        'video_link': 'https://youtu.be/cv3NzFa1VyU'
+        'video_link': 'https://youtu.be/cv3NzFa1VyU',
+        'information': 'Информация'
 
     },
     'de': {
@@ -39,7 +41,8 @@ lang = {
         'bad_request': 'Ungültige Anforderung',
         'not_found': 'Nicht gefunden',
         'logout': 'Ausloggen',
-        'search': 'Suche'
+        'search': 'Suche',
+        'information': 'Information'
 
     }
 

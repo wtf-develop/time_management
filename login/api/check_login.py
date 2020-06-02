@@ -41,7 +41,7 @@ except Exception as ex:
 
 jsonpost['password'] = hashlib.md5((jsonpost['password']).encode('utf-8')).hexdigest()
 mydb.execute(
-    'select * from users where login="' + jsonpost['login'] + '" and password="' + jsonpost['password'] + '" and status=0')
+    'select * from users where login="' + jsonpost['login'] + '" and password="' + jsonpost['password'] + '" and state>0')
 row = mydb.fetchone()
 if row is None:
     headers.jsonAPI(False)

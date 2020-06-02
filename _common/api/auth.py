@@ -25,7 +25,7 @@ def checkCredentials(arr: list):
         remember = 0
         uid = 0
         some_state = 0
-        hash = ''
+        myhash = ''
         login = ''
         passwd = ''
 
@@ -51,10 +51,10 @@ def checkCredentials(arr: list):
         except Exception as ex:
             some_state = 0
 
-        hash = arr[4]
+        myhash = arr[4]
         # TODO SQL request to database for login and password with selected uid
         if uid != 0:
-            mydb.execute('select * from users where id=' + str(uid) + ' and status=0')
+            mydb.execute('select * from users where id=' + str(uid) + ' and state>0')
             row = mydb.fetchone()
             if row is None:
                 uid = 0
@@ -75,7 +75,7 @@ def checkCredentials(arr: list):
             (str(timestamp) + str(some_state) + login + str(remember) + str(
                 uid) + passwd + 'WASSUP!' + req_agent + req_scheme + req_language).encode(
                 'utf-8')).hexdigest()
-        if hash == hash2:
+        if myhash == hash2:
             user_id = uid
             user_login = login
             user_password = passwd

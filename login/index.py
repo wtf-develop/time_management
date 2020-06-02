@@ -16,7 +16,7 @@ print("""<!DOCTYPE html>
 <head>
     <title>Time and Place reminder application - WEB Login page</title>
     <meta name="description" content="The application will notify the user about various events. By place - location based reminder. Reminder by time. List for the day (simple todo). List without date (colored notes). Countdown (short intervals). Widgets: Today, Colored Notes, Microphone, Calendar. Sync timers and tasks (notes) with Google Calendar and Google Tasks">
-    <meta name="keywords" content="Reminder, Android, Time and Place, Запоминатор, Напоминалка, Напоминатор">
+    <meta name="keywords" content="Reminder, Android, Time and Place, Запоминатор, Напоминалка, Напоминатор, MachEs!">
     <meta name="author" content="Arefev Leonid">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,9 +56,9 @@ print("""<!DOCTYPE html>
                 J2H.setTranslationArray(json.data);
                 extLang=json.code;
                 storeLang(extLang);
-                J2H.loadTemplatesArray(templates, ["html/templates.html"], buildWebUI);
+                J2H.loadTemplatesArray(templates, ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }else{
-                J2H.loadTemplatesArray(templates, ["html/templates.html"], buildWebUI);
+                J2H.loadTemplatesArray(templates, ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }        
         });
         return selectedLang;
