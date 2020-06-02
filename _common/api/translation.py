@@ -11,7 +11,8 @@ lang = {
         'bad_request': 'Bad request',
         'not_found': 'Not found',
         'logout': 'LogOut',
-        'search': 'Search'
+        'search': 'Search',
+        'video_link': 'https://youtu.be/J_iGJ9E2TtU'
 
     },
     'ru': {
@@ -24,7 +25,8 @@ lang = {
         'bad_request': 'Неверный запрос',
         'not_found': 'Не найдено',
         'logout': 'Выход',
-        'search': 'Поиск'
+        'search': 'Поиск',
+        'video_link': 'https://youtu.be/cv3NzFa1VyU'
 
     },
     'de': {

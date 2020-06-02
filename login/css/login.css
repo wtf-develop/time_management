@@ -43,6 +43,33 @@ body {
   text-align: center;
 }
 
+
+#formFooter {
+  background-color: #f6f6f6;
+  border-top: 1px solid #dce8f1;
+  padding-top: 1px;
+  padding-bottom: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  text-align: center;
+  -webkit-border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
+}
+
+#formFooter a {
+  color: #aaa;
+  display:inline-block;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#formFooter a:hover {
+  color: #47b;
+  display:inline-block;
+  text-decoration: underline;
+  font-weight: 800;
+}
+
 .google-link{
     color: #eee;
     text-decoration: none;
@@ -53,16 +80,4 @@ body {
     color: #eee;
     text-decoration: none;
     opacity: 0.9;
-}
-
-.github-link{
-    color: #eee;
-    text-decoration: none;
-    opacity: 0.05;
-}
-
-.github-link:hover{
-    color: #eee;
-    text-decoration: none;
-    opacity: 0.7;
 }
