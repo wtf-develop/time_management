@@ -1,5 +1,5 @@
 #!/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/bin/python3
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 import os, sys, inspect, cgitb
 
 cgitb.enable()

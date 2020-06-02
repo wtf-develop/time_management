@@ -6,8 +6,20 @@ from _common.api import auth
 def htmlPage(check_auth: bool = True, fail_redirection: str = "../login/index.py"):
     if check_auth:
         if auth.access_levels == 0:
+            print("Content-Type: text/html;charset=utf-8")
+            print("Cache-Control: no-store, no-cache, must-revalidate")
             print("Location: " + fail_redirection.strip())
             print("")
+            print("""<!DOCTYPE html><html>
+                        <head>
+                        <meta http-equiv="Refresh" content="0;url='"""+fail_redirection+"""'" />
+                        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+                        <script type="text/javascript">
+                            window.location.href = '"""+fail_redirection+"""'
+                        </script>
+                        </head><body>
+                        <p>Please follow <a href='"""+fail_redirection+"""'>this link</a>.</p>
+                    </body></html>""")
             sys.exit()
     today = datetime.date.today()
     print("Content-Type: text/html;charset=utf-8")
