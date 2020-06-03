@@ -1,4 +1,7 @@
-import os, http.cookies, hashlib, time
+import os
+import http.cookies
+import hashlib
+import time
 from _common.api._database import mydb, mydb_connection
 from _common.api import utils
 
@@ -56,7 +59,8 @@ def checkCredentials(arr: list):
         myhash = arr[4]
         # TODO SQL request to database for login and password with selected uid
         if uid != 0:
-            mydb.execute('select * from users where id=' + str(uid) + ' and state>0')
+            mydb.execute('select * from users where id=' +
+                         str(uid) + ' and state>0')
             row = mydb.fetchone()
             if row is None:
                 uid = 0
@@ -107,7 +111,8 @@ req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:20]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]
 req_agent = (os.environ.get("HTTP_USER_AGENT") or "").strip()[:50]
 req_language = (os.environ.get("HTTP_ACCEPT_LANGUAGE") or "").strip()[:20]
-req_scheme = (os.environ.get("REQUEST_SCHEME") or "").strip()[:5]  # http or https
+req_scheme = (os.environ.get("REQUEST_SCHEME")
+              or "").strip()[:5]  # http or https
 req_query = (os.environ.get("QUERY_STRING") or "").strip()[:350]  # parameters
 
 credentials = req_cookie.get("credentials")
@@ -135,7 +140,8 @@ if credentials is None:
 else:
     credentials = str(credentials).strip()[:150]
     if checkCredentials(credentials.split('_', 7)):
-        credentials = buildCredentials(user_id, user_login, user_password, user_remember, user_some_state)
+        credentials = buildCredentials(
+            user_id, user_login, user_password, user_remember, user_some_state)
         user_password = ''  # reset MD5 hashed password from global variable
         access_levels = 1
     else:

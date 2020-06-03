@@ -9,16 +9,16 @@ function isGoodResponse(json) {
 
 
 function showProgressIn(element) {
-    var temp=$(element).html();
+    var temp = $(element).html();
     $(element).html('<img width=16 height=16 src="../_common/img/loader.gif" />');
-    $(element).attr("old",temp);
-    $(element).attr("disabled",true);
+    $(element).attr("old", temp);
+    $(element).attr("disabled", true);
 }
 
 function hideProgressIn(element) {
-    var temp=$(element).attr("old");
-    if(temp.length<1)return;
+    var temp = $(element).attr("old");
+    if (temp.length < 1) return;
     $(element).html(temp);
-    $(element).attr("old",'');
+    $(element).attr("old", '');
     $(element).removeAttr("disabled");
 }

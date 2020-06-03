@@ -31,12 +31,14 @@ def jsonAPI(check_auth: bool = True):
     print("")
     if check_auth:
         if auth.access_levels == 0:
-            print('{"error":{"state":true,"code":401,"title":"Unauthorized","message":"Please open login page"}}')
+            print(
+                '{"error":{"state":true,"code":401,"title":"Unauthorized","message":"Please open login page"}}')
             sys.exit()
 
 
-def errorResponse(title: str, message: str='', code: int=0):
-    print('{"error":{"state":true,"title": "'+title+'","message":"'+message+'","code":'+str(code)+'}}')
+def errorResponse(title: str, message: str = '', code: int = 0):
+    print('{"error":{"state":true,"title": "' + title +
+          '","message":"' + message + '","code":' + str(code) + '}}')
     sys.exit()
 
 
@@ -57,4 +59,3 @@ def redirectionPage(url: str):
                             <p>Please follow <a href='""" + url + """'>this link</a>.</p>
                         </body></html>""")
     sys.exit()
-

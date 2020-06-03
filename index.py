@@ -1,16 +1,19 @@
 #!/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/bin/python3
 #!/usr/bin/env python3
-import os, sys, inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, currentdir)
-from _common.api import auth
-from _common.api import headers
 from _common.api import translation
+from _common.api import headers
+from _common.api import auth
 
 headers.htmlPage(True, "login/index.py")
 
 print("""<!DOCTYPE html>
-<html lang='"""+auth.user_lang+"""'>
+<html lang='""" + auth.user_lang + """'>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -26,7 +29,7 @@ print("""<!DOCTYPE html>
 </head>
 
 <body>
-    <div id="content">
+    <div id="content" style="overflow: hidden;">
         <div style="text-align:center;"><br />&nbsp;<br><img src="_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 
@@ -41,8 +44,8 @@ print("""<!DOCTYPE html>
         var templates = {};
 
         function init() {
-            J2H.setTranslationArray("""+translation.get_array(auth.user_lang)+"""); // optional
-            J2H.loadTemplatesArray(templates, ["main/html/navigation.html"], loadingCallback);
+            J2H.setTranslationArray(""" + translation.get_array(auth.user_lang) + """); // optional
+            J2H.loadTemplatesArray(templates, ["_common/html/templates.html", "main/html/navigation.html"], loadingCallback);
         }
 
         function loadingCallback() {

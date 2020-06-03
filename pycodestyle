@@ -1,0 +1,7 @@
+[pycodestyle]
+ignore = E24, E402
+
+or
+
+[tool.autopep8]
+ignore = "E24, E402"

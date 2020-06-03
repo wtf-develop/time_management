@@ -1,18 +1,20 @@
 #!/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/bin/python3
 #!/usr/bin/env python3
-import os,sys,inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-sys.path.insert(0, os.path.dirname(currentdir)) #one level up "os.path.dirname()"
-
-from _common.api import auth
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+sys.path.insert(0, os.path.dirname(currentdir))
 from _common.api import headers
+from _common.api import auth
 
 
 auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
 headers.htmlPage(False)
 
 print("""<!DOCTYPE html>
-<html lang='"""+auth.user_lang+"""'>
+<html lang='""" + auth.user_lang + """'>
 <head>
     <title>Time and Place reminder application - WEB Login page</title>
     <meta name="description" content="The application will notify the user about various events. By place - location based reminder. Reminder by time. List for the day (simple todo). List without date (colored notes). Countdown (short intervals). Widgets: Today, Colored Notes, Microphone, Calendar. Sync timers and tasks (notes) with Google Calendar and Google Tasks">
@@ -36,7 +38,7 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
     <script type="text/javascript" src="../_common/js/json2html.js"></script>
     <script type="text/javascript" src="../_common/js/project_functions.js"></script>
-    <script type="text/javascript" src="js/functions.js"></script>    
+    <script type="text/javascript" src="js/functions.js"></script>
 
 <script type="text/javascript">
     var templates = {};
@@ -59,7 +61,7 @@ print("""<!DOCTYPE html>
                 J2H.loadTemplatesArray(templates, ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }else{
                 J2H.loadTemplatesArray(templates, ["../_common/html/templates.html","html/templates.html"], buildWebUI);
-            }        
+            }
         });
         return selectedLang;
     }
