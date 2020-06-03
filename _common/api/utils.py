@@ -1,7 +1,7 @@
 import re
 
 
-def removeDobleSpaces(s: str):
+def removeDoubleSpaces(s: str):
     return ' '.join(s.strip().split())
 
 
@@ -17,8 +17,8 @@ def clearUserLogin(login: str):
     login = stripTags(login)
     login = removeQuotes(login)
     login = removeNonUTF(login)
-    login = removeDobleSpaces(login)
     login = login.replace('\\', '').replace('/', '')
+    login = removeDoubleSpaces(login)
     return login
 
 
@@ -32,21 +32,21 @@ def stripTags(s: str):
     return tag_html.sub('', s)
 
 
-def bit_test(number: int, bit_index: int):
+def bitTest(number: int, bit_index: int):
     if number & (1 << bit_index):
         return True
     return False
 
 
-def bit_set(number: int, bit_index: int):
+def bitSet(number: int, bit_index: int):
     return number | (1 << bit_index)
 
 
-def bit_clear(number: int, bit_index: int):
+def bitClear(number: int, bit_index: int):
     return number & (~(int(1 << bit_index)))
 
 
-def convertArray2bits(array: list):
+def array2bits(array: list):
     res = 0
     mykey = -1
     for key, value in array:
@@ -62,20 +62,20 @@ def convertArray2bits(array: list):
         try:
             myval = int(value)
         except Exception as ex:
-            res = bit_clear(res, key)
+            res = bitClear(res, key)
             continue
 
         if myval == 1:
-            res = bit_set(res, mykey)
+            res = bitSet(res, mykey)
         else:
-            res = bit_clear(res, mykey)
+            res = bitClear(res, mykey)
     return res
 
 
-def convertBits2Array(intval: int, bitscount: int = 32):
+def bits2array(intval: int, bitscount: int = 32):
     result = [0] * bitscount
     for i in range(bitscount):
-        if bit_test(intval, i):
+        if bitTest(intval, i):
             result[i] = 1
         else:
             result[i] = 0

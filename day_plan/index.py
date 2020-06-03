@@ -2,12 +2,12 @@
 #!/usr/bin/env python3
 import os, sys, inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-sys.path.insert(0, currentdir)
+sys.path.insert(0, os.path.dirname(currentdir)) #one level up "os.path.dirname()"
 from _common.api import auth
 from _common.api import headers
 from _common.api import translation
 
-headers.htmlPage(True, "login/index.py")
+headers.htmlPage(True)
 
 print("""<!DOCTYPE html>
 <html lang='"""+auth.user_lang+"""'>
@@ -27,15 +27,15 @@ print("""<!DOCTYPE html>
 
 <body>
     <div id="content">
-        <div style="text-align:center;"><br />&nbsp;<br><img src="_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
+        <div style="text-align:center;"><br />&nbsp;<br><img src="../_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 
-    <script type="text/javascript" src="_common/js/jquery.min.js"></script>
-    <script type="text/javascript" src="_common/js/json2html.js"></script>
-    <script type="text/javascript" src="_common/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_common/js/feather.min.js"></script>
-    <script type="text/javascript" src="_common/js/project_functions.js"></script>
-    <script type="text/javascript" src="main/js/functions.js"></script>
+    <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../_common/js/json2html.js"></script>
+    <script type="text/javascript" src="../_common/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_common/js/feather.min.js"></script>
+    <script type="text/javascript" src="../_common/js/project_functions.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
 
     <script type="text/javascript">
         var templates = {};
@@ -48,7 +48,7 @@ print("""<!DOCTYPE html>
         function loadingCallback() {
             buildWebUI();
         }
-        init(); //Run it immediately after loading page
+        init();
     </script>
 </body>
 
