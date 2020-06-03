@@ -26,10 +26,11 @@ print("""<!DOCTYPE html>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="../_common/css/bootstrap.min.css" rel="stylesheet">
     <link href="../_common/css/custom.css" rel="stylesheet">
+    <link href="css/timeline.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="content">
+    <div id="content" class="pt-0 pb-0 pl-2 pr-2">
         <div style="text-align:center;"><br />&nbsp;<br><img src="../_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 
@@ -39,13 +40,14 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="../_common/js/feather.min.js"></script>
     <script type="text/javascript" src="../_common/js/project_functions.js"></script>
     <script type="text/javascript" src="js/functions.js"></script>
+    <script type="text/javascript" src="js/timeline.js"></script>
 
     <script type="text/javascript">
         var templates = {};
 
         function init() {
             J2H.setTranslationArray(""" + translation.get_array(auth.user_lang) + """); // optional
-            J2H.loadTemplatesArray(templates, ["../_common/html/templates.html", "html/templates.html"], loadingCallback);
+            J2H.loadTemplatesArray(templates, ["../_common/html/templates.html", "html/templates.html", "html/timeline.html"], loadingCallback);
         }
 
         function loadingCallback() {
