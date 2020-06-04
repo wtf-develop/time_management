@@ -18,12 +18,9 @@ lang = {
 
         'device_sync': 'Your devices',
         'common_tasks': 'Common tasks',
-        'list_global_plan': 'Plan for the day',
-        'list_timers': 'Exact timers',
-        'list_daily': 'Flexible tasks',
+        'list_global_plan': 'Plan for the week',
         'list_calendar': 'Calendar view',
         'list_notes': 'Notes list',
-        'list_geo': 'Points on map'
 
     },
     'ru': {
@@ -43,12 +40,9 @@ lang = {
 
         'device_sync': 'Ваши устройства',
         'common_tasks': 'Общие задачи',
-        'list_global_plan': 'План на день',
-        'list_timers': 'Точное время',
-        'list_daily': 'Гибкие задачи',
+        'list_global_plan': 'План на неделю',
         'list_calendar': 'Просмотр календаря',
         'list_notes': 'Список заметок',
-        'list_geo': 'Дела на карте'
 
     },
     'de': {
