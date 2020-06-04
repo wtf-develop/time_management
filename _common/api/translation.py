@@ -21,6 +21,8 @@ lang = {
         'list_global_plan': 'Plan for the week',
         'list_calendar': 'Calendar view',
         'list_notes': 'Notes list',
+        'today': 'Today',
+        'tomorrow': 'Tomorrow',
 
     },
     'ru': {
@@ -43,6 +45,8 @@ lang = {
         'list_global_plan': 'План на неделю',
         'list_calendar': 'Просмотр календаря',
         'list_notes': 'Список заметок',
+        'today': 'Сегодня',
+        'tomorrow': 'Завтра',
 
     },
     'de': {
@@ -57,8 +61,15 @@ lang = {
         'logout': 'Ausloggen',
         'search': 'Suche',
         'information': 'Information',
-        'settings': 'Einstellungen'
+        'settings': 'Einstellungen',
 
+        'device_sync': 'Ihre Geräte',
+        'common_tasks': 'Gemeinsame Aufgaben',
+        'list_global_plan': 'Plan für die Woche',
+        'list_calendar': 'Kalenderansicht',
+        'list_notes': 'Notizenliste',
+        'today': 'Heute',
+        'tomorrow': 'Morgen',
 
     }
 
