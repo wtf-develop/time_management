@@ -8,6 +8,26 @@ function isGoodResponse(json) {
 }
 
 
+function getLang() {
+    var name = "lang=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    var browserLang = navigator.language || navigator.userLanguage;
+    if (browserLang === undefined || browserLang == null) {
+        return ""
+    }
+    return browserLang;
+}
+
 function showProgressIn(element) {
     var temp = $(element).html();
     $(element).html('<img width=16 height=16 src="../_common/img/loader.gif" />');

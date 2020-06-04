@@ -25,7 +25,7 @@ print("""<!DOCTYPE html>
     <title>WEB-Reminder</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
-<link href="css/timeline.css" rel="stylesheet">
+    <link href="css/timeline.css" rel="stylesheet">
     <link href="../_common/css/bootstrap.min.css" rel="stylesheet">
     <link href="../_common/css/custom.css" rel="stylesheet">
 
