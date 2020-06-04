@@ -16,7 +16,7 @@
             var self = this;
             for (var i = 0; i < this.blocks.length; i++) {
                 (function(i) {
-                    if (self.blocks[i].getBoundingClientRect().top > window.innerHeight * self.offset) {
+                    if (self.blocks[i].getBoundingClientRect().top > (window.innerHeight + 200) * self.offset) {
                         self.images[i].classList.add("cd-timeline__img--hidden");
                         self.contents[i].classList.add("cd-timeline__content--hidden");
                     }
@@ -31,7 +31,7 @@
             var self = this;
             for (var i = 0; i < this.blocks.length; i++) {
                 (function(i) {
-                    if (self.contents[i].classList.contains("cd-timeline__content--hidden") && self.blocks[i].getBoundingClientRect().top <= window.innerHeight * self.offset) {
+                    if (self.contents[i].classList.contains("cd-timeline__content--hidden") && self.blocks[i].getBoundingClientRect().top <= (window.innerHeight + 200) * self.offset) {
                         // add bounce-in animation
                         self.images[i].classList.add("cd-timeline__img--bounce-in");
                         self.contents[i].classList.add("cd-timeline__content--bounce-in");
@@ -58,7 +58,7 @@
                 window.addEventListener("scroll", function(event) {
                     if (!scrolling) {
                         scrolling = true;
-                        (!window.requestAnimationFrame) ? setTimeout(checkTimelineScroll, 250): window.requestAnimationFrame(checkTimelineScroll);
+                        (!window.requestAnimationFrame) ? setTimeout(checkTimelineScroll, 200): window.requestAnimationFrame(checkTimelineScroll);
                     }
                 });
             }
