@@ -22,6 +22,7 @@ function selectLeftMenu(indx) {
         indx = 0;
     }
     $('#menuitem' + indx).addClass('active');
+    $('#sidebarMenu').toggleClass('show');
     return true;
 }
 
