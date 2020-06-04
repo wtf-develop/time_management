@@ -13,7 +13,7 @@ function buildWebUI() {
 function drawCalendar() {
     calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: ['bootstrap', 'interaction', 'dayGrid'],
+        plugins: ['interaction', 'dayGrid'],
         locale: getLang(),
         //themeSystem: 'bootstrap',
         height: 'parent',

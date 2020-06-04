@@ -716,8 +716,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 /* "primary" coloring */
 .fc-button-primary {
     color: #fff;
-    background-color: #2C3E50;
-    border-color: #2C3E50;
+    background-color: #343a40;
+    border-color: #343a40;
 }
 
 .fc-button-primary:hover {

@@ -27,7 +27,6 @@ print("""<!DOCTYPE html>
 
     <link href="css/calendar.css" rel="stylesheet">
     <link href="css/day_grid.css" rel="stylesheet">
-    <link href="css/calendar_bootstrap.css" rel="stylesheet">
     <link href="../_common/css/bootstrap.min.css" rel="stylesheet">
     <link href="../_common/css/custom.css" rel="stylesheet">
 
@@ -49,7 +48,6 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="js/calendar_loc.js"></script>
     <script type="text/javascript" src="js/calendar_events.js"></script>
     <script type="text/javascript" src="js/day_grid.js"></script>
-    <script type="text/javascript" src="js/calendar_bootstrap.js"></script>
 
     <script type="text/javascript">
         var templates = {};
