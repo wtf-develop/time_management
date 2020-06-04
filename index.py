@@ -21,6 +21,9 @@ print("""<!DOCTYPE html>
     <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Reminder web application">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
     <meta name="author" content="Arefev Leonid">
     <title>WEB-Reminder</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -29,7 +32,7 @@ print("""<!DOCTYPE html>
 </head>
 
 <body>
-    <div id="content" style="overflow: hidden;">
+    <div id="content" style="overflow: hidden; height:100%;">
         <div style="text-align:center;"><br />&nbsp;<br><img src="_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 

@@ -1,0 +1,6 @@
+{
+  "short_name": "Reminder App",
+  "name": "Web part of GooglePlay reminder application",
+  "start_url": "index.py",
+  "display": "standalone"
+}
