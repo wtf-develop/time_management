@@ -1,22 +1,22 @@
 NextTemplateName: timeline
-<div class="timeline" data-mode="horizontal" data-visible-items="4" data-force-vertical-width="400">
-    <div class="timeline__wrap">
-        <div class="timeline__items">
-            [!timeline_item,timers!]
-        </div>
+<section class="cd-timeline js-cd-timeline">
+    <div class="tcontainer max-width-lg cd-timeline__container">
+        [!timeline_item,timers!]
     </div>
-</div>
+</section> <!-- cd-timeline -->
 
 NextTemplateName: timeline_item
-<div class="timeline__item">
-    <div class="timeline__content">
-        [*title*] / [*desc*]
-        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-            <div class="card-header">Header</div>
-            <div class="card-body">
-                <h5 class="card-title">Dark card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
+<div class="cd-timeline__block">
+    <div class="cd-timeline__img">
+        [*hour*]:[*minute*]
+    </div> <!-- cd-timeline__img -->
+
+    <div class="cd-timeline__content text-component">
+        <h2>[*title*]</h2>
+        <p class="color-contrast-medium">[*desc*]</p>
+
+        <div class="flex justify-between items-center">
+            <span class="cd-timeline__date">Feb 26</span>
         </div>
-    </div>
-</div>
+    </div> <!-- cd-timeline__content -->
+</div> <!-- cd-timeline__block -->

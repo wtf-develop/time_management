@@ -33,48 +33,60 @@ NextTemplateName: left_menu
         </h6>
 
         <ul class="nav flex-column">
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(0)" id="menuitem0" class="nav-link active" href="day_plan/index.py" target="frame_content">
-                    <span data-feather="list"></span>
-                    @str.list_global_plan
-                </a>
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(0)" id="menuitem0" class="nav-link active" href="day_plan/index.py" target="frame_content">
+                        <span data-feather="list"></span>
+                        @str.list_global_plan
+                    </a>
+                </nobr>
             </li>
             <li class="nav-item">
-                <a onclick="selectLeftMenu(1)" id="menuitem1" class="nav-link" href="/404.html" target="frame_content">
-                    <span data-feather="clock"></span>
-                    @str.list_timers
-                </a>
+                <nobr>
+                    <a onclick="selectLeftMenu(1)" id="menuitem1" class="nav-link" href="/404.html" target="frame_content">
+                        <span data-feather="clock"></span>
+                        @str.list_timers
+                    </a>
+                </nobr>
             </li>
 
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(2)" id="menuitem2" class="nav-link" href="#" target="frame_content">
-                    <span data-feather="clipboard"></span>
-                    @str.list_daily
-                </a>
-            </li>
-
-
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(3)" id="menuitem3" class="nav-link" href="#" target="frame_content">
-                    <span data-feather="calendar"></span>
-                    @str.list_calendar
-                </a>
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(2)" id="menuitem2" class="nav-link" href="#" target="frame_content">
+                        <span data-feather="clipboard"></span>
+                        @str.list_daily
+                    </a>
+                </nobr>
             </li>
 
 
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(4)" id="menuitem4" class="nav-link" href="#" target="frame_content">
-                    <span data-feather="edit"></span>
-                    @str.list_notes
-                </a>
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(3)" id="menuitem3" class="nav-link" href="#" target="frame_content">
+                        <span data-feather="calendar"></span>
+                        @str.list_calendar
+                    </a>
+                </nobr>
             </li>
 
 
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(5)" id="menuitem5" class="nav-link" href="#" target="frame_content">
-                    <span data-feather="map-pin"></span>
-                    @str.list_geo
-                </a>
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(4)" id="menuitem4" class="nav-link" href="#" target="frame_content">
+                        <span data-feather="edit"></span>
+                        @str.list_notes
+                    </a>
+                </nobr>
+            </li>
+
+
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(5)" id="menuitem5" class="nav-link" href="#" target="frame_content">
+                        <span data-feather="map-pin"></span>
+                        @str.list_geo
+                    </a>
+                </nobr>
             </li>
         </ul>
 
@@ -82,17 +94,21 @@ NextTemplateName: left_menu
             <span>@str.settings</span>
         </h6>
         <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(6)" id="menuitem6" class="nav-link" href="#" target="frame_content">
-                    <span data-feather="cloud"></span>
-                    @str.device_sync
-                </a>
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(6)" id="menuitem6" class="nav-link" href="#" target="frame_content">
+                        <span data-feather="cloud"></span>
+                        @str.device_sync
+                    </a>
+                </nobr>
             </li>
-            <li class="nav-item">
-                <a onclick="selectLeftMenu(7)" id="menuitem7" class="nav-link" href="#" target="frame_content">
-                    <span data-feather="users"></span>
-                    @str.common_tasks
-                </a>
+            <li class="nav-item nowrap">
+                <nobr>
+                    <a onclick="selectLeftMenu(7)" id="menuitem7" class="nav-link" href="#" target="frame_content">
+                        <span data-feather="users"></span>
+                        @str.common_tasks
+                    </a>
+                </nobr>
             </li>
 
         </ul>

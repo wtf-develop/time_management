@@ -24,13 +24,16 @@ print("""<!DOCTYPE html>
     <meta name="author" content="Arefev Leonid">
     <title>WEB-Reminder</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+<link href="css/timeline.css" rel="stylesheet">
     <link href="../_common/css/bootstrap.min.css" rel="stylesheet">
     <link href="../_common/css/custom.css" rel="stylesheet">
-    <link href="css/timeline.css" rel="stylesheet">
+
+
 </head>
 
 <body>
-    <div id="content" class="pt-0 pb-0 pl-2 pr-2">
+    <div id="content" class="pt-0 pl-2 pr-2">
         <div style="text-align:center;"><br />&nbsp;<br><img src="../_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 
