@@ -1,3 +1,8 @@
+:root {
+    --blue: #5080c0;
+    --primary: #5080c0;
+}
+
 body, html {
     font-size: .9rem;
     height: 100%;

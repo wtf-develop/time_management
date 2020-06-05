@@ -12,16 +12,32 @@ NextTemplateName: page_structure
 
 NextTemplateName: top_navigation
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#"><span data-feather="user"></span> [*login*]</a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" onclick="return false;" href="#"><span data-feather="user"></span> [*login*]</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="@str.search" aria-label="Search">
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="login/index.py">@str.logout</a>
-        </li>
-    </ul>
+
+    <input class="form-control form-control-dark" type="text" placeholder="@str.search" aria-label="Search">
+    <div class="navbar-nav p-0 text-nowrap">
+        <table cellspacing=0 cellpadding=0 border=0 class="p-0 m-0 w-100" align=right>
+            <tr>
+                <td align=center>
+                    <a id="refreshbtn" onclick="return refreshChildUI();" class="nav-link px-4" href="#">
+                        <span data-feather="refresh-cw"></span>
+                    </a>
+                </td>
+
+                <td align=center>
+                    <a onclick="return toggleFullScreen();" class="nav-link px-4" href="#">
+                        <span data-feather="maximize"></span>
+                    </a>
+                </td>
+                <td align=center>
+                    <a class="nav-link px-4" href="login/index.py" title="@str.logout"><span data-feather="log-out"></span> @str.logout</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </nav>
 
 

@@ -18,9 +18,9 @@ function drawCalendar() {
         //themeSystem: 'bootstrap',
         height: 'parent',
         header: {
-            left: 'prev,next today',
+            left: '',
             center: 'title',
-            right: ''
+            right: 'today prev,next'
         },
         defaultView: 'dayGridMonth',
         defaultDate: '2020-05-12',

@@ -63,4 +63,21 @@ function toggleFullScreen() {
             cancelFullScreen.call(doc);
         }
     } catch (ex) {}
+    return false;
+}
+
+var stopRefreshing = false;
+
+function refreshChildUI() {
+    if (stopRefreshing) return false;
+    stopRefreshing = true;
+    showProgressIn($('#refreshbtn'), true);
+    setTimeout(function() {
+        stopRefreshing = false;
+        hideProgressIn($('#refreshbtn'));
+    }, 999);
+    try {
+        document.getElementById("frame_content").contentWindow.buildWebUI();
+    } catch (e) {}
+    return false;
 }

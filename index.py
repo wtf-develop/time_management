@@ -21,8 +21,16 @@ print("""<!DOCTYPE html>
     <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Reminder web application">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-title" content="Full Screen">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Full Screen">
+
+
     <link rel="manifest" href="manifest.json">
     <meta name="author" content="Arefev Leonid">
     <title>WEB-Reminder</title>

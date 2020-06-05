@@ -28,17 +28,25 @@ function getLang() {
     return browserLang;
 }
 
-function showProgressIn(element) {
-    var temp = $(element).html();
-    $(element).html('<img width=16 height=16 src="../_common/img/loader.gif" />');
-    $(element).attr("old", temp);
+function showProgressIn(element, mainPage = false) {
+    var temp = $(element).attr("oldhtml");
+    if (temp === undefined) temp = '';
+    if (temp.length > 0) return;
+    temp = $(element).html();
+    if (mainPage) {
+        $(element).html('<img width=16 height=16 src="_common/img/loader.gif" />');
+    } else {
+        $(element).html('<img width=16 height=16 src="../_common/img/loader.gif" />');
+    }
+    $(element).attr("oldhtml", temp);
     $(element).attr("disabled", true);
 }
 
 function hideProgressIn(element) {
-    var temp = $(element).attr("old");
+    var temp = $(element).attr("oldhtml") + '';
+    if (temp === undefined) temp = '';
     if (temp.length < 1) return;
     $(element).html(temp);
-    $(element).attr("old", '');
+    $(element).attr("oldhtml", '');
     $(element).removeAttr("disabled");
 }
