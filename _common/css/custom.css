@@ -1,6 +1,9 @@
 :root {
-    --blue: #5080c0;
-    --primary: #5080c0;
+    --blue: #58c;
+    --primary: #58c;
+    --base-color: #58c;
+    --dark-base-color: #47b;
+    --item-back-color: #eee;
 }
 
 body, html {
@@ -92,7 +95,7 @@ body, html {
 .sidebar .nav-link.active:hover .feather,
 .sidebar .nav-link.active,
 .sidebar .nav-link.active .feather {
-    color: #58c;
+    color: var(--base-color);
     font-weight: 600;
     cursor: default;
 }

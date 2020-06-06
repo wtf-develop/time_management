@@ -1846,7 +1846,7 @@ mark {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    box-shadow: 0 0 0 4px #58c, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 0 4px var(--base-color), inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
     background-color: #343a40;
     color: #fff;
     font-weight: 600;
@@ -1896,7 +1896,7 @@ mark {
     position: relative;
     margin-left: 1.25em;
     margin-left: var(--space-md);
-    background: #eee;
+    background: var(--item-back-color);
     border-radius: 0.25em;
     border-radius: var(--radius-md);
     padding: 1.25em;
