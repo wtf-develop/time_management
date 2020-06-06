@@ -2,7 +2,7 @@ function buildWebUI() {
     window.scrollTo(0, 1);
     J2H.getJSON('main/api/base_info.py', function(json) {
         if (isGoodResponse(json)) {
-            $("#content").html(J2H.process(templates, "page_structure", json));
+            $("#content").html(J2H.process("page_structure", json));
             runMenuLink(json.some_state)
             selectLeftMenu(json.some_state);
             feather.replace();
@@ -17,7 +17,7 @@ function storePageIndex(index) {
     var d = new Date();
     d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = "indx=" + index + ";" + expires + ";path=/";
+    document.cookie = "indx=" + index + ";" + expires + ";sameSite=Strict;path=/";
 }
 
 

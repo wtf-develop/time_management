@@ -58,9 +58,9 @@ print("""<!DOCTYPE html>
                 J2H.setTranslationArray(json.data);
                 extLang=json.code;
                 storeLang(extLang);
-                J2H.loadTemplatesArray(templates, ["../_common/html/templates.html","html/templates.html"], buildWebUI);
+                J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }else{
-                J2H.loadTemplatesArray(templates, ["../_common/html/templates.html","html/templates.html"], buildWebUI);
+                J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }
         });
         return selectedLang;
@@ -68,7 +68,7 @@ print("""<!DOCTYPE html>
 
     var extLang='en';
     function buildWebUI() { //create all elements inside page (Structure of page)
-        $("#content").html(J2H.process(templates,"page",{code:extLang}));
+        $("#content").html(J2H.process("page",{code:extLang}));
         $("#content").fadeIn(150);
     }
 

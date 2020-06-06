@@ -21,7 +21,7 @@ print("""<!DOCTYPE html>
     <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Reminder web application">
-    
+
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-status-bar-style" content="default">
     <meta name="mobile-web-app-title" content="Full Screen">
@@ -56,7 +56,7 @@ print("""<!DOCTYPE html>
 
         function init() {
             J2H.setTranslationArray(""" + translation.get_array(auth.user_lang) + """); // optional
-            J2H.loadTemplatesArray(templates, ["_common/html/templates.html", "main/html/navigation.html"], loadingCallback);
+            J2H.loadTemplatesArray( ["_common/html/templates.html", "main/html/navigation.html"], loadingCallback);
         }
 
         function loadingCallback() {

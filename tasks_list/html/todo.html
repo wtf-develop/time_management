@@ -1,0 +1,16 @@
+NextTemplateName: all_panels
+[!todo_panel,this!]
+
+NextTemplateName: todo_panel
+<div class="card [*bg_class*]" style="width: 18rem;" id="[*id*]">
+    <div class="card-header">
+        [*name*]
+    </div>
+    Hello world!
+    <ul class="list-group list-group-flush todo_content">
+        [!todo_item,items!]
+    </ul>
+</div>
+
+NextTemplateName: todo_item
+<li class="list-group-item" id="[*random*]item[*j2h_counter*]">[*name*]</li>

@@ -14,6 +14,7 @@ from _common.api import headers
 from _common.api import utils
 
 headers.jsonAPI(True)
+
 print("""{
 "time":""" + str(time.time() * 1000) + """,
 "daily":[

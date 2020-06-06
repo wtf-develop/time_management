@@ -112,10 +112,11 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
         var level_parce = 0; //stack overflow protection
         //function change HTML code with templates to HTML code with data.
-        function process(templates, name, data) {
+        function process(name, data) {
             //check stack overflow
             ///********************** loop part ***************************
             var global_filter = '';
+            var templates = shadow_templates_object;
 
             function set_filter(f) {
                 global_filter = f;
@@ -364,7 +365,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         if (eqWithThis) {
                             if (then_v !== undefined && then_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(templates, then_v, data);
+                                    temp = process(then_v, data);
                                 } else {
                                     temp = my_trim(removeSq(then_v));
                                 }
@@ -374,7 +375,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         } else {
                             if (else_v !== undefined && else_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(templates, else_v, data);
+                                    temp = process(else_v, data);
                                 } else {
                                     temp = my_trim(removeSq(else_v));
                                 }
@@ -410,7 +411,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         if (eqWithThis) {
                             if (then_v !== undefined && then_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(templates, then_v, data);
+                                    temp = process(then_v, data);
                                 } else {
                                     temp = my_trim(removeSq(then_v));
                                 }
@@ -420,7 +421,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         } else {
                             if (else_v !== undefined && else_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(templates, else_v, data);
+                                    temp = process(else_v, data);
                                 } else {
                                     temp = my_trim(removeSq(else_v));
                                 }
@@ -503,29 +504,25 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         //filter_end
 
                         if ((temp_data[key] instanceof Object)) {
-                            temp_data[key]['index_counter'] = k + '';
-                            temp_data[key]['index_key'] = key + '';
+                            temp_data[key]['j2h_counter'] = k + '';
+                            temp_data[key]['j2h_key'] = key + '';
                             //k=parseInt(k);
                             if (k == 0) {
-                                temp_data[key]['index_class'] = 'first';
-                            } else {
-                                temp_data[key]['index_class'] = '';
+                                temp_data[key]['j2h_first'] = '1';
                             };
                             if (k == ccc) {
-                                temp_data[key]['index_class'] = 'last';
+                                temp_data[key]['j2h_last'] = '1';
                             };
                             //temp_data[key]['index_0'] = 'unused';
                             //temp_data[key]['index_1'] = 'unused';
-                            temp_data[key]['index_2'] = ' ';
                             if (((k + 1) % 2) == 0) {
-                                temp_data[key]['index_2'] = 'second';
-                            };
-                            if (((k + 1) % 2) == 1) {
-                                temp_data[key]['index_2'] = 'f_second';
+                                temp_data[key]['j2h_even'] = '1';
+                            } else {
+                                temp_data[key]['j2h_odd'] = '1';
                             };
                         }
 
-                        temp_str = temp_str + process(templates, temp_template[0], temp_data[key]);
+                        temp_str = temp_str + process(temp_template[0], temp_data[key]);
 
                         k++;
                     }
@@ -558,7 +555,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         name_template = name_template[0];
                         curData = get_from_data(curData, dataindex);
                     }
-                    str = str_replace(j_templ[0] + name_template_all + j_templ[1], process(templates, name_template, curData), str);
+                    str = str_replace(j_templ[0] + name_template_all + j_templ[1], process(name_template, curData), str);
                 } else {
                     debug_log('too long or short template{{..}} in ' + name + ' on ' + str.substr(ind_s, ind_e - (ind_s)));
                     ind_s = ind_s + 1;
@@ -933,16 +930,16 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
             templates_callback_function();
         }
 
-        function loadTemplatesArray(template, arr, func) {
+        function loadTemplatesArray(arr, func) {
             if (!isAllTemplatesLoaded()) {
                 alert('Critical error.\nTrying to load templates before previous templates request is completed');
             }
             var i = 0;
-            shadow_templates_object = template;
+            shadow_templates_object = {};
             templates_callback_function = func;
             lockTemplateCallback();
             for (i = 0; i < arr.length; i++) {
-                load_template(template, arr[i], shadow_templates_callback);
+                load_template(shadow_templates_object, arr[i], shadow_templates_callback);
             }
             unlockTemplateCallback();
             shadow_templates_callback();

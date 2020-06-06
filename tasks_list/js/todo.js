@@ -1,14 +1,10 @@
 /*
  * @author Shaumik "Dada" Daityari
  * @copyright December 2013
+ *
+ * @changes Arefev Leonid
+ * @copyright June 2020
  */
-
-/* Some info
-Using newer versions of jQuery and jQuery UI in place of the links given in problem statement
-All data is stored in local storage
-User data is extracted from local storage and saved in variable todo.data
-Otherwise, comments are provided at appropriate places
-*/
 
 var todo = todo || {},
     data = {}; // JSON.parse(localStorage.getItem("todoData"));
@@ -16,54 +12,51 @@ var todo = todo || {},
 data = data || {};
 
 (function(todo, data, $) {
-
-    var defaults = {
-            todoTask: "todo-task",
-            todoHeader: "task-header",
-            todoDate: "task-date",
-            todoDescription: "task-description",
-            taskId: "task-",
-            formId: "todo-form",
-            dataAttribute: "data",
-            deleteDiv: "delete-div"
+    var panels = [{
+            'state': 0,
+            "id": "inreview",
+            'bg_class': 'bg-light',
+            'name': '@str.inreview'
         },
-        codes = {
-            "0": "#review"
-            "10": "#approved",
-            "20": "#progress",
-            "30": "#completed",
-            "40": "#canceled",
-            "50": "#archived"
-        };
+        {
+            'state': 10,
+            "id": "approved",
+            'bg_class': 'bg-light',
+            'name': '@str.approved'
+        },
+        {
+            'state': 20,
+            "id": "inprogress",
+            'bg_class': 'bg-light',
+            'name': '@str.inprogress'
+        },
+        {
+            'state': 30,
+            "id": "completed",
+            'bg_class': 'bg-light',
+            'name': '@str.completed'
+        },
+        {
+            'state': 40,
+            "id": "canceled",
+            'bg_class': 'bg-light',
+            'name': '@str.canceled'
+        },
+        {
+            'state': 50,
+            "id": "archived",
+            'bg_class': 'bg-light',
+            'name': '@str.archived'
+        }
+    ];
 
-    todo.init = function(options) {
-
-        options = options || {};
-        options = $.extend({}, defaults, options);
-
-        $.each(data, function(index, params) {
-            generateElement(params);
-        });
-
-        /*generateElement({
-            id: "123",
-            code: "1",
-            title: "asd",
-            date: "22/12/2013",
-            description: "Blah Blah"
-        });*/
-
-        /*removeElement({
-            id: "123",
-            code: "1",
-            title: "asd",
-            date: "22/12/2013",
-            description: "Blah Blah"
-        });*/
+    todo.init = function(element) {
+        J2H.translate(panels, ['name']);
+        $(element).html(J2H.process('all_panels', panels));
 
         // Adding drop function to each category of task
-        $.each(codes, function(index, value) {
-            $(value).droppable({
+        $.each(panels, function(index, value) {
+            $('#' + value.id).find('.todo_content').droppable({
                 drop: function(event, ui) {
                     var element = ui.helper,
                         css_id = element.attr("id"),
@@ -88,26 +81,6 @@ data = data || {};
                 }
             });
         });
-
-        // Adding drop function to delete div
-        $("#" + options.deleteDiv).droppable({
-            drop: function(event, ui) {
-                var element = ui.helper,
-                    css_id = element.attr("id"),
-                    id = css_id.replace(options.taskId, ""),
-                    object = data[id];
-
-                // Removing old element
-                removeElement(object);
-
-                // Updating local storage
-                delete data[id];
-                //localStorage.setItem("todoData", JSON.stringify(data));
-
-                // Hiding Delete Area
-                $("#" + defaults.deleteDiv).hide();
-            }
-        })
 
     };
 

@@ -4,7 +4,7 @@ var calendar;
 function buildWebUI() {
     J2H.getJSON('api/get_month_plan.py', function(json) {
         if (isGoodResponse(json)) {
-            $('#content').html(J2H.process(templates, 'page_structure', json))
+            $('#content').html(J2H.process( 'page_structure', json))
             drawCalendar();
         }
     })
