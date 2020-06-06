@@ -10,7 +10,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import translation
 
-headers.htmlPage(True)
+headers.htmlPage()
 
 print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>

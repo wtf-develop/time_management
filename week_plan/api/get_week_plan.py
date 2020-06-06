@@ -13,7 +13,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import utils
 
-headers.jsonAPI(False)
+headers.jsonAPI()
 
 data = {}
 data['daily'] = []

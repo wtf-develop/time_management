@@ -12,7 +12,7 @@ from _common.api import auth
 from _common.api import headers
 
 
-headers.jsonAPI(True)
+headers.jsonAPI()
 
 print(json.dumps({'time': time.time(), 'login': auth.user_login,
                   'some_state': auth.user_some_state}))

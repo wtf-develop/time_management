@@ -13,22 +13,58 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import utils
 
-headers.jsonAPI(True)
+headers.jsonAPI()
 
-print("""{
-"time":""" + str(time.time() * 1000) + """,
-"daily":[
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":1, "alarm_type":0,"start_time":""" + str((time.time() + 1000) * 1000) + """, "timezone":10000,"hour":14,"minute":37},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":1, "alarm_type":0,"start_time":""" + str((time.time() + 800) * 1000) + """, "timezone":10000,"hour":14,"minute":17},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":1, "alarm_type":1,"start_time":""" + str((time.time() + 1400) * 1000) + """, "timezone":10000,"hour":14,"minute":57}
-],
-"timers":[
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":1,"start_time":""" + str((time.time() + 1000) * 1000) + """, "timezone":10000,"hour":14,"minute":37},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":2,"start_time":""" + str((time.time() + 800) * 1000) + """, "timezone":10000,"hour":14,"minute":49},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":0,"start_time":""" + str((time.time() + 1400) * 1000) + """, "timezone":10000,"hour":14,"minute":17},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":1,"start_time":""" + str((time.time() + 1000) * 1000) + """, "timezone":10000,"hour":14,"minute":37},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":2,"start_time":""" + str((time.time() + 800) * 1000) + """, "timezone":10000,"hour":14,"minute":49},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":0,"start_time":""" + str((time.time() + 1400) * 1000) + """, "timezone":10000,"hour":14,"minute":17}
+arrdata = []
+for i in range(10):
+    obj = {'title': 'daily' +
+           str(i), 'desc': 'example description for element',
+           'hour': 8 + (i * 2),
+           'minute': 26 + i}
+    arrdata.append(obj)
 
-]
-}""")
+
+panels = {'panels': [{
+    'state': 0,
+    "id": "inreview",
+    'bg_class': 'bg-light',
+    'pname': '@str.inreview',
+    'items': arrdata
+},
+    {
+        'state': 10,
+        "id": "approved",
+        'bg_class': 'bg-light',
+        'pname': '@str.approved',
+        'items': arrdata
+},
+    {
+        'state': 20,
+        "id": "inprogress",
+        'bg_class': 'bg-light',
+        'pname': '@str.inprogress',
+        'items': arrdata
+},
+    {
+        'state': 30,
+        "id": "completed",
+        'bg_class': 'bg-light',
+        'pname': '@str.completed',
+        'items': arrdata
+},
+    {
+        'state': 40,
+        "id": "canceled",
+        'bg_class': 'bg-light',
+        'pname': '@str.canceled',
+        'items': arrdata
+},
+    {
+        'state': 50,
+        "id": "archived",
+        'bg_class': 'bg-light',
+        'pname': '@str.archived',
+        'items': []
+}
+]}
+headers.goodResponse(panels)

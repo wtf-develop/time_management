@@ -33,7 +33,9 @@ function selectLeftMenu(indx) {
         indx = 0;
     }
     $('#menuitem' + indx).addClass('active');
-    $('#sidebarMenu').toggleClass('show');
+    $('#sidebarMenu').removeClass('show');
+    $('.navbar-toggler').addClass('collapsed');
+    $('.navbar-toggler').attr('aria-expanded', false);
     storePageIndex(indx);
     return true;
 }

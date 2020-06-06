@@ -15,7 +15,6 @@ lang = {
         'video_link': 'https://youtu.be/J_iGJ9E2TtU',
         'information': 'Information',
         'settings': 'Settings',
-
         'device_sync': 'Your devices',
         'common_tasks': 'Common tasks',
         'list_global_plan': 'Plan for the week',
@@ -23,6 +22,13 @@ lang = {
         'list_notes': 'Notes list',
         'today': 'Today',
         'tomorrow': 'Tomorrow',
+
+        'inreview': 'In Review',
+        'approved': 'Approved',
+        'inprogress': 'In Progress',
+        'completed': 'Completed',
+        'canceled': 'Canceled',
+        'archived': 'Archived'
 
     },
     'ru': {
@@ -39,7 +45,6 @@ lang = {
         'video_link': 'https://youtu.be/cv3NzFa1VyU',
         'information': 'Информация',
         'settings': 'Настройки',
-
         'device_sync': 'Ваши устройства',
         'common_tasks': 'Общие задачи',
         'list_global_plan': 'План на неделю',
@@ -47,6 +52,14 @@ lang = {
         'list_notes': 'Список заметок',
         'today': 'Сегодня',
         'tomorrow': 'Завтра',
+
+        'inreview': 'Черновые',
+        'approved': 'Одобренные',
+        'inprogress': 'В работе',
+        'completed': 'Завершенные',
+        'canceled': 'Отмененные',
+        'archived': 'Архивные'
+
 
     },
     'de': {

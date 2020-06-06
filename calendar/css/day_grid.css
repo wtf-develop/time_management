@@ -82,14 +82,12 @@
 }
 
 .fc-event, .fc-event-dot {
-    background-color: var(--base-color) !important;
     font-size: 1.0em !important;
+    background-color: var(--base-color) !important;
     border: 1px solid var(--dark-base-color);
 }
 
-.fc-event {}
-
 .fc-resizable {
-    background-color: var(--dark-base-color) !important;
-    border: 1px solid var(--base-color);
+    background-color: var(--green-color) !important;
+    border: 1px solid var(--dark-green-color);
 }

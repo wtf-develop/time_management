@@ -14,20 +14,19 @@ from _common.api import headers
 from _common.api import utils
 
 headers.jsonAPI(True)
-print("""{
-"time":""" + str(time.time() * 1000) + """,
-"daily":[
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":1, "alarm_type":0,"start_time":""" + str((time.time() + 1000) * 1000) + """, "timezone":10000,"hour":14,"minute":37},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":1, "alarm_type":0,"start_time":""" + str((time.time() + 800) * 1000) + """, "timezone":10000,"hour":14,"minute":17},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":1, "alarm_type":1,"start_time":""" + str((time.time() + 1400) * 1000) + """, "timezone":10000,"hour":14,"minute":57}
-],
-"timers":[
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":1,"start_time":""" + str((time.time() + 1000) * 1000) + """, "timezone":10000,"hour":14,"minute":37},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":2,"start_time":""" + str((time.time() + 800) * 1000) + """, "timezone":10000,"hour":14,"minute":49},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":0,"start_time":""" + str((time.time() + 1400) * 1000) + """, "timezone":10000,"hour":14,"minute":17},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":1,"start_time":""" + str((time.time() + 1000) * 1000) + """, "timezone":10000,"hour":14,"minute":37},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":2,"start_time":""" + str((time.time() + 800) * 1000) + """, "timezone":10000,"hour":14,"minute":49},
-{"title":"task1", "desc":"Description text with many simbols", "device":"Xiaomi", "type":0, "alarm_type":0,"start_time":""" + str((time.time() + 1400) * 1000) + """, "timezone":10000,"hour":14,"minute":17}
+data = {}
+data['daily'] = []
+for i in range(55):
+    obj = {'title': 'daily' +
+           str(i), 'desc': 'example description for element',
+           'hour': 8 + (i * 2),
+           'minute': 26 + i}
+    data['daily'].append(obj)
 
-]
-}""")
+data['timers'] = []
+for i in range(55):
+    obj = {'title': 'timers' +
+           str(i), 'desc': 'example description for element',
+           'hour': 8 + (i * 2),
+           'minute': 26 + i}
+    data['timers'].append(obj)

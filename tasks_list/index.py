@@ -10,7 +10,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import translation
 
-headers.htmlPage(True)
+headers.htmlPage()
 
 print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>
@@ -34,12 +34,13 @@ print("""<!DOCTYPE html>
 </head>
 
 <body>
-    <div id="content" class="pt-0 pl-2 pr-2">
+    <div id="content" class="pt-0 pl-2 pr-0">
         <div style="text-align:center;"><br />&nbsp;<br><img src="../_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 
     <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
     <script type="text/javascript" src="../_common/js/jqueryui.min.js"></script>
+    <script type="text/javascript" src="../_common/js/jquery.mobile-events.min.js"></script>
     <script type="text/javascript" src="../_common/js/json2html.js"></script>
     <script type="text/javascript" src="../_common/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_common/js/feather.min.js"></script>
@@ -58,6 +59,7 @@ print("""<!DOCTYPE html>
         function loadingCallback() {
             buildWebUI();
         }
+
         init();
     </script>
 </body>
