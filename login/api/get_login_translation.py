@@ -10,7 +10,7 @@ from _common.api import translation
 from _common.api import headers
 from _common.api import auth
 
-headers.jsonAPI()
+headers.jsonAPI(False)
 
 
 print(translation.get_array_with_code(auth.user_lang))
