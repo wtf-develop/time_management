@@ -127,6 +127,16 @@ if not (user_lang is None):
 else:
     user_lang = 'en'
 
+user_indx = req_cookie.get("indx")
+if not (user_lang is None):
+    try:
+        user_indx = int(user_indx.value)
+    except Exception as ex:
+        user_indx = 0
+else:
+    user_indx = 0
+
+
 user_role = "GUEST"
 access_levels = 0
 user_id = 0
@@ -140,8 +150,9 @@ if credentials is None:
 else:
     credentials = str(credentials).strip()[:150]
     if checkCredentials(credentials.split('_', 7)):
+        user_some_state = user_indx
         credentials = buildCredentials(
-            user_id, user_login, user_password, user_remember, user_some_state)
+            user_id, user_login, user_password, user_remember, user_indx)
         user_password = ''  # reset MD5 hashed password from global variable
         access_levels = 1
     else:

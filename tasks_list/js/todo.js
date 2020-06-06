@@ -28,9 +28,12 @@ data = data || {};
             deleteDiv: "delete-div"
         },
         codes = {
-            "1": "#pending",
-            "2": "#inProgress",
-            "3": "#completed"
+            "0": "#review"
+            "10": "#approved",
+            "20": "#progress",
+            "30": "#completed",
+            "40": "#canceled",
+            "50": "#archived"
         };
 
     todo.init = function(options) {

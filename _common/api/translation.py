@@ -76,7 +76,7 @@ lang = {
 }
 
 
-def get_array(lang_code):
+def get_array(lang_code: str):
     if lang is None:
         return json.dumps(lang['en'])
     if lang_code == 'en':
@@ -89,7 +89,7 @@ def get_array(lang_code):
     return json.dumps(result)
 
 
-def get_array_with_code(lang_code):
+def get_array_with_code(lang_code: str):
     if lang is None:
         return json.dumps({'code': 'en', 'data': lang['en']})
     if lang_code == 'en':

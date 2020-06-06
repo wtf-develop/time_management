@@ -28,6 +28,7 @@ function getLang() {
     return browserLang;
 }
 
+
 function showProgressIn(element, mainPage = false) {
     var temp = $(element).attr("oldhtml");
     if (temp === undefined) temp = '';
