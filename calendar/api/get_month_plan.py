@@ -13,7 +13,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import utils
 
-headers.jsonAPI(True)
+headers.jsonAPI()
 data = {}
 data['daily'] = []
 for i in range(55):
@@ -30,3 +30,4 @@ for i in range(55):
            'hour': 8 + (i * 2),
            'minute': 26 + i}
     data['timers'].append(obj)
+headers.goodResponse(data)
