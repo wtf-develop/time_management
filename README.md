@@ -13,13 +13,13 @@ OpenSource personal time managment system. Server source code for [this Reminder
 For update process please start from step 2
 
 # Server requrements
-Can be any old personal computer. Or any modern dedicated server. You can try to install it even directly to your mobile device or router, if you know how to do this. 
+Can be any old personal computer. Or any modern dedicated server. You can try to install it even directly to your mobile device or router, if you know how to do this.
 
-### Python 3.3+ 
+### Python 3.3+
 Or higher
 
-### Apache2 
-with CGI folder 
+### Apache2
+with CGI folder
 ```
 <VirtualHost *:80>
     <Directory /var/www/html>
@@ -33,7 +33,7 @@ with CGI folder
 ```
 
 ### Database
-install MySQL or MariaDB 
+install MySQL or MariaDB
 
 Install driver for connections
 ```bash
@@ -43,3 +43,12 @@ pip3 install mysql-connector
 # FAQ
 - If you want to install this project somewhere and don't know how to do this: There are a lot of examples in Internet: Apache + MySQL + Python
 - If you want to change/add/extend something: Do it byself and create merge request.
+
+# Links
+- [JQuery](https://jquery.com/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Calendar](https://github.com/fullcalendar/fullcalendar)
+- [Arbor.js](https://github.com/samizdatco/arbor)
+- [Timeline](https://github.com/CodyHouse/vertical-timeline)
+- [Json2Html](https://github.com/wtf-develop/JSONtemplate)
+- [JQueryUI](https://jqueryui.com/)

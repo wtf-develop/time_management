@@ -40,7 +40,7 @@ var todo = {};
             feather.replace();
             $('.todo_content').sortable({
                 zIndex: 9999,
-                delay: 0,
+                delay: 300,
                 revert: "invalid",
                 revertDuration: 100,
                 scroll: true,

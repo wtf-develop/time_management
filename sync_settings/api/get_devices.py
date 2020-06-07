@@ -25,7 +25,7 @@ data = {
         "c": {
             "name": "Philips",
             "own": False,
-            "user": "Ivanuschka"
+            "user": "Семафорович"
         },
         "b": {
             "name": "Samsung",

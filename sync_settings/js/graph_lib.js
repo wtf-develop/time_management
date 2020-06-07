@@ -375,12 +375,15 @@ var graph = {};
         sys.renderer.detectSelection();
         stoptimer = setTimeout(function() {
             sys.parameters({
-                dt: 0.008
+                dt: 0.007
             })
             sys.fps(25);
             sys.renderer.detectSelection();
             if (stoptimer) clearTimeout(stoptimer);
             stoptimer = setTimeout(function() {
+                sys.parameters({
+                    dt: 0.0005
+                })
                 sys.stop();
                 sys.renderer.detectSelection();
             }, 6000)

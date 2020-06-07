@@ -9,12 +9,13 @@ NextTemplateName: todo_panel
     <div class="card-header">
         <h4>[*pname*]</h4>
     </div>
-    <ul class="list-group list-group-flush todo_content p0" style="min-height:250px;">
+    <ul class="list-group list-group-flush todo_content p0" style="min-height:250px;height:100%;">
         [!todo_item,items!]
     </ul>
 </div>
 
 NextTemplateName: todo_item
-<li class="list-group-item todo_item d-flex justify-content-between" id="[*random*]item[*j2h_counter*]"><span>[*title*]</span>
-    <div class="sub-draggable text-muted" style="opacity:0.4;"><span data-feather="move"></span></div>
+<li class="list-group-item todo_item d-flex justify-content-between p-0 align-middle" id="[*random*]item[*j2h_counter*]">
+    <div class="p-2 pr-1 align-middle">[*title*]</div>
+    <div class="sub-draggable text-muted align-middle p-1 pt-2" style="opacity:0.4; height:100%; border: 0px solid black;"><span data-feather="move"></span></div>
 </li>

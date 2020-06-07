@@ -87,7 +87,7 @@
     border: 1px solid var(--dark-base-color);
 }
 
-.fc-resizable {
+.fc-resizable, .fc-not-end {
     background-color: var(--green-color) !important;
     border: 1px solid var(--dark-green-color);
 }
