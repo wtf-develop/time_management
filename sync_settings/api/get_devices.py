@@ -31,7 +31,9 @@ data = {
             "name": "Samsung",
             "own": True
         },
-        "e": {},
+        "e": {"name": "Server",
+              "server": True
+              },
         "d": {},
         "g": {},
         "f": {},

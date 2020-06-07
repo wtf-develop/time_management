@@ -58,11 +58,14 @@ var graph = {};
                     var h = 22;
                     var w = ctx.measureText("" + label).width + 12;
                     var w2 = 0;
-                    if (!node.data.own) {
+                    if ((!node.data.own) && (!node.data.server)) {
                         var w2 = ctx.measureText("" + fname).width + 10
                         if (w2 > w) {
                             w = w2
                         }
+                        h = 44
+                    }
+                    if (node.data.server) {
                         h = 44
                     }
 
@@ -81,6 +84,9 @@ var graph = {};
                         /*if (node.data.selected) {
                             ctx.fillStyle = "#871"
                         }*/
+                    }
+                    if (node.data.server) {
+                        ctx.fillStyle = "#444"
                     }
                     if (node.data.selected) {
                         node.mass = 2.5;
@@ -109,7 +115,7 @@ var graph = {};
                         ctx.textAlign = "center"
                         ctx.fillStyle = "#fff"
 
-                        if (!node.data.own) {
+                        if ((!node.data.own) && (!node.data.server)) {
                             ctx.fillText(label || "-", pt.x, pt.y + 2 + h / 4)
                             ctx.fillText(label || "-", pt.x, pt.y + 2 + h / 4)
                             ctx.font = "12px Helvetica"
