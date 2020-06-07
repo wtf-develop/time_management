@@ -83,12 +83,21 @@ var graph = {};
                         }*/
                     }
                     if (node.data.selected) {
-                        node.mass = 3;
+                        node.mass = 2.5;
                         ctx.fillStyle = "#931";
                     } else {
-                        node.mass = 1;
+                        node.mass = 2;
                     }
 
+                    if (hasSelected) {
+                        if (!node.data.linked) {
+                            ctx.fillStyle = "#aaa";
+                            node.mass = 1;
+                        } else {
+
+                        }
+                    }
+                    node.data.linked = false;
                     gfx.rect(pt.x - w / 2, pt.y - (h / 2) + 1, w, h - 2, 4, {
                         fill: ctx.fillStyle
                     })
@@ -154,6 +163,8 @@ var graph = {};
                             ctx.strokeStyle = "rgba(0,0,0, .5)";
                         }
                         ctx.lineWidth = 3;
+                        edge.source.data.linked = true;
+                        edge.target.data.linked = true;
                     } else if (edge.target.data.selected) {
                         if (count == 0) {
                             ctx.strokeStyle = "rgba(200,0,0, .8)";
@@ -161,12 +172,14 @@ var graph = {};
                             ctx.strokeStyle = "rgba(0,0,0, .5)";
                         }
                         ctx.lineWidth = 3;
+                        edge.source.data.linked = true;
+                        edge.target.data.linked = true;
                     } else {
                         if (hasSelected) {
                             ctx.lineWidth = 0.35;
                             wt = 1
-                            arrowLength = 7 + wt
-                            arrowWidth = 3 + wt
+                            arrowLength = 6 + wt
+                            arrowWidth = 2 + wt
 
                         }
                         ctx.strokeStyle = "rgba(0,0,0, .5)";
