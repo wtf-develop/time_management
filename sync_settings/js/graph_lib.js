@@ -13,6 +13,7 @@ var graph = {};
         var ctx = canvas.getContext("2d");
         var gfx = arbor.Graphics(canvas);
         var particleSystem = null;
+        var hasSelected = false;
 
         var that = {
             //
@@ -36,7 +37,6 @@ var graph = {};
             // which allow you to step through the actual node objects but also pass an
             // x,y point in the screen's coordinate system
             //
-
             redraw: function() {
                 if (!particleSystem) return
 
@@ -76,14 +76,17 @@ var graph = {};
                     // draw a rectangle centered at pt
                     if (node.data.own) {
                         ctx.fillStyle = "#193"
-                        if (node.data.selected) {
-                            ctx.fillStyle = "#931"
-                        }
                     } else {
                         ctx.fillStyle = "#47b"
-                        if (node.data.selected) {
+                        /*if (node.data.selected) {
                             ctx.fillStyle = "#871"
-                        }
+                        }*/
+                    }
+                    if (node.data.selected) {
+                        node.mass = 3;
+                        ctx.fillStyle = "#931";
+                    } else {
+                        node.mass = 1;
                     }
 
                     gfx.rect(pt.x - w / 2, pt.y - (h / 2) + 1, w, h - 2, 4, {
@@ -98,10 +101,10 @@ var graph = {};
                         ctx.fillStyle = "#fff"
 
                         if (!node.data.own) {
-                            ctx.fillText(label || "-", pt.x, pt.y + 4 + h / 4)
-                            ctx.fillText(label || "-", pt.x, pt.y + 4 + h / 4)
+                            ctx.fillText(label || "-", pt.x, pt.y + 2 + h / 4)
+                            ctx.fillText(label || "-", pt.x, pt.y + 2 + h / 4)
                             ctx.font = "12px Helvetica"
-                            ctx.fillText(fname || "-", pt.x, pt.y + 4 - h / 4)
+                            ctx.fillText(fname || "-", pt.x, pt.y + 6 - h / 4)
                         } else {
                             ctx.fillText(label || "-", pt.x, pt.y + 4)
                             ctx.fillText(label || "-", pt.x, pt.y + 4)
@@ -127,7 +130,6 @@ var graph = {};
                     // pt1:  {x:#, y:#}  source position in screen coords
                     // pt2:  {x:#, y:#}  target position in screen coords
 
-                    var weight = edge.data.weight
                     var color = edge.data.color
 
                     if (!color || ("" + color).match(/^[ \t]*$/)) color = null
@@ -136,12 +138,40 @@ var graph = {};
                     var tail = intersect_line_box(pt1, pt2, nodeBoxes[edge.source.name])
                     var head = intersect_line_box(tail, pt2, nodeBoxes[edge.target.name])
 
+                    var count = particleSystem.getEdges(edge.target, edge.source).length;
+                    var wt = 1
+                    var arrowLength = 12 + wt
+                    var arrowWidth = 5 + wt
+
+                    if (count < 0) count = 0;
                     ctx.save()
                     ctx.beginPath()
-                    ctx.lineWidth = 2
-                    //ctx.strokeStyle = (color) ? color : "#cccccc"
-                    ctx.strokeStyle = "rgba(0,0,0, .5)"
-                    ctx.fillStyle = null
+                    ctx.lineWidth = count + 1; //count
+                    if (edge.source.data.selected) {
+                        if (count == 0) {
+                            ctx.strokeStyle = "rgba(0,0,250, .8)";
+                        } else {
+                            ctx.strokeStyle = "rgba(0,0,0, .5)";
+                        }
+                        ctx.lineWidth = 3;
+                    } else if (edge.target.data.selected) {
+                        if (count == 0) {
+                            ctx.strokeStyle = "rgba(200,0,0, .8)";
+                        } else {
+                            ctx.strokeStyle = "rgba(0,0,0, .5)";
+                        }
+                        ctx.lineWidth = 3;
+                    } else {
+                        if (hasSelected) {
+                            ctx.lineWidth = 0.35;
+                            wt = 1
+                            arrowLength = 7 + wt
+                            arrowWidth = 3 + wt
+
+                        }
+                        ctx.strokeStyle = "rgba(0,0,0, .5)";
+                    }
+                    ctx.fillStyle = null;
 
                     ctx.moveTo(tail.x, tail.y)
                     ctx.lineTo(head.x, head.y)
@@ -152,9 +182,6 @@ var graph = {};
 
                     ctx.save()
                     // move to the head position of the edge we just drew
-                    var wt = !isNaN(weight) ? parseFloat(weight) : 1
-                    var arrowLength = 12 + wt
-                    var arrowWidth = 5 + wt
                     ctx.fillStyle = "rgba(0,0,0, .7)"
                     ctx.translate(head.x, head.y);
                     ctx.rotate(Math.atan2(head.y - tail.y, head.x - tail.x));
@@ -171,9 +198,6 @@ var graph = {};
                     ctx.closePath();
                     ctx.fill();
                     ctx.restore()
-
-
-
                 })
 
             },
@@ -188,6 +212,7 @@ var graph = {};
                 // for moves and mouseups while dragging
                 var handler = {
                     clicked: function(e) {
+                        if (!particleSystem) return
                         var pos = $(canvas).offset();
                         _mouseP = arbor.Point(e.pageX - pos.left, e.pageY - pos.top)
                         selected = nearest = dragged = particleSystem.nearest(_mouseP);
@@ -198,10 +223,17 @@ var graph = {};
                         $(window).bind('mouseup', handler.dropped)
                         $(canvas).bind('touchmove', handler.dragged)
                         $(window).bind('touchend', handler.dropped)
-
+                        var curstate = (nearest.node.data.selected == true)
+                        particleSystem.eachNode(function(node, pt) {
+                            node.data.selected = false;
+                        })
+                        nearest.node.data.selected = !curstate;
+                        hasSelected = nearest.node.data.selected
+                        initMoving();
                         return false
                     },
                     dragged: function(e) {
+                        if (!particleSystem) return
                         var old_nearest = nearest && nearest.node._id
                         var pos = $(canvas).offset();
                         var s = arbor.Point(e.pageX - pos.left, e.pageY - pos.top)
@@ -216,6 +248,7 @@ var graph = {};
                     },
 
                     dropped: function(e) {
+                        if (!particleSystem) return
                         if (dragged === null || dragged.node === undefined) return
                         if (dragged.node !== null) dragged.node.fixed = false
                         dragged.node.tempMass = 1000
@@ -227,7 +260,6 @@ var graph = {};
                         $(window).unbind('touchend', handler.dropped)
 
                         _mouseP = null
-                        initMoving();
                         return false
                     }
                 }
@@ -235,6 +267,18 @@ var graph = {};
                 //$(canvas).bind('touchstart', handler.clicked);
 
             },
+            detectSelection: function() {
+                if (!particleSystem) return
+                hasSelected = false;
+                particleSystem.eachNode(function(node, pt) {
+                    if (node.data.selected) {
+                        hasSelected = true;
+                        node.data.selected = true;
+                    } else {
+                        node.data.selected = false;
+                    }
+                })
+            }
 
         } //var "that" ended
 
@@ -290,12 +334,14 @@ var graph = {};
     graph.init = function(data) {
         sys = arbor.ParticleSystem(1000, 600, 0.5, true, 40, 0.01, 0.5)
         sys.renderer = SimpleRenderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
-        initMoving();
         sys.graft({
             nodes: data.nodes,
             edges: data.edges
         })
-
+        setTimeout(function() {
+            sys.renderer.detectSelection();
+        }, 200);
+        initMoving();
     }
 
 
@@ -307,20 +353,19 @@ var graph = {};
             dt: 0.01
         });
         sys.fps(40);
+        sys.renderer.detectSelection();
         stoptimer = setTimeout(function() {
             sys.parameters({
                 dt: 0.008
             })
-            sys.fps(24);
+            sys.fps(25);
+            sys.renderer.detectSelection();
             if (stoptimer) clearTimeout(stoptimer);
             stoptimer = setTimeout(function() {
                 sys.stop();
+                sys.renderer.detectSelection();
             }, 6000)
         }, 8000);
     }
 
 })(this.jQuery) //module ended
-
-$(document).ready(function() {
-    graph.init(response)
-})

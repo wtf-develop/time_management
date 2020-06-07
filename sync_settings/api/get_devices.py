@@ -20,7 +20,7 @@ data = {
             "id": 123,
             "name": "Xiaomi",
             "own": True,
-            "selected": True
+            "selected": False
         },
         "c": {
             "name": "Philips",
