@@ -196,6 +196,8 @@ var graph = {};
 
                         $(canvas).bind('mousemove', handler.dragged)
                         $(window).bind('mouseup', handler.dropped)
+                        $(canvas).bind('touchmove', handler.dragged)
+                        $(window).bind('touchend', handler.dropped)
 
                         return false
                     },
@@ -221,12 +223,16 @@ var graph = {};
                         selected = null
                         $(canvas).unbind('mousemove', handler.dragged)
                         $(window).unbind('mouseup', handler.dropped)
+                        $(canvas).unbind('touchmove', handler.dragged)
+                        $(window).unbind('touchend', handler.dropped)
+
                         _mouseP = null
                         initMoving();
                         return false
                     }
                 }
-                $(canvas).mousedown(handler.clicked);
+                $(canvas).bind('mousedown', handler.clicked);
+                //$(canvas).bind('touchstart', handler.clicked);
 
             },
 
