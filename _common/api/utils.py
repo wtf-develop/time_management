@@ -17,8 +17,10 @@ def clearUserLogin(login: str) -> str:
     login = stripTags(login)
     login = removeQuotes(login)
     login = removeNonUTF(login)
-    login = login.replace('\\', '').replace('/', '')
-    login = removeDoubleSpaces(login)
+    login = login.replace('\\', '').replace(
+        '/', '').replace('<', '').replace('>', '').replace('[', '').replace(
+        ']', '').replace('{', '').replace('}', '').replace('%', '').replace(',', '')
+    login = removeDoubleSpaces(login).lower()
     return login
 
 

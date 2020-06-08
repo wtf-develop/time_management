@@ -1,7 +1,10 @@
 import os
+import sys
+import json
 import http.cookies
 import hashlib
 import time
+from urllib import parse
 from _common.api._database import mydb, mydb_connection
 from _common.api import utils
 
@@ -107,13 +110,26 @@ def credentialsHeader():
 # -------- run part -------
 
 req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
-req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:20]
+req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:40]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]
-req_agent = (os.environ.get("HTTP_USER_AGENT") or "").strip()[:50]
+req_agent = (os.environ.get("HTTP_USER_AGENT") or "").strip()[:80]
 req_language = (os.environ.get("HTTP_ACCEPT_LANGUAGE") or "").strip()[:20]
 req_scheme = (os.environ.get("REQUEST_SCHEME")
               or "").strip()[:5]  # http or https
 req_query = (os.environ.get("QUERY_STRING") or "").strip()[:350]  # parameters
+
+_GET = None
+if len(req_query) > 0:
+    _GET = parse_qs(req_query)
+
+req_rawpost = ''
+_POST = None
+if req_method.lower().strip() == "post":
+    req_rawpost = sys.stdin.read()
+    try:
+        _POST = json.loads(req_rawpost)
+    except Exception as ex:
+        _POST = None
 
 credentials = req_cookie.get("credentials")
 if not (credentials is None):
@@ -143,7 +159,7 @@ user_id = 0
 user_login = ''
 user_password = ''
 user_remember = 0
-user_some_state = 0
+user_some_state = 0  # page index for WEB and device id for MOBILE
 if credentials is None:
     access_levels = 0
     credentials = buildCredentials(0, '', '', 0, 0)

@@ -31,8 +31,8 @@ data = {
             "name": "Samsung",
             "own": True
         },
-        "e": {"name": "Server",
-              "server": True
+        "e": {"name": "Mein Handy",
+              "default": True
               },
         "d": {},
         "g": {},

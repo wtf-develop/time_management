@@ -7,7 +7,7 @@ OpenSource self-hosted personal time management system. Server source code was c
 1) Setup server environment (look "Server requirements")
 2) Remove old source files if they exists
 3) Open file **/_common/api/_database.py** and change database credentials
-4) Run script **/zzz_install_and_then_remove_it.sh**
+4) Run script **/zzz_install_and_then_remove_it.sh** as files owner
 5) Remove all files with name **zzz_install_and_then_remove_it**.* with any extensions
 
 For update process please start from step 2
@@ -16,8 +16,10 @@ For update process please start from step 2
 Can be any old personal computer. Or any modern dedicated server. You can try to install it even directly to your mobile device or router, if you know how to do this and want to have fun.
 
 ### Python 3.3+
-Or higher. While development it was v3.7
-
+Or higher. While development process version was v3.7
+```bash
+sudo apt-get install python3
+```
 ### Apache2
 with CGI folder
 ```

@@ -33,6 +33,9 @@ if 'login' not in jsonpost:
 if 'password' not in jsonpost:
     badExit(3)
 
+if 'device' not in jsonpost:
+    badExit(4)
+
 if auth.req_agent.startswith('PlanMe APP'):
     jsonpost['remember'] = 1
 else:

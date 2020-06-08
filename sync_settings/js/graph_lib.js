@@ -26,7 +26,11 @@ var graph = {};
             init: function(system) {
                 particleSystem = system
                 particleSystem.screenSize(canvas.width, canvas.height)
-                particleSystem.screenPadding(35) // leave an extra 80px of whitespace per side
+                if (isMobile()) {
+                    particleSystem.screenPadding(35) // leave an extra 80px of whitespace per side
+                } else {
+                    particleSystem.screenPadding(65) // leave an extra 80px of whitespace per side
+                }
                 that.initMouseHandling()
             },
 
@@ -60,14 +64,14 @@ var graph = {};
                     var h = 22;
                     var w = ctx.measureText("" + label).width + 12;
                     var w2 = 0;
-                    if ((!node.data.own) && (!node.data.server)) {
+                    if ((!node.data.own) && (!node.data.default)) {
                         var w2 = ctx.measureText("" + fname).width + 10
                         if (w2 > w) {
                             w = w2
                         }
                         h = 44
                     }
-                    if (node.data.server) {
+                    if (node.data.default) {
                         h = 44
                     }
 
@@ -87,7 +91,7 @@ var graph = {};
                             ctx.fillStyle = "#871"
                         }*/
                     }
-                    if (node.data.server) {
+                    if (node.data.default) {
                         ctx.fillStyle = "#444"
                     }
                     if (node.data.selected) {
@@ -117,7 +121,7 @@ var graph = {};
                         ctx.textAlign = "center"
                         ctx.fillStyle = "#fff"
 
-                        if ((!node.data.own) && (!node.data.server)) {
+                        if ((!node.data.own) && (!node.data.default)) {
                             ctx.fillText(label || "-", pt.x, pt.y + 2 + h / 4)
                             ctx.fillText(label || "-", pt.x, pt.y + 2 + h / 4)
                             ctx.font = "12px Helvetica"
