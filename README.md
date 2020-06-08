@@ -52,3 +52,4 @@ pip3 install mysql-connector
 - [Timeline](https://github.com/CodyHouse/vertical-timeline)
 - [Json2Html](https://github.com/wtf-develop/JSONtemplate)
 - [JQueryUI](https://jqueryui.com/)
+- [Icons](https://github.com/feathericons/feather)
