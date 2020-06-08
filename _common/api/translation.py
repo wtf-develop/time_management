@@ -2,7 +2,7 @@ import json
 
 lang = {
     'en': {
-        "application": 'Reminder',
+        "application": 'PlanMe',
         'login': 'User',
         'password': 'Password',
         'remember': 'Remember me',

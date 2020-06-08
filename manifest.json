@@ -1,5 +1,5 @@
 {
-  "short_name": "Reminder App",
+  "short_name": "PlanMe",
   "name": "Web part of GooglePlay reminder application",
   "start_url": "index.py",
   "display": "standalone"
