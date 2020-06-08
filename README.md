@@ -46,6 +46,9 @@ pip3 install mysql-connector
 - If you want to install this project somewhere and don't know how to do this: there are a lot of examples in Google by request: Apache(CGI mode) + MySQL + Python
 - If you want to change/add/extend something: "do it, just do it" and create pull request.
 
+# For developers
+Please set auto-format tool to ignore "E24, E402" - look **pycodestyle.ini** for examples. And follow current code structure.
+
 # Links
 - [JQuery](https://jquery.com/)
 - [Bootstrap](https://getbootstrap.com/)
