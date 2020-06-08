@@ -8,7 +8,9 @@
 var graph = {};
 (function($) {
 
+    var dom = {};
     SimpleRenderer = function(canvas) {
+        dom = $(canvas).parent();
         var canvas = $(canvas).get(0)
         var ctx = canvas.getContext("2d");
         var gfx = arbor.Graphics(canvas);
@@ -24,7 +26,7 @@ var graph = {};
             init: function(system) {
                 particleSystem = system
                 particleSystem.screenSize(canvas.width, canvas.height)
-                particleSystem.screenPadding(80) // leave an extra 80px of whitespace per side
+                particleSystem.screenPadding(35) // leave an extra 80px of whitespace per side
                 that.initMouseHandling()
             },
 
@@ -297,7 +299,19 @@ var graph = {};
                         node.data.selected = false;
                     }
                 })
-            }
+            },
+            resize: function() {
+                that.updateLayout()
+                sys.renderer.redraw()
+            },
+            updateLayout: function() {
+                var w = Math.max(100, Math.min(dom.width(), $(window).width() - 50));
+                var h = Math.max(100, Math.min(dom.height(), $(window).height() - 50));
+                canvas.width = w
+                canvas.height = h
+                sys.screenSize(w, h)
+            },
+
 
         } //var "that" ended
 
@@ -350,9 +364,16 @@ var graph = {};
 
 
     var sys
+    var dom = {}
     graph.init = function(data) {
+        dom = $("#viewport").parent();
+
         sys = arbor.ParticleSystem(1000, 600, 0.5, true, 40, 0.01, 0.5)
         sys.renderer = SimpleRenderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
+        $(window).resize(sys.renderer.resize)
+        sys.renderer.resize()
+        sys.renderer.updateLayout()
+
         sys.graft({
             nodes: data.nodes,
             edges: data.edges
@@ -379,6 +400,7 @@ var graph = {};
             })
             sys.fps(25);
             sys.renderer.detectSelection();
+            sys.renderer.resize();
             if (stoptimer) clearTimeout(stoptimer);
             stoptimer = setTimeout(function() {
                 sys.parameters({

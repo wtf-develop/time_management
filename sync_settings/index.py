@@ -34,7 +34,7 @@ print("""<!DOCTYPE html>
 </head>
 
 <body>
-    <div id="content" class="pt-0 pl-2 pr-0">
+    <div id="content" class="pt-0 pl-0 pr-0 w-100">
         <div style="text-align:center;"><br />&nbsp;<br><img src="../_common/img/loader.gif" /><br />&nbsp;&nbsp;Loading...</div>
     </div>
 
