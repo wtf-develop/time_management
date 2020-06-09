@@ -6,7 +6,7 @@ NextTemplateName: form
     <input placeholder="@str.password" type="password" name="password" id="password" class="form-control text-body" autocorrect="off" autocapitalize="none" autocomplete="off">
 </div>
 <div class="form-group text-left pl-2">
-    <label for="remember-me" class="text-muted m-0 p-0"><span><input id="remember-me" name="remember" type="checkbox" value=1></span> <span>@str.remember</span></label><br>
+    <label for="remember-me" class="text-muted m-0 p-0"><span><input id="remember-me" name="remember" type="checkbox" checked value=1></span> <span>@str.remember</span></label><br>
 </div>
 <div class="form-group text-center mt-2 mb-0">
     <button id="submit_login" type="submit" class="btn btn-outline-primary w-50 mb-0">@str.submit_login</button>
@@ -19,7 +19,8 @@ NextTemplateName: page
         <div id="login-column">
             <div id="login-box">
                 <form id="login-form" class="form m-0 pl-4 pr-4 pb-4 pt-4" action="#" method="post" onsubmit="return checkLogin($(this).serializeHtmlForm());">
-                    <h3 class="text-center pb-3 m-0"><a class="text-secondary google-link" href="https://play.google.com/store/apps/details?id=ru.mcsar.schedule" target="_blank"><img src="../_common/img/app.png" width="40" height="40" border="0" /> @str.application</a></h3>
+                    <h3 class="text-center pb-3 m-0"><a class="text-secondary google-link" href="https://play.google.com/store/apps/details?id=ru.mcsar.schedule" target="_blank"><img src="../_common/img/app.png" width="40" height="40" border="0" />
+                            @str.application</a></h3>
                     <div id="formContainer">
                         {{form}}
                     </div>
@@ -51,5 +52,3 @@ NextTemplateName: page
         </div>
     </div>
 </div>
-
-

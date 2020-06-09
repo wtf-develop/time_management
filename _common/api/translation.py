@@ -113,3 +113,13 @@ def get_array_with_code(lang_code: str):
     for key in lang[lang_code]:
         result[key] = lang[lang_code][key]
     return json.dumps({'code': lang_code, 'data': result})
+
+
+def getAppName(lang_code: str) -> str:
+    if (lang is None) or (lang_code == 'en'):
+        return lang['en']['application']
+    if (not (lang_code in lang)) or (lang[lang_code] is None):
+        return lang['en']['application']
+    if 'application' not in lang[lang_code]:
+        return lang['en']['application']
+    return lang[lang_code]['application']

@@ -5,7 +5,7 @@ import http.cookies
 import hashlib
 import time
 from urllib import parse
-from _common.api._database import mydb, mydb_connection
+from _common.api._settings import mydb, mydb_connection
 from _common.api import utils
 
 

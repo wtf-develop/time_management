@@ -6,7 +6,7 @@ OpenSource self-hosted personal time management system. Server source code was c
 
 1) Setup server environment (look "Server requirements")
 2) Remove old source files if they exists
-3) Open file **/_common/api/_database.py** and change database credentials
+3) Open file **/_common/api/_settings.py** and change database credentials
 4) Run script **/zzz_install_and_then_remove_it.sh** as files owner
 5) Remove all files with name **zzz_install_and_then_remove_it**.* with any extensions
 

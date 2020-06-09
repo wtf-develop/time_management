@@ -8,6 +8,7 @@ currentdir = os.path.dirname(os.path.abspath(
 sys.path.insert(0, os.path.dirname(currentdir))
 from _common.api import headers
 from _common.api import auth
+from _common.api import translation
 
 
 auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
@@ -16,8 +17,8 @@ headers.htmlPage(False)
 print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>
 <head>
-    <title>Time and Place reminder application - WEB Login page</title>
-    <meta name="description" content="The application will notify the user about various events. By place - location based reminder. Reminder by time. List for the day (simple todo). List without date (colored notes). Countdown (short intervals). Widgets: Today, Colored Notes, Microphone, Calendar. Sync timers and tasks (notes) with Google Calendar and Google Tasks">
+    <title>""" + translation.getAppName(auth.user_lang) + """: Android application - Login page</title>
+    <meta name="description" content="The application will notify the user about various events. By place - location based reminder. Reminder by time. List for the day (simple todo). List without date (colored notes). Countdown (short intervals). Widgets: Today, Colored Notes, Microphone, Calendar. Sync timers and tasks (notes) with Google Calendar and Google Tasks. Time and place reminder">
     <meta name="keywords" content="Reminder, Android, Time and Place, Запоминатор, Напоминалка, Напоминатор, MachEs!">
     <meta name="author" content="Arefev Leonid">
     <meta charset="utf-8">
