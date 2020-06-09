@@ -13,6 +13,10 @@ OpenSource self-hosted personal time management system. Server source code was c
 For update process please start from step 2
 
 # Server requirements
+- Linux
+- MacOS
+- Windows? Really?? Replace **#!/usr/local/bin/python3** in all \*.py scripts at the top of file.
+
 Can be any old personal computer. Or any modern dedicated server. You can try to install it even directly to your mobile device or router, if you know how to do this and want to have fun.
 
 ### Python 3.3+
@@ -20,6 +24,8 @@ Or higher. While development process version was v3.7
 ```bash
 sudo apt-get install python3
 ```
+Create a link to **python3** interpreter from this installation inside **/usr/local/bin/** folder. May be to **pip3** command also.
+
 ### Apache2
 with CGI folder
 ```xml
