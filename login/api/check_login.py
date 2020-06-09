@@ -1,5 +1,5 @@
-#!/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/bin/python3
-# !/usr/bin/env python3
+#!/usr/local/bin/python3
+
 import os
 import sys
 import inspect
@@ -30,6 +30,9 @@ def wrongCred(index: int):
     headers.errorResponse('@str.error', '@str.not_found - ' + str(index), 404)
 
 
+if(auth.isMobile):  # login from mobile not accepted here
+    badExit(0)
+
 jsonpost = auth._POST
 
 if jsonpost is None:
@@ -42,9 +45,12 @@ if 'password' not in jsonpost:
     badExit(3)
 
 if auth.isMobile:
+    badExit(3)
+    """
     jsonpost['remember'] = 1
     if 'device' not in jsonpost:
         badExit(4)
+    """
 else:
     if 'remember' not in jsonpost:
         badExit(5)
@@ -77,6 +83,8 @@ if usr is None:
 auth.user_id = int(usr['id'])
 timestamp_string = str(int(time.time() * 1000))
 if auth.isMobile:
+    wrongCred(1)
+    """
     mydb.execute(
         'select id from devices where uid=' + str(auth.user_id) +
         ' and name="' + jsonpost['device'] +
@@ -90,6 +98,7 @@ if auth.isMobile:
         wrongCred(3)
     mydb.execute('update devices set lastconnect=' +
                  timestamp_string + ' where uid=' + str(auth.user_id) + ' and id=' + str(auth.user_some_state))
+    """
 else:
     mydb.execute('update users set lastlogin=' +
                  timestamp_string + ' where id=' + str(auth.user_id))
@@ -99,6 +108,7 @@ auth.credentials = auth.buildCredentials(
     auth.user_id, usr['login'], usr['password'], jsonpost['remember'], auth.user_some_state)
 headers.jsonAPI(False)  # New cookie always there
 if auth.isMobile:
-    print('{"accepted": true, "token":"' + auth.credentials + '"}')
+    badExit(7)
+    # print('{"accepted": true, "token":"' + auth.credentials + '"}')
 else:
     print('{"accepted": true}')
