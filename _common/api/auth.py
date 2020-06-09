@@ -144,7 +144,7 @@ req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
 req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:40]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]
 req_agent = (os.environ.get("HTTP_USER_AGENT") or "").strip()[:100]
-req_language = (os.environ.get("HTTP_ACCEPT_LANGUAGE") or "").strip()[:20]
+req_language = (os.environ.get("HTTP_ACCEPT_LANGUAGE") or "").strip()[:2]
 req_scheme = (os.environ.get("REQUEST_SCHEME")
               or "").strip()[:5]  # http or https
 req_query = (os.environ.get("QUERY_STRING") or "").strip()[:350]  # parameters
@@ -182,7 +182,7 @@ user_lang = req_cookie.get("lang")
 if not (user_lang is None):
     user_lang = user_lang.value
 else:
-    user_lang = 'en'
+    user_lang = req_language
 
 user_indx = 0
 if not(isMobile):
