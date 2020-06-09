@@ -22,7 +22,7 @@ sudo apt-get install python3
 ```
 ### Apache2
 with CGI folder
-```
+```xml
 <VirtualHost *:80>
     <Directory /var/www/html>
         Options +ExecCGI
@@ -33,7 +33,18 @@ with CGI folder
     ...
 </VirtualHost>
 ```
-
+May be next code will solve some problems after update. This is not necessary and not recommended. Only if you see some cached content and can not clear internal browser cache.
+```xml
+<FilesMatch "\.(html|htm|js|css)$">
+    FileETag None
+    <IfModule mod_headers.c>
+        Header unset ETag
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "Wed, 11 May 1983 17:30:00 GMT"
+    </IfModule>
+</FilesMatch>
+```
 ### Database
 Install MySQL or MariaDB
 
