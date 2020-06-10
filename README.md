@@ -19,7 +19,7 @@ For update process please start from step 2
 
 Can be any old personal computer. Or any modern dedicated server. You can try to install it even directly to your mobile device or router, if you know how to do this and want to have fun.
 
-### Python 3.3+
+### Python >= 3.5
 Or higher. While development process version was v3.7
 ```bash
 sudo apt-get install python3
@@ -52,11 +52,11 @@ May be next code will solve some problems after update. This is not necessary an
 </FilesMatch>
 ```
 ### Database
-Install MySQL or MariaDB
+Install MySQL >= 5.5 or MariaDB >= 5.5
 
 And install recommended driver for Python
 ```bash
-pip3 install pymysql
+pip3 install PyMySQL
 ```
 
 # FAQ
@@ -67,6 +67,7 @@ pip3 install pymysql
 Please set auto-format tool to ignore "E24, E402" - look **pycodestyle.ini** for examples. And follow current code structure.
 
 # Links
+- [PyMySQL](https://github.com/PyMySQL/PyMySQL)
 - [JQuery](https://jquery.com/)
 - [Bootstrap](https://getbootstrap.com/)
 - [Calendar](https://github.com/fullcalendar/fullcalendar)
