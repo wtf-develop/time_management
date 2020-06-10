@@ -183,6 +183,7 @@ if not (user_lang is None):
     user_lang = user_lang.value
 else:
     user_lang = req_language
+user_lang = user_lang.lower()
 
 user_indx = 0
 if not(isMobile):
