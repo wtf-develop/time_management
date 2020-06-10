@@ -13,6 +13,7 @@ from _common.api import utils
 from _common.api import headers
 from _common.api import auth
 from _common.api._settings import mydb, mydb_connection
+from _common.api import db
 
 
 def badExit(index: int):

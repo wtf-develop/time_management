@@ -4,8 +4,8 @@ import time
 import json
 import random
 import string
-import mysql.connector
-from _common.api import auth
+
+
 from _common.api._settings import mydb_connection, mydb
 from _common.api import utils
 
@@ -54,7 +54,9 @@ def saveTask(data: dict) -> int:
                 except Exception as ex:
                     return -3
 
-    if(data['devid'] < 1) return -4
+    if(data['devid'] < 1):
+        return -4
+
     if data['type'] == 0:  # timer
         required = set(['alarm_type', 'start_time', 'repeat_type',
                         'repeat_value', 'defered_interval', 'year', 'month',
@@ -122,7 +124,7 @@ def saveTask(data: dict) -> int:
 
 def __build_update(data: dict) -> str:
     result = ""
-    for key, value in data:
+    for key, value in data.items():
         if (key == 'id') or (key == 'globalid') or (key == 'created'):  # ignore this fields
             continue
         if(isinstance(value, str)):
@@ -136,13 +138,14 @@ def __build_update(data: dict) -> str:
 def __build_insert(data: dict) -> str:
     prefix = ""
     postfix = ""
-    for key, value in data:
+    for key, value in data.items():
         if (key == 'id'):  # ignore this fields
             continue
-        if(isinstance(value, str)):
+        if (isinstance(value, str)):
             prefix = prefix + key + ','
             postfix = postfix + '"' + \
                 mydb_connection.escape_string(value) + '",'
+
         elif(isinstance(value, int)):
             prefix = prefix + key + ','
             postfix = postfix + str(value) + ','
@@ -159,7 +162,7 @@ def __rand_string() -> str:
 
 # convert keys for database
 def __replace_keys(data: dict) -> dict:
-    for key, value in database_keymap:
+    for key, value in database_keymap.items():
         if(key in data):
             data[value] = data.pop(key, None)
     # and return updated fields

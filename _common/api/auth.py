@@ -7,6 +7,7 @@ import time
 from urllib import parse
 from _common.api._settings import mydb, mydb_connection
 from _common.api import utils
+from _common.api import db
 
 
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
@@ -155,7 +156,7 @@ if req_agent.startswith('PlanMe mobile reminder APP'):
 
 _GET = None
 if len(req_query) > 0:
-    _GET = parse_qs(req_query)
+    _GET = parse.parse_qs(req_query)
 
 req_rawpost = None
 _POST = None
@@ -221,11 +222,13 @@ else:
         access_levels = 1
         timestamp_string = str(int(time.time() * 1000))
         if isMobile:
-            mydb.execute('update devices set lastconnect=' +
-                         timestamp_string + ' where uid=' + str(user_id) + ' and id=' + str(auth.user_some_state))
+            mydb.execute('update devices set ' +
+                         db.__build_update({'lastconnect': timestamp_string}) +
+                         ' where uid=' + str(user_id) + ' and id=' + str(user_some_state))
         else:
-            mydb.execute('update users set lastlogin=' +
-                         timestamp_string + ' where id=' + str(user_id))
+            mydb.execute('update users set ' +
+                         db.__build_update({'lastlogin': timestamp_string}) +
+                         ' where id=' + str(user_id))
     else:
         access_levels = 0
         credentials = buildCredentials(0, '', '', 0, 0)

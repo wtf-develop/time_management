@@ -56,7 +56,7 @@ Install MySQL or MariaDB
 
 And install recommended driver for Python
 ```bash
-pip3 install mysql-connector
+pip3 install pymysql
 ```
 
 # FAQ
