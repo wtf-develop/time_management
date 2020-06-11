@@ -154,7 +154,7 @@ if req_agent.startswith('PlanMe mobile reminder APP'):
     isMobile = True
 
 
-_GET = None
+_GET = None  # always not NONE. Check exact values. Device-id is always there
 if len(req_query) > 0:
     _GET = parse.parse_qs(req_query)
     if('devid' not in _GET):
@@ -163,6 +163,8 @@ if len(req_query) > 0:
         _GET['devid'] = int(_GET['devid'])
     except Exception as ex:
         _GET['devid'] = 0
+else:
+    _GET = {'devid': 0}
 
 req_rawpost = None
 _POST = None
