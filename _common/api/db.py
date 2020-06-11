@@ -22,7 +22,8 @@ database_keymap = {
     'duration': 'duration_time',
     'start': 'start_time',
     'done': 'done_time',
-    'utc': 'isUTC',
+    'utc': 'utc_flag',
+    'isUTC': 'utc_flag'
 
 }
 
@@ -39,7 +40,7 @@ def saveTask(data: dict) -> int:
     int_fields = set(['id', 'devid', 'type', 'alarm_type', 'state', 'priority',
                       'ordr', 'start_time', 'done_time', 'duration_time',
                       'repeat_type', 'repeat_value', 'defered_interval', 'year',
-                      'month', 'day', 'hour', 'minute', 'timezone', 'isUTC'])
+                      'month', 'day', 'hour', 'minute', 'timezone', 'utc_flag'])
     for key, value in data:
         if(key in int_fields):
             if not(isinstance(value, int)):
@@ -60,7 +61,7 @@ def saveTask(data: dict) -> int:
     if data['type'] == 0:  # timer
         required = set(['alarm_type', 'start_time', 'repeat_type',
                         'repeat_value', 'defered_interval', 'year', 'month',
-                        'day', 'hour', 'minute', 'timezone', 'isUTC'])
+                        'day', 'hour', 'minute', 'timezone', 'utc_flag'])
         if not(required.isubset(data.keys())):
             return -5
     elif data['type'] == 1:  # for the whole day

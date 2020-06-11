@@ -14,6 +14,7 @@ from _common.api import headers
 from _common.api import auth
 from _common.api._settings import mydb, mydb_connection
 from _common.api import db
+from mobile_service.apiv1 import functions as func
 
 
 def badExit(index: int):

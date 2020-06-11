@@ -22,7 +22,7 @@ print("""<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Reminder web application">
     <meta name="author" content="Arefev Leonid">
-    <title>WEB-Reminder</title>
+    <title>""" + translation.getAppName(auth.user_lang) + """: Notes</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
     <link href="css/todo.css" rel="stylesheet">

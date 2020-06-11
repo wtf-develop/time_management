@@ -33,7 +33,7 @@ print("""<!DOCTYPE html>
 
     <link rel="manifest" href="manifest.json">
     <meta name="author" content="Arefev Leonid">
-    <title>WEB-Reminder</title>
+    <title>""" + translation.getAppName(auth.user_lang) + """</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="_common/css/bootstrap.min.css" rel="stylesheet">
     <link href="_common/css/custom.css" rel="stylesheet">
