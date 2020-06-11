@@ -157,6 +157,12 @@ if req_agent.startswith('PlanMe mobile reminder APP'):
 _GET = None
 if len(req_query) > 0:
     _GET = parse.parse_qs(req_query)
+    if('devid' not in _GET):
+        _GET['devid'] = 0
+    try:
+        _GET['devid'] = int(_GET['devid'])
+    except Exception as ex:
+        _GET['devid'] = 0
 
 req_rawpost = None
 _POST = None
