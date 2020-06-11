@@ -26,8 +26,18 @@ sudo apt-get install python3
 ```
 Create a link to **python3** interpreter from this installation inside **/usr/local/bin/** folder. May be to **pip3** command also.
 
+### Database
+Install MySQL >= 5.5 or MariaDB >= 5.5
+```bash
+sudo apt-get install mariadb-server
+```
+And install recommended mysql client for Python
+```bash
+pip3 install PyMySQL
+```
+
 ### Apache2
-with CGI folder
+Must be with CGI folder
 ```xml
 <VirtualHost *:80>
     <Directory /var/www/html>
@@ -50,13 +60,6 @@ May be next code will solve some problems after update. This is not necessary an
         Header set Expires "Wed, 11 May 1983 17:30:00 GMT"
     </IfModule>
 </FilesMatch>
-```
-### Database
-Install MySQL >= 5.5 or MariaDB >= 5.5
-
-And install recommended driver for Python
-```bash
-pip3 install PyMySQL
 ```
 
 # FAQ

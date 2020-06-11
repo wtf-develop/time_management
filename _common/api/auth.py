@@ -39,7 +39,7 @@ def __resetAuth():
 
 
 def checkCredentials(arr: list):
-    global isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
+    global user_ch0, user_ch1, user_ch2, user_ch3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
     if len(arr) != 5:
         return __resetAuth()
 
@@ -116,12 +116,13 @@ def checkCredentials(arr: list):
         user_some_state = some_state
         return True
     else:  # if mobile need to check device id in database
-        mydb.execute('select id from devices where id=' + str(some_state) + ' and uid=' +
+        mydb.execute('select id,chanel0,chanel1,chanel2,chanel3 from devices where id=' + str(some_state) + ' and uid=' +
                      str(uid) + ' and state>0')
         dev = mydb.fetchone()
         if row is None:
             return __resetAuth()
         else:
+            # device id for mobile API. Values less then 1 are not permitted
             user_some_state = int(dev['id'])
             if user_some_state < 1:
                 return __resetAuth()
@@ -129,6 +130,18 @@ def checkCredentials(arr: list):
             user_login = utils.clearUserLogin(login)
             user_password = passwd
             user_remember = 1
+            user_ch0 = int(dev['chanel0'])
+            user_ch1 = int(dev['chanel1'])
+            user_ch2 = int(dev['chanel2'])
+            user_ch3 = int(dev['chanel3'])
+            if user_ch0 != 0:
+                user_ch0 = -1
+            if user_ch1 != 1:
+                user_ch1 = -1
+            if user_ch2 != 2:
+                user_ch2 = -1
+            if user_ch3 != 3:
+                user_ch3 = -1
             return True
     return __resetAuth()
 
@@ -212,6 +225,12 @@ user_id = 0
 user_login = ''
 user_password = ''
 user_remember = 0
+
+# for sync filter in mobile API, to not generate additional request to database
+user_ch0 = -1
+user_ch1 = -1
+user_ch2 = -1
+user_ch3 = -1
 
 # page index for WEB and device_id for MOBILE (isMobile variable)
 user_some_state = 0

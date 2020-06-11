@@ -1,4 +1,8 @@
 import re
+import sys
+import random
+import string
+import zlib
 
 
 def removeDoubleSpaces(s: str) -> str:
@@ -82,3 +86,37 @@ def bits2array(intval: int, bitscount: int = 32) -> list:
         else:
             result[i] = 0
     return result
+
+
+__letters = string.ascii_lowercase
+
+
+def rand_string() -> str:
+    rand_str = ''.join(random.choice(__letters) for i in range(9))
+
+
+# result not depend from simbols order. Good!
+def crc32(s: str) -> int:
+    return zlib.crc32(s.encode(encoding="utf-8", errors="ignore"), 2)
+
+
+# convert keys for database
+def replace_keys(data: dict, keymap: dict) -> dict:
+    for key, value in keymap.items():
+        if(key in data):
+            data[value] = data.pop(key, None)
+    # and return updated fields
+    return data
+
+
+def debug(s):
+    print("Content-Type: text/html;charset=utf-8")
+    print("Expires: Wed, 11 May 1983 17:30:00 GMT")
+    print("Cache-Control: no-store, no-cache, must-revalidate")
+    print("Cache-Control: post-check=0, pre-check=0")
+    print("Pragma: no-cache")
+    print("")
+    print("")
+    print("-------<br>\n")
+    print(s)
+    print("\n<br>-------<br/>\n")

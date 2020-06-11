@@ -15,7 +15,7 @@ from _common.api import utils
 # This functions are used in many places of project
 # and changes may broke everything
 #
-database_keymap = {
+tasks_keymap = {
     'order': 'ordr',
     'device_id': 'devid',
     'defered': 'defered_interval',
@@ -31,7 +31,7 @@ database_keymap = {
 # return id or 0 - error, anything < 0 is  also error
 def saveTask(data: dict) -> int:
     # do all necessary checks and convert types
-    data = __replace_keys(data)
+    data = utils.replace_keys(data, tasks_keymap)
     required = set(['devid', 'title', 'desc', 'type'])
     if not(required.isubset(data.keys())):
         return -1
@@ -86,7 +86,7 @@ def saveTask(data: dict) -> int:
 
     if('id' not in data) or (data['id'] < 1):  # new record in tasks
         data['id'] = 0
-        data['globalid'] = timestampstr + '-' + __rand_string() + \
+        data['globalid'] = timestampstr + '-' + utils.rand_string() + \
             str(data['type'] + str(data['devid']))
         data['created'] = timestampstr  # dont change this later never!
 
@@ -154,17 +154,84 @@ def __build_insert(data: dict) -> str:
     return '(' + prefix.strip(", ") + ') values (' + postfix.strip(", ") + ')'
 
 
-__letters = string.ascii_lowercase
+def getLinkedDevices(devid: int) -> dict:
+    result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
+    sql = '''select s.src as id, d.name, s.chanel0,s.chanel1,s.chanel2,s.chanel3
+    from sync_devices s, devices d
+    where s.dst=''' + str(devid) + ''' and s.state>0 and d.id=s.src
+    '''
+    mydb.execute(sql)
+    rows = mydb.fetchall()
+    for row in rows:
+        result['all'].append(row)
+        if(row['chanel0'] == 0):
+            result['0'].append(row['id'])
+        if(row['chanel1'] == 1):
+            result['1'].append(row['id'])
+        if(row['chanel2'] == 2):
+            result['2'].append(row['id'])
+        if(row['chanel3'] == 3):
+            result['3'].append(row['id'])
+    if len(result['0']) < 1:
+        result['0'].append(0)
+    if len(result['1']) < 1:
+        result['1'].append(0)
+    if len(result['2']) < 1:
+        result['2'].append(0)
+    if len(result['3']) < 1:
+        result['3'].append(0)
+    if len(result['all']) < 1:
+        result['all'].append({'id': 0, 'name': ''})
+    return result
 
 
-def __rand_string() -> str:
-    rand_str = ''.join(random.choice(__letters) for i in range(9))
+def getOwnDevices(user_id: int, devid: int, chanel0: int, chanel1: int, chanel2: int, chanel3: int) -> dict:
+    result = {'0': [devid], '1': [devid], '2': [
+        devid], '3': [devid], 'all': [devid]}
+    sql = '''select d.id,d.name
+    from devices d
+    where d.uid=''' + str(user_id) + ''' and d.state>0 and d.id!=''' + str(devid) + '''
+    '''
+    mydb.execute(sql)
+    rows = mydb.fetchall()
+
+    # myown device will get all data that its owned
+    for row in rows:
+        result['all'].append(row)
+        if(chanel0 == 0):
+            result['0'].append(row['id'])
+        if(chanel1 == 1):
+            result['1'].append(row['id'])
+        if(chanel2 == 2):
+            result['2'].append(row['id'])
+        if(chanel3 == 3):
+            result['3'].append(row['id'])
+    if len(result['0']) < 1:
+        result['0'].append(0)
+    if len(result['1']) < 1:
+        result['1'].append(0)
+    if len(result['2']) < 1:
+        result['2'].append(0)
+    if len(result['3']) < 1:
+        result['3'].append(0)
+    if len(result['all']) < 1:
+        result['all'].append(0)
+    return result
 
 
-# convert keys for database
-def __replace_keys(data: dict) -> dict:
-    for key, value in database_keymap.items():
-        if(key in data):
-            data[value] = data.pop(key, None)
-    # and return updated fields
-    return data
+def getLinedTasks(devid: int) -> list:
+    result = []
+    sql = '''select d.id
+    from sync_tasks s, tasks t
+    where s.dst=''' + str(devid) + ''' and s.tid=t.id and t.state=20'''
+
+    mydb.execute(sql)
+    rows = mydb.fetchall()
+    # myown device will get all data that its owned
+
+    for row in rows:
+        result.append(row['id'])
+
+    if len(result) < 1:
+        result.append(0)
+    return result
