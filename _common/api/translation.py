@@ -28,7 +28,8 @@ lang = {
         'inprogress': 'In Progress',
         'completed': 'Completed',
         'canceled': 'Canceled',
-        'archived': 'Archived'
+        'archived': 'Archived',
+        'all_devices': 'All devices'
 
     },
     'ru': {
@@ -58,7 +59,8 @@ lang = {
         'inprogress': 'В работе',
         'completed': 'Завершенные',
         'canceled': 'Отмененные',
-        'archived': 'Архивные'
+        'archived': 'Архивные',
+        'all_devices': 'Все устройства'
 
 
     },

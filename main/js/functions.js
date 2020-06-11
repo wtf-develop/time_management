@@ -3,8 +3,8 @@ function buildWebUI() {
     J2H.getJSON('main/api/base_info.py', function(json) {
         if (isGoodResponse(json)) {
             $("#content").html(J2H.process("page_structure", json));
-            runMenuLink(json.some_state)
-            selectLeftMenu(json.some_state);
+            runMenuLink(json.data.some_state)
+            selectLeftMenu(json.data.some_state);
             feather.replace();
             window.scrollTo(0, 1);
             //toggleFullScreen();
@@ -21,7 +21,27 @@ function storePageIndex(index) {
 }
 
 
-var selectedItem
+var selectedItem = 0
+var currentDevId = 0
+
+function setDevId(id) {
+    if (inRefreshProcess) return false;
+    currentDevId = parseInt(id);
+    inRefreshProcess = true;
+    $('#dropdev_all').html($('#dropdev' + id).html())
+    $('.dropdev_items').removeClass('active');
+    $('#dropdev' + id).addClass('active');
+    showProgressIn($('#dropdev_all'), true);
+    setTimeout(function() {
+        inRefreshProcess = false;
+        hideProgressIn($('#dropdev_all'));
+        selectLeftMenu(selectedItem);
+    }, 600);
+    try {
+        document.getElementById("frame_content").contentWindow.buildWebUI();
+    } catch (e) {}
+    return false;
+}
 
 function selectLeftMenu(indx) {
     selectedItem = indx;
@@ -77,18 +97,23 @@ function toggleFullScreen() {
     return false;
 }
 
-var stopRefreshing = false;
+var inRefreshProcess = false;
 
 function refreshChildUI() {
-    if (stopRefreshing) return false;
-    stopRefreshing = true;
+    if (inRefreshProcess) return false;
+    inRefreshProcess = true;
     showProgressIn($('#refreshbtn'), true);
     setTimeout(function() {
-        stopRefreshing = false;
+        inRefreshProcess = false;
         hideProgressIn($('#refreshbtn'));
     }, 999);
     try {
         document.getElementById("frame_content").contentWindow.buildWebUI();
     } catch (e) {}
     return false;
+}
+
+
+function __mainDevId() {
+    return currentDevId;
 }

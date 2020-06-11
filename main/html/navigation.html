@@ -12,7 +12,7 @@ NextTemplateName: page_structure
 
 NextTemplateName: top_navigation
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" onclick="return false;" href="#"><span data-feather="user"></span> <span style="text-transform: capitalize;">[*login*]</span></a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" onclick="return false;" href="#"><span data-feather="user"></span> <span style="text-transform: capitalize;">[*data.login*]</span></a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -40,14 +40,27 @@ NextTemplateName: top_navigation
     </div>
 </nav>
 
+NextTemplateName: left_dropdown
+<div class="dropdown show w-100">
+    <a id="dropdev_all" class="nowrap dropdown-toggle w-100 text-muted" style="display:inline-block;text-decoration:underline;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @str.all_devices
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        [!left_dropdown_item,data.devices!]
+    </div>
+</div>
+
+NextTemplateName: left_dropdown_item
+<a id="dropdev[*id*]" onclick="return setDevId('[*id*]');" style="text-transform: none;" class="dropdev_items dropdown-item [*selected,if=`true||1`then`active`else``*]" href="#">[*name*]</a>
+
+
 
 NextTemplateName: left_menu
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" style="overflow: hidden;width: 100%;height: 100%;">
     <div class="sidebar-sticky pt-0" style="width: 100%;overflow-y: auto;padding-right:17px;box-sizing: content-box;">
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-2 text-muted">
-            <span>@str.information</span>
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-2 text-muted pb-0">
+            {{left_dropdown}}
         </h6>
-
         <ul class="nav flex-column">
             <li class="nav-item nowrap">
                 <nobr>
@@ -91,15 +104,6 @@ NextTemplateName: left_menu
                     </a>
                 </nobr>
             </li>
-            <!--li class="nav-item nowrap">
-                <nobr>
-                    <a onclick="selectLeftMenu(4)" id="menuitem4" class="nav-link" href="#" target="frame_content">
-                        <span data-feather="users"></span>
-                        @str.common_tasks
-                    </a>
-                </nobr>
-            </li-->
-
         </ul>
     </div>
 </nav>

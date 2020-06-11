@@ -18,20 +18,20 @@ data = {
     "nodes": {
         "a": {
             "id": 123,
-            "name": "Xiaomi",
+            "name": "XiaoMi".title(),
             "own": True,
             "selected": False
         },
         "c": {
-            "name": "Philips",
+            "name": "Philips".title(),
             "own": False,
             "user": "Семафорович"
         },
         "b": {
-            "name": "Samsung",
+            "name": "samSung".title(),
             "own": True
         },
-        "e": {"name": "Mein Handy",
+        "e": {"name": "Mein Handy".title(),
               "default": True
               },
         "d": {},

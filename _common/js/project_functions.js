@@ -64,3 +64,18 @@ function isMobile() {
     }
     return isMobileDevice;
 }
+
+function getDevId() {
+    if (typeof __mainDevId !== "undefined") {
+        try {
+            return __mainDevId()
+        } catch (e) {}
+    }
+    try {
+        return parent.__mainDevId()
+    } catch (e) {
+        return 0
+    }
+
+
+}
