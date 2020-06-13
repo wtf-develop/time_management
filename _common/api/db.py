@@ -154,14 +154,93 @@ def __build_insert(data: dict) -> str:
     return '(' + prefix.strip(", ") + ') values (' + postfix.strip(", ") + ')'
 
 
-def getLinkedDevices(devid: int) -> dict:
+def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, outgoing: bool = True) -> dict:
+    result = {
+        'in': {'0': [], '1': [], '2': [], '3': [], 'all': []},
+        'out': {'0': [], '1': [], '2': [], '3': [], 'all': []},
+        'all': {},
+        'names': {}}
+
+    addsql = ''
+    if devid > 0:
+        addsql = ' and d2.id=' + str(devid) + ' '
+
+    if incomming:
+        # get external devices that send info to user  id - src (ext-dev), dst - user device
+        sql = '''select d2.name as dst_name,s.dst,d.name,d.id,s.chanel0,s.chanel1,s.chanel2,s.chanel3 from devices as d
+                inner join sync_devices as s on s.src=d.id
+                inner join devices as d2 on s.dst=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
+                where d.state>0
+                '''
+
+        # utils.debug(sql)
+        mydb.execute(sql)
+        rows = mydb.fetchall()
+        result_all = result['all']
+        result_names = result['names']
+
+        result_in = result['in']
+        obj = {}
+        for row in rows:
+            result_names[row['id']] = row['name']  # external
+            result_names[row['dst']] = row['dst_name']
+            result_all[row['id']] = {'id': row['id'], 'name': row['name']}
+            obj = {'src': row['id'], 'dst': row['dst']}
+            result_in['all'].append(obj)
+            if(row['chanel0'] == 0):
+                result_in['0'].append(obj)
+            if(row['chanel1'] == 1):
+                result_in['1'].append(obj)
+            if(row['chanel2'] == 2):
+                result_in['2'].append(obj)
+            if(row['chanel3'] == 3):
+                result_in['3'].append(obj)
+
+    if outgoing:
+        # get external devices that receive info from user  id - desctination (ext-dev), src - user device
+        sql = '''select d2.name as src_name,s.src,d.name,d.id,s.chanel0,s.chanel1,s.chanel2,s.chanel3 from devices as d
+            inner join sync_devices as s on s.dst=d.id
+            inner join devices as d2 on s.src=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
+            where d.state>0
+            '''
+
+        # utils.debug(sql)
+        mydb.execute(sql)
+        rows = mydb.fetchall()
+        result_out = result['out']
+        for row in rows:
+            result_names[row['id']] = row['name']  # external
+            result_names[row['src']] = row['src_name']
+            result_all[row['id']] = {'id': row['id'], 'name': row['name']}
+            obj = {'src': row['src'], 'dst': row['id']}
+            result_out['all'].append(obj)
+            if(row['chanel0'] == 0):
+                result_out['0'].append(obj)
+            if(row['chanel1'] == 1):
+                result_out['1'].append(obj)
+            if(row['chanel2'] == 2):
+                result_out['2'].append(obj)
+            if(row['chanel3'] == 3):
+                result_out['3'].append(obj)
+
+    return result
+
+
+def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
-    sql = '''select s.src as id, d.name, s.chanel0,s.chanel1,s.chanel2,s.chanel3
-    from sync_devices s, devices d
-    where s.dst=''' + str(devid) + ''' and s.state>0 and d.id=s.src
+
+    addsql = ''
+    if devid > 0:
+        addsql = ' and d.id=' + str(devid) + ' '
+
+    sql = '''select d.id,d.name,chanel0,chanel1,chanel2,chanel3
+    from devices d
+    where d.uid=''' + str(user_id) + addsql + ''' and d.state>0
     '''
     mydb.execute(sql)
     rows = mydb.fetchall()
+
+    # myown device will get all data that its owned
     for row in rows:
         result['all'].append(row)
         if(row['chanel0'] == 0):
@@ -172,54 +251,10 @@ def getLinkedDevices(devid: int) -> dict:
             result['2'].append(row['id'])
         if(row['chanel3'] == 3):
             result['3'].append(row['id'])
-    if len(result['0']) < 1:
-        result['0'].append(0)
-    if len(result['1']) < 1:
-        result['1'].append(0)
-    if len(result['2']) < 1:
-        result['2'].append(0)
-    if len(result['3']) < 1:
-        result['3'].append(0)
-    if len(result['all']) < 1:
-        result['all'].append({'id': 0, 'name': ''})
     return result
 
 
-def getOwnDevices(user_id: int, devid: int, chanel0: int, chanel1: int, chanel2: int, chanel3: int) -> dict:
-    result = {'0': [devid], '1': [devid], '2': [
-        devid], '3': [devid], 'all': [devid]}
-    sql = '''select d.id,d.name
-    from devices d
-    where d.uid=''' + str(user_id) + ''' and d.state>0 and d.id!=''' + str(devid) + '''
-    '''
-    mydb.execute(sql)
-    rows = mydb.fetchall()
-
-    # myown device will get all data that its owned
-    for row in rows:
-        result['all'].append(row)
-        if(chanel0 == 0):
-            result['0'].append(row['id'])
-        if(chanel1 == 1):
-            result['1'].append(row['id'])
-        if(chanel2 == 2):
-            result['2'].append(row['id'])
-        if(chanel3 == 3):
-            result['3'].append(row['id'])
-    if len(result['0']) < 1:
-        result['0'].append(0)
-    if len(result['1']) < 1:
-        result['1'].append(0)
-    if len(result['2']) < 1:
-        result['2'].append(0)
-    if len(result['3']) < 1:
-        result['3'].append(0)
-    if len(result['all']) < 1:
-        result['all'].append(0)
-    return result
-
-
-def getLinedTasks(devid: int) -> list:
+def getUserLinkedTasks(devid: int) -> list:
     result = []
     sql = '''select d.id
     from sync_tasks s, tasks t

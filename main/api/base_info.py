@@ -20,11 +20,6 @@ devices = [{'id': 0, 'name': '@str.all_devices'}, {'id': 100, 'selected': 1, 'na
 headers.goodResponse({'login': auth.user_login,
                       'some_state': auth.user_some_state,
                       'all_devices': [{'id': 0, 'name': '@str.all_devices'}],
-                      # incorrect need another function
-                      'own_devices': db.getOwnDevices(
-                          auth.user_id, auth.user_some_state,
-                          auth.user_ch0, auth.user_ch1,
-                          auth.user_ch2, auth.user_ch3)['all'],
-                      # incorrect need another function
-                      'linked_devices': db.getLinkedDevices(auth.user_some_state)['all']
+                      'own_devices': db.getUserOwnDevices(auth.user_id)['all'],
+                      'linked_devices': db.getUserLinkedDevices(auth.user_id)['all']
                       })
