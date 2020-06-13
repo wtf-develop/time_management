@@ -46,13 +46,13 @@ def saveTask(data: dict) -> int:
             if not(isinstance(value, int)):
                 try:
                     data[key] = int(value)
-                except Exception as ex:
+                except Exception:
                     return -2
         else:
             if not(isinstance(value, str)):
                 try:
                     data[key] = str(value)
-                except Exception as ex:
+                except Exception:
                     return -3
 
     if(data['devid'] < 1):
@@ -108,14 +108,14 @@ def saveTask(data: dict) -> int:
             __build_update(data) + ' where id=' + data['id']
         try:
             mydb.execute(sql)
-        except Exception as ex:
+        except Exception:
             return -11
         return data['id']
     else:
         sql = 'insert into tasks ' + __build_insert(data)
         try:
             mydb.execute(sql)
-        except Exception as ex:
+        except Exception:
             return -12
         data['id'] = mydb_connection.insert_id()
         return data['id']

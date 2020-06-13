@@ -3,6 +3,9 @@ import sys
 import random
 import string
 import zlib
+import time
+from _common.api import auth
+from _common.api import _settings
 
 
 def removeDoubleSpaces(s: str) -> str:
@@ -60,14 +63,15 @@ def array2bits(array: list) -> int:
         myval = 0
         try:
             mykey = int(key)
-        except Exception as ex:
+        except Exception:
             continue
+
         if mykey < 0:
             continue
 
         try:
             myval = int(value)
-        except Exception as ex:
+        except Exception:
             res = bitClear(res, key)
             continue
 
@@ -107,6 +111,23 @@ def replace_keys(data: dict, keymap: dict) -> dict:
             data[value] = data.pop(key, None)
     # and return updated fields
     return data
+
+
+def log(message: str, tag: str = '  info', file_postfix: str = 'web'):
+    if _settings.enable_logging:
+        try:
+            ip = auth.req_ip.ljust(39)
+            tag = tag[:6].rjust(6)
+            mtime = time.localtime()
+            log_time = time.strftime('%H:%M:%S', mtime)
+            log_date = time.strftime('%Y-%m-%d', mtime)
+            path = _settings.logs_path + log_date + '_' + file_postfix + '.log'
+            flog = open(path, "a")
+            flog.write(log_time + ' ' + ip + ' ' +
+                       tag + ': ' + message + "\r\n")
+            flog.close()
+        except Exception:
+            pass
 
 
 def debug(s):

@@ -57,7 +57,7 @@ else:
     else:
         try:
             jsonpost['remember'] = int(jsonpost['remember'])
-        except Exception as ex:
+        except Exception:
             jsonpost['remember'] = 0
 
 if 'device' not in jsonpost:
@@ -112,3 +112,4 @@ if auth.isMobile:
     # print('{"accepted": true, "token":"' + auth.credentials + '"}')
 else:
     print('{"accepted": true}')
+    utils.log(usr['login'] + ' Logged in', 'Auth')

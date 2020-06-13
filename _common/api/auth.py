@@ -53,7 +53,7 @@ def checkCredentials(arr: list):
 
     try:
         uid = int(arr[2])
-    except Exception as ex:
+    except Exception:
         uid = 0
 
     if uid < 1:
@@ -61,7 +61,7 @@ def checkCredentials(arr: list):
 
     try:
         timestamp = int(arr[0])
-    except Exception as ex:
+    except Exception:
         timestamp = 0
 
     if(timestamp < int(time.time())):
@@ -69,7 +69,7 @@ def checkCredentials(arr: list):
 
     try:
         remember = int(arr[1])
-    except Exception as ex:
+    except Exception:
         remember = 0
 
     if(isMobile) and (remember != 1):
@@ -77,7 +77,7 @@ def checkCredentials(arr: list):
 
     try:
         some_state = int(arr[3])
-    except Exception as ex:
+    except Exception:
         some_state = 0
 
     if(isMobile) and (some_state < 1):
@@ -155,7 +155,7 @@ def credentialsHeader():
 # -------- run part -------
 
 req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
-req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:40]
+req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:39]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]
 req_agent = (os.environ.get("HTTP_USER_AGENT") or "").strip()[:100]
 req_language = (os.environ.get("HTTP_ACCEPT_LANGUAGE") or "").strip()[:2]
@@ -174,7 +174,7 @@ if len(req_query) > 0:
         _GET['devid'] = 0
     try:
         _GET['devid'] = int(_GET['devid'])
-    except Exception as ex:
+    except Exception:
         _GET['devid'] = 0
 else:
     _GET = {'devid': 0}
@@ -186,7 +186,7 @@ if req_method.lower().strip() == "post":
     try:
         _POST = json.loads(req_rawpost)
         req_rawpost = None
-    except Exception as ex:
+    except Exception:
         _POST = None
 
 
@@ -194,7 +194,7 @@ credentials = req_cookie.get("credentials")
 if not (credentials is None):
     # try fetch token from cookie (FIRST!!)
     credentials = credentials.value
-elif (not(_GET is None)) and (_GET['credentials']):
+elif not(_GET is None) and ('credentials' in _GET) and not(_GET['credentials'] is None):
     # try fetch token from GET parameter (ONLY AFTER COOKIE!!)
     credentials = _GET['credentials']
 else:
@@ -213,7 +213,7 @@ if not(isMobile):
     if not (user_indx is None):
         try:
             user_indx = int(user_indx.value)
-        except Exception as ex:
+        except Exception:
             user_indx = 0
     else:
         user_indx = 0
