@@ -16,7 +16,7 @@ from _common.api import db
 def getTotalIdsString(user_id: int, devid: int) -> str:
     links = getLinkedDevices(user_id, devid)
     own = getOwnDevices(user_id, devid)
-    tasks = getLinkedTasks(devid)
+    tasks = getLinkedTasks(user_id, devid)
     result = []
     sql = '''
     select group_concat(globalid separator ',') as val, max(update_time) as time from tasks
@@ -107,19 +107,8 @@ def getOwnDevices(user_id: int, devid: int) -> dict:
     return result
 
 
-def getLinkedTasks(devid: int) -> list:
-    result = []
-    sql = '''select d.id
-    from sync_tasks s, tasks t
-    where s.dst=''' + str(devid) + ''' and s.tid=t.id and t.state=20'''
-
-    mydb.execute(sql)
-    rows = mydb.fetchall()
-    # myown device will get all data that its owned
-
-    for row in rows:
-        result.append(row['id'])
-
+def getLinkedTasks(user_id: int, devid: int) -> list:
+    result = getUserLinkedTasks(user_id, devid)
     if len(result) < 1:
         result.append(0)
     return result

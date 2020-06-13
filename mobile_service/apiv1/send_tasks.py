@@ -35,5 +35,5 @@ if len(data) > 0:
 # After updating we check CRC32 values,
 # if they are different - need to check
 obj = mobile.getTotalIdsString(
-    auth.user_id, auth.user_some_state, auth.user_ch0, auth.user_ch1, auth.user_ch2, auth.user_ch3)
+    auth.user_id, auth.user_some_state, auth.user_sync0, auth.user_sync1, auth.user_sync2, auth.user_sync3)
 obj['crc32'] = utils.crc32(obj['val'])

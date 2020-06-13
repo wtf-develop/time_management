@@ -294,14 +294,10 @@ def getUserLinkedTasks(user_id: int, devid: int = 0) -> list:
         inner join sync_tasks as s on t.id=s.tid
         inner join devices as d on d.id=s.dst and d.uid=''' + str(uid) + addsql + ''' and d.state>0
     '''
-
     mydb.execute(sql)
     rows = mydb.fetchall()
-    # myown device will get all data that its owned
 
+    # myown device will get all data that its owned
     for row in rows:
         result.append(row['id'])
-
-    if len(result) < 1:
-        result.append(0)
     return result

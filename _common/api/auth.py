@@ -39,7 +39,7 @@ def __resetAuth():
 
 
 def checkCredentials(arr: list):
-    global user_ch0, user_ch1, user_ch2, user_ch3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
+    global user_sync0, user_sync1, user_sync2, user_sync3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
     if len(arr) != 5:
         return __resetAuth()
 
@@ -130,18 +130,18 @@ def checkCredentials(arr: list):
             user_login = utils.clearUserLogin(login)
             user_password = passwd
             user_remember = 1
-            user_ch0 = int(dev['sync0'])
-            user_ch1 = int(dev['sync1'])
-            user_ch2 = int(dev['sync2'])
-            user_ch3 = int(dev['sync3'])
-            if user_ch0 != 0:
-                user_ch0 = -1
-            if user_ch1 != 1:
-                user_ch1 = -1
-            if user_ch2 != 2:
-                user_ch2 = -1
-            if user_ch3 != 3:
-                user_ch3 = -1
+            user_sync0 = int(dev['sync0'])
+            user_sync1 = int(dev['sync1'])
+            user_sync2 = int(dev['sync2'])
+            user_sync3 = int(dev['sync3'])
+            if user_sync0 != 0:
+                user_sync0 = -1
+            if user_sync1 != 1:
+                user_sync1 = -1
+            if user_sync2 != 2:
+                user_sync2 = -1
+            if user_sync3 != 3:
+                user_sync3 = -1
             return True
     return __resetAuth()
 
@@ -227,10 +227,10 @@ user_password = ''
 user_remember = 0
 
 # for sync filter in mobile API, to not generate additional request to database
-user_ch0 = -1
-user_ch1 = -1
-user_ch2 = -1
-user_ch3 = -1
+user_sync0 = -1
+user_sync1 = -1
+user_sync2 = -1
+user_sync3 = -1
 
 # page index for WEB and device_id for MOBILE (isMobile variable)
 user_some_state = 0
