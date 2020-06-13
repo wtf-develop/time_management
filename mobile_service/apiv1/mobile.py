@@ -12,14 +12,14 @@ from _common.api import utils
 from _common.api import db
 
 
-# SQL query MUST be optimized later
-def getTotalIdsString(user_id: int, devid: int, chanel0: int, chanel1: int, chanel2: int, chanel3: int) -> str:
-    links = getLinkedDevices(devid)
-    own = getOwnDevices(user_id, devid, chanel0, chanel1, chanel2, chanel3)
+# SQL query MUST be optimized - later
+def getTotalIdsString(user_id: int, devid: int) -> str:
+    links = getLinkedDevices(user_id, devid)
+    own = getOwnDevices(user_id, devid)
     tasks = getLinkedTasks(devid)
     result = []
     sql = '''
-    select group_concat(globalid separator '+') as val from tasks
+    select group_concat(globalid separator ',') as val, max(update_time) as time from tasks
     where state=20 and
     (
     (id in (''' + ','.join(tasks) + '''))
@@ -39,33 +39,33 @@ def getTotalIdsString(user_id: int, devid: int, chanel0: int, chanel1: int, chan
     mydb.execute(sql)
     row = mydb.fetchone()
     if(row is None):
-        return ''
+        return {'val': '', 'time': 0}
     if 'val' not in row:
-        return ''
+        return {'val': '', 'time': 0}
     if row['val'] is None:
-        return ''
-    return row['val']
+        return {'val': '', 'time': 0}
+    return row
     # myown device will get all data that its owned
 
 
-def getLinkedDevices(devid: int) -> dict:
+def getLinkedDevices(user_id: int, devid: int) -> dict:
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
-    sql = '''select s.src as id, d.name, s.chanel0,s.chanel1,s.chanel2,s.chanel3
-    from sync_devices s, devices d
-    where s.dst=''' + str(devid) + ''' and s.state>0 and d.id=s.src
-    '''
-    mydb.execute(sql)
-    rows = mydb.fetchall()
-    for row in rows:
-        result['all'].append(row)
-        if(row['chanel0'] == 0):
-            result['0'].append(row['id'])
-        if(row['chanel1'] == 1):
-            result['1'].append(row['id'])
-        if(row['chanel2'] == 2):
-            result['2'].append(row['id'])
-        if(row['chanel3'] == 3):
-            result['3'].append(row['id'])
+
+    links = db.getUserLinkedDevices(
+        user_id=user_id, devid=devid, incomming=True, outgoing=False)
+
+    for key, value in links['all']:
+        result['all'].append({'id': value, 'name': links['names'][value]})
+
+    for value in links['in']['0']:
+        result['0'].append(value['src'])
+    for value in links['in']['1']:
+        result['1'].append(value['src'])
+    for value in links['in']['2']:
+        result['2'].append(value['src'])
+    for value in links['in']['3']:
+        result['3'].append(value['src'])
+
     if len(result['0']) < 1:
         result['0'].append(0)
     if len(result['1']) < 1:
@@ -79,16 +79,10 @@ def getLinkedDevices(devid: int) -> dict:
     return result
 
 
-def getOwnDevices(user_id: int, devid: int, chanel0: int, chanel1: int, chanel2: int, chanel3: int) -> dict:
+def getOwnDevices(user_id: int, devid: int) -> dict:
     result = {'0': [devid], '1': [devid], '2': [
         devid], '3': [devid], 'all': [devid]}
-    sql = '''select d.id,d.name
-    from devices d
-    where d.uid=''' + str(user_id) + ''' and d.state>0 and d.id!=''' + str(devid) + '''
-    '''
-    mydb.execute(sql)
-    rows = mydb.fetchall()
-
+    db.getUserOwnDevices(user_id, devid)
     # myown device will get all data that its owned
     for row in rows:
         result['all'].append(row)
@@ -129,3 +123,7 @@ def getLinkedTasks(devid: int) -> list:
     if len(result) < 1:
         result.append(0)
     return result
+
+
+def log(message: str, tag: str = '  info'):
+    utils.log(message, tag, 'mobile')

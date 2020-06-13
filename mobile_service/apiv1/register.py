@@ -14,7 +14,7 @@ from _common.api import headers
 from _common.api import auth
 from _common.api._settings import mydb, mydb_connection
 from _common.api import db
-from mobile_service.apiv1 import functions as func
+from mobile_service.apiv1 import mobile
 
 
 def badExit(index: int):
@@ -77,6 +77,7 @@ if usr is None:  # Need to create new record
         jsonpost['login'] + '", password="' + jsonpost['password'] +
         '", state=1, created=' + timestamp_string)
     auth.user_id = mydb_connection.insert_id()
+    mobile.log('New user registered id:' + auth.user_id)
 else:
     if int(usr['state']) < 1:  # if user exists, but wrong password
         usr['id'] = 0
@@ -100,6 +101,7 @@ if dev is None:  # Need to add new device to user
         '", state=1, created=' + timestamp_string +
         ', lastconnect=' + timestamp_string)
     auth.user_some_state = mydb_connection.insert_id()
+    mobile.log('New device added id:' + auth.user_some_state)
 else:
     auth.user_some_state = int(dev['id'])
 
@@ -110,3 +112,4 @@ auth.credentials = auth.buildCredentials(
     int(usr['id']), usr['login'], usr['password'], 1, auth.user_some_state)
 headers.jsonAPI(False)
 print('{"accepted": true, "token":"' + auth.credentials + '"}')
+mobile.log('Token was sent to device id:' + auth.user_some_state)

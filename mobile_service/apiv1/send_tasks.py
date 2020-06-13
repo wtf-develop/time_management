@@ -13,7 +13,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import utils
 from _common.api import db
-from mobile_service.apiv1 import functions as func
+from mobile_service.apiv1 import mobile
 
 headers.jsonAPI()
 if not(auth.isMobile):  # check that this request from mobile application
@@ -26,12 +26,14 @@ json = auth._POST
 if 'data' not in json:
     headers.errorResponse('Nothing was sent')
 data = json['data']
-mobile_crc = json['crc32']
+mobile_crc32 = json['sync_info']['crc32']
+mobile_time = json['sync_info']['time']
 if len(data) > 0:
     for task in data:
         db.saveTask(task)
 
 # After updating we check CRC32 values,
 # if they are different - need to check
-server_crc = utils.crc32(func.getTotalIdsString(
-    auth.user_id, auth.user_some_state, auth.user_ch0, auth.user_ch1, auth.user_ch2, auth.user_ch3))
+obj = mobile.getTotalIdsString(
+    auth.user_id, auth.user_some_state, auth.user_ch0, auth.user_ch1, auth.user_ch2, auth.user_ch3)
+obj['crc32'] = utils.crc32(obj['val'])

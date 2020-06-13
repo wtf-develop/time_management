@@ -15,11 +15,20 @@ from _common.api import db
 
 
 headers.jsonAPI()
-devices = [{'id': 0, 'name': '@str.all_devices'}, {'id': 100, 'selected': 1, 'name': 'xiaOmi'.title()},
-           {'id': 101, 'name': 'Samsung'.title()}, {'id': 102, 'name': 'Philips'.title()}]
+ext_links = db.getUserLinkedDevices(auth.user_id)
+ext_link_names = ext_links['names']
+ext_link_ids = ext_links['all']
+linked_devices = []
+for key in ext_link_ids:
+    obj = {'id': ext_link_ids[key],
+           'name': ext_link_names[ext_link_ids[key]]['device'].title(),
+           'user': (ext_link_names[ext_link_ids[key]]['user'] or '').title()
+           }
+    linked_devices.append(obj)
+own_devices = db.getUserOwnDevices(auth.user_id)
 headers.goodResponse({'login': auth.user_login,
                       'some_state': auth.user_some_state,
                       'all_devices': [{'id': 0, 'name': '@str.all_devices'}],
-                      'own_devices': db.getUserOwnDevices(auth.user_id)['all'],
-                      'linked_devices': db.getUserLinkedDevices(auth.user_id)['all']
+                      'own_devices': own_devices['all'],
+                      'linked_devices': linked_devices
                       })
