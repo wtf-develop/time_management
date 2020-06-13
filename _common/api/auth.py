@@ -116,7 +116,7 @@ def checkCredentials(arr: list):
         user_some_state = some_state
         return True
     else:  # if mobile need to check device id in database
-        mydb.execute('select id,chanel0,chanel1,chanel2,chanel3 from devices where id=' + str(some_state) + ' and uid=' +
+        mydb.execute('select id,sync0,sync1,sync2,sync3 from devices where id=' + str(some_state) + ' and uid=' +
                      str(uid) + ' and state>0')
         dev = mydb.fetchone()
         if row is None:
@@ -130,10 +130,10 @@ def checkCredentials(arr: list):
             user_login = utils.clearUserLogin(login)
             user_password = passwd
             user_remember = 1
-            user_ch0 = int(dev['chanel0'])
-            user_ch1 = int(dev['chanel1'])
-            user_ch2 = int(dev['chanel2'])
-            user_ch3 = int(dev['chanel3'])
+            user_ch0 = int(dev['sync0'])
+            user_ch1 = int(dev['sync1'])
+            user_ch2 = int(dev['sync2'])
+            user_ch3 = int(dev['sync3'])
             if user_ch0 != 0:
                 user_ch0 = -1
             if user_ch1 != 1:

@@ -174,7 +174,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
 
     if incomming:
         # get external devices that send info to user  id - src (ext-dev), dst - user device
-        sql = '''select u.login,d2.name as dst_name,s.dst,d.name,d.id,s.chanel0,s.chanel1,s.chanel2,s.chanel3
+        sql = '''select u.login,d2.name as dst_name,s.dst,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3
                 from devices as d
                 inner join sync_devices as s on s.src=d.id
                 inner join devices as d2 on s.dst=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
@@ -202,18 +202,18 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             result_all[row['id']] = row['id']
             result_in_all[row['id']] = row['id']
             obj = {'src': row['id'], 'dst': row['dst']}
-            if(row['chanel0'] == 0):
+            if(row['sync0'] == 0):
                 result_in['0'].append(obj)
-            if(row['chanel1'] == 1):
+            if(row['sync1'] == 1):
                 result_in['1'].append(obj)
-            if(row['chanel2'] == 2):
+            if(row['sync2'] == 2):
                 result_in['2'].append(obj)
-            if(row['chanel3'] == 3):
+            if(row['sync3'] == 3):
                 result_in['3'].append(obj)
 
     if outgoing:
         # get external devices that receive info from user  id - desctination (ext-dev), src - user device
-        sql = '''select u.login,d2.name as src_name,s.src,d.name,d.id,s.chanel0,s.chanel1,s.chanel2,s.chanel3 from devices as d
+        sql = '''select u.login,d2.name as src_name,s.src,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3 from devices as d
             inner join sync_devices as s on s.dst=d.id
             inner join devices as d2 on s.src=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
             inner join users as u on d.uid=u.id
@@ -235,13 +235,13 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             result_all[row['id']] = row['id']
             result_out_all[row['id']] = row['id']
             obj = {'src': row['src'], 'dst': row['id']}
-            if(row['chanel0'] == 0):
+            if(row['sync0'] == 0):
                 result_out['0'].append(obj)
-            if(row['chanel1'] == 1):
+            if(row['sync1'] == 1):
                 result_out['1'].append(obj)
-            if(row['chanel2'] == 2):
+            if(row['sync2'] == 2):
                 result_out['2'].append(obj)
-            if(row['chanel3'] == 3):
+            if(row['sync3'] == 3):
                 result_out['3'].append(obj)
 
     return result
@@ -250,17 +250,17 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
 def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
 
-    sql = '''select d.id,d.name,chanel0,chanel1,chanel2,chanel3
+    sql = '''select d.id,d.name,sync0,sync1,sync2,sync3
     from devices d
     where d.uid=''' + str(user_id) + ''' and d.state>0
     '''
 
     if devid > 0:
         sql = '''select d.id,d.name,
-            CASE WHEN d.chanel0<d2.chanel0 then d.chanel0 else d2.chanel0 end as chanel0,
-            CASE WHEN d.chanel1<d2.chanel1 then d.chanel1 else d2.chanel1 end as chanel1,
-            CASE WHEN d.chanel2<d2.chanel2 then d.chanel2 else d2.chanel2 end as chanel2,
-            CASE WHEN d.chanel3<d2.chanel3 then d.chanel3 else d2.chanel3 end as chanel3
+            CASE WHEN d.sync0<d2.sync0 then d.sync0 else d2.sync0 end as sync0,
+            CASE WHEN d.sync1<d2.sync1 then d.sync1 else d2.sync1 end as sync1,
+            CASE WHEN d.sync2<d2.sync2 then d.sync2 else d2.sync2 end as sync2,
+            CASE WHEN d.sync3<d2.sync3 then d.sync3 else d2.sync3 end as sync3
             from devices d
             inner join devices d2 on d.uid=d2.uid and d2.id=''' + str(devid) + ''' and d2.state>0
             where d.uid=''' + str(user_id) + ''' and d.id!=''' + str(devid) + ''' and d.state>0
@@ -272,13 +272,13 @@ def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
     # myown device will get all data that its owned
     for row in rows:
         result['all'].append(row)
-        if(row['chanel0'] == 0):
+        if(row['sync0'] == 0):
             result['0'].append(row['id'])
-        if(row['chanel1'] == 1):
+        if(row['sync1'] == 1):
             result['1'].append(row['id'])
-        if(row['chanel2'] == 2):
+        if(row['sync2'] == 2):
             result['2'].append(row['id'])
-        if(row['chanel3'] == 3):
+        if(row['sync3'] == 3):
             result['3'].append(row['id'])
     return result
 

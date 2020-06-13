@@ -32,7 +32,7 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     or
     (type=3 and devid in (''' + (','.join(links['3'])) + '''))
     or
-    (type in (''' + chanel0 + ',' + chanel1 + ',' + chanel2 + ',' + chanel3 + ''')
+    (type in (''' + sync0 + ',' + sync1 + ',' + sync2 + ',' + sync3 + ''')
      and devid in (''' + (','.join(own['all'])) + '''))
     )
     '''
@@ -86,13 +86,13 @@ def getOwnDevices(user_id: int, devid: int) -> dict:
     # myown device will get all data that its owned
     for row in rows:
         result['all'].append(row)
-        if(chanel0 == 0):
+        if(sync0 == 0):
             result['0'].append(row['id'])
-        if(chanel1 == 1):
+        if(sync1 == 1):
             result['1'].append(row['id'])
-        if(chanel2 == 2):
+        if(sync2 == 2):
             result['2'].append(row['id'])
-        if(chanel3 == 3):
+        if(sync3 == 3):
             result['3'].append(row['id'])
     if len(result['0']) < 1:
         result['0'].append(0)
