@@ -21,9 +21,9 @@ def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_stat
     else:
         timestamp = int(time.time()) + 30 * 60
     hashstr = hashlib.md5(
-        (str(timestamp) + str(some_state) + login + str(remember) + str(
-            uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
-            'utf-8')).hexdigest().lower()
+            (str(timestamp) + str(some_state) + login + str(remember) + str(
+                    uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
+                    'utf-8')).hexdigest().lower()
     return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hashstr
 
 
@@ -64,7 +64,7 @@ def checkCredentials(arr: list):
     except Exception:
         timestamp = 0
 
-    if(timestamp < int(time.time())):
+    if (timestamp < int(time.time())):
         return __resetAuth()
 
     try:
@@ -72,7 +72,7 @@ def checkCredentials(arr: list):
     except Exception:
         remember = 0
 
-    if(isMobile) and (remember != 1):
+    if (isMobile) and (remember != 1):
         return __resetAuth()
 
     try:
@@ -80,7 +80,7 @@ def checkCredentials(arr: list):
     except Exception:
         some_state = 0
 
-    if(isMobile) and (some_state < 1):
+    if (isMobile) and (some_state < 1):
         return __resetAuth()
 
     myhash = arr[4]
@@ -102,13 +102,13 @@ def checkCredentials(arr: list):
         return __resetAuth()
 
     hash2 = hashlib.md5(
-        (str(timestamp) + str(some_state) + login + str(remember) + str(
-            uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
-            'utf-8')).hexdigest().lower()
+            (str(timestamp) + str(some_state) + login + str(remember) + str(
+                    uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
+                    'utf-8')).hexdigest().lower()
     if myhash != hash2:
         return __resetAuth()
 
-    if not(isMobile):  # if not mobile - complete
+    if not (isMobile):  # if not mobile - complete
         user_id = uid
         user_login = utils.clearUserLogin(login)
         user_password = passwd
@@ -166,11 +166,10 @@ isMobile = False
 if req_agent.startswith('PlanMe mobile reminder APP'):
     isMobile = True
 
-
 _GET = None  # always not NONE. Check exact values. Device-id is always there
 if len(req_query) > 0:
     _GET = parse.parse_qs(req_query)
-    if('devid' not in _GET):
+    if ('devid' not in _GET):
         _GET['devid'] = 0
     try:
         _GET['devid'] = int(_GET['devid'])
@@ -189,16 +188,17 @@ if req_method.lower().strip() == "post":
     except Exception:
         _POST = None
 
-
-credentials = req_cookie.get("credentials")
-if not (credentials is None):
-    # try fetch token from cookie (FIRST!!)
-    credentials = credentials.value
-elif not(_GET is None) and ('credentials' in _GET) and not(_GET['credentials'] is None):
+credentials = None
+if not (_GET is None) and ('credentials' in _GET) and not (_GET['credentials'] is None):
     # try fetch token from GET parameter (ONLY AFTER COOKIE!!)
     credentials = _GET['credentials']
 else:
-    credentials = ''
+    credentials = req_cookie.get("credentials")
+    if not (credentials is None):
+        # try fetch token from cookie (FIRST!!)
+        credentials = credentials.value
+    else:
+        credentials = ''
 
 user_lang = req_cookie.get("lang")
 if not (user_lang is None):
@@ -208,7 +208,7 @@ else:
 user_lang = user_lang.lower()
 
 user_indx = 0
-if not(isMobile):
+if not (isMobile):
     user_indx = req_cookie.get("indx")
     if not (user_indx is None):
         try:
@@ -217,7 +217,6 @@ if not(isMobile):
             user_indx = 0
     else:
         user_indx = 0
-
 
 user_role = "GUEST"
 access_levels = 0
@@ -240,11 +239,11 @@ if credentials is None:
 else:
     credentials = str(credentials).strip()[:150]
     if checkCredentials(credentials.split('_', 7)):
-        if not(isMobile):
+        if not (isMobile):
             user_some_state = user_indx
 
         credentials = buildCredentials(
-            user_id, user_login, user_password, user_remember, user_some_state)
+                user_id, user_login, user_password, user_remember, user_some_state)
         user_password = ''  # reset MD5 hashed password from global variable
         access_levels = 1
         timestamp_string = str(int(time.time() * 1000))

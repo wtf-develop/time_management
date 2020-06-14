@@ -54,9 +54,14 @@ if 'password' not in jsonpost:
 if 'device' not in jsonpost:
     badExit(4)
 
+if len(jsonpost['device']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['password']) < 4:
+    headers.errorResponse('Too short values. Minimum 4 symbols')
+
 jsonpost['remember'] = -1
 if auth.isMobile:  # Yes only from Mobile!!!
     jsonpost['remember'] = 1
+else:
+    badExit(6)
 
 if (jsonpost['remember'] > 1) or (jsonpost['remember'] < 0):
     badExit(6)
@@ -80,7 +85,7 @@ if usr is None:  # Need to create new record
             jsonpost['login'] + '", password="' + jsonpost['password'] +
             '", state=1, created=' + timestamp_string)
     auth.user_id = mydb_connection.insert_id()
-    mobile.log('New user registered id:' + auth.user_id)
+    mobile.log('New user registered id:' + str(auth.user_id))
 else:
     if int(usr['state']) < 1:  # if user exists, but wrong password
         usr['id'] = 0
@@ -104,7 +109,7 @@ if dev is None:  # Need to add new device to user
             '", state=1, created=' + timestamp_string +
             ', lastconnect=' + timestamp_string)
     auth.user_some_state = mydb_connection.insert_id()
-    mobile.log('New device added id:' + auth.user_some_state)
+    mobile.log('New device added id:' + str(auth.user_some_state))
 else:
     auth.user_some_state = int(dev['id'])
 
@@ -112,7 +117,7 @@ if auth.user_some_state < 1:
     wrongCred(4)
 
 auth.credentials = auth.buildCredentials(
-        int(usr['id']), usr['login'], usr['password'], 1, auth.user_some_state)
+        int(auth.user_id), jsonpost['login'], jsonpost['password'], 1, auth.user_some_state)
 headers.jsonAPI(False)
-print('{"accepted": true, "token":"' + auth.credentials + '"}')
-mobile.log('Token was sent to device id:' + auth.user_some_state)
+mobile.log('Token was sent to device id:' + str(auth.user_some_state))
+headers.goodResponse({'accepted': True, 'token': auth.credentials})
