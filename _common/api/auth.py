@@ -11,7 +11,7 @@ from _common.api import db
 
 
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
-    global req_agent, req_scheme, req_language
+    global req_agent, req_scheme, req_language, __hash_key
     if uid == 0:
         return ''
     timestamp = 0
@@ -22,7 +22,7 @@ def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_stat
         timestamp = int(time.time()) + 30 * 60
     hashstr = hashlib.md5(
         (str(timestamp) + str(some_state) + login + str(remember) + str(
-            uid) + passwd + 'WASSUP!' + req_agent + req_scheme + req_language).encode(
+            uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
             'utf-8')).hexdigest().lower()
     return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hashstr
 
@@ -39,7 +39,7 @@ def __resetAuth():
 
 
 def checkCredentials(arr: list):
-    global user_sync0, user_sync1, user_sync2, user_sync3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
+    global __hash_key, user_sync0, user_sync1, user_sync2, user_sync3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
     if len(arr) != 5:
         return __resetAuth()
 
@@ -103,7 +103,7 @@ def checkCredentials(arr: list):
 
     hash2 = hashlib.md5(
         (str(timestamp) + str(some_state) + login + str(remember) + str(
-            uid) + passwd + 'WASSUP!' + req_agent + req_scheme + req_language).encode(
+            uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
             'utf-8')).hexdigest().lower()
     if myhash != hash2:
         return __resetAuth()
@@ -153,7 +153,7 @@ def credentialsHeader():
 # -------- run part -------
 # -------- run part -------
 # -------- run part -------
-
+__hash_key = 'WASSUP!'
 req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
 req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:39]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]

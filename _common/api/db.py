@@ -5,10 +5,8 @@ import json
 import random
 import string
 
-
 from _common.api._settings import mydb_connection, mydb
 from _common.api import utils
-
 
 #
 # Functions for storing data for different tables
@@ -33,7 +31,7 @@ def saveTask(data: dict) -> int:
     # do all necessary checks and convert types
     data = utils.replace_keys(data, tasks_keymap)
     required = set(['devid', 'title', 'desc', 'type'])
-    if not(required.isubset(data.keys())):
+    if not (required.isubset(data.keys())):
         return -1
     # Convert all values only to Integers and Strings.
     # Other primitive types except float - it's a big lying
@@ -42,55 +40,55 @@ def saveTask(data: dict) -> int:
                       'repeat_type', 'repeat_value', 'defered_interval', 'year',
                       'month', 'day', 'hour', 'minute', 'timezone', 'utc_flag'])
     for key, value in data:
-        if(key in int_fields):
-            if not(isinstance(value, int)):
+        if (key in int_fields):
+            if not (isinstance(value, int)):
                 try:
                     data[key] = int(value)
                 except Exception:
                     return -2
         else:
-            if not(isinstance(value, str)):
+            if not (isinstance(value, str)):
                 try:
                     data[key] = str(value)
                 except Exception:
                     return -3
 
-    if(data['devid'] < 1):
+    if (data['devid'] < 1):
         return -4
 
     if data['type'] == 0:  # timer
         required = set(['alarm_type', 'start_time', 'repeat_type',
                         'repeat_value', 'defered_interval', 'year', 'month',
                         'day', 'hour', 'minute', 'timezone', 'utc_flag'])
-        if not(required.isubset(data.keys())):
+        if not (required.isubset(data.keys())):
             return -5
     elif data['type'] == 1:  # for the whole day
         required = set(['start_time', 'duration_time', 'repeat_type',
                         'repeat_value', 'year', 'month', 'day', 'timezone'])
-        if not(required.isubset(data.keys())):
+        if not (required.isubset(data.keys())):
             return -6
     elif data['type'] == 2:  # notes
         required = set(['state', 'priority', 'ordr'])
-        if not(required.isubset(data.keys())):
+        if not (required.isubset(data.keys())):
             return -7
 
     elif data['type'] == 3:  # geo based reminders
         required = set(['start_time', 'repeat_type',
                         'repeat_value', 'locations'])
-        if not(required.isubset(data.keys())):
+        if not (required.isubset(data.keys())):
             return -8
     else:
         return -9  # not supported task type
 
     timestampstr = str(int(time.time() * 1000))
 
-    if('id' not in data) or (data['id'] < 1):  # new record in tasks
+    if ('id' not in data) or (data['id'] < 1):  # new record in tasks
         data['id'] = 0
-        data['globalid'] = timestampstr + '-' + utils.rand_string() + \
-            str(data['type'] + str(data['devid']))
+        data['globalid'] = timestampstr + '-' + utils.rand_string() +\
+                           str(data['type'] + str(data['devid']))
         data['created'] = timestampstr  # dont change this later never!
 
-    if('globalid' not in data) or (len(data['globalid']) < 10):
+    if ('globalid' not in data) or (len(data['globalid']) < 10):
         # Error globalid must always present!
         # if its new record - it will be updated by prev condition
         # ->> if('id' not in data) or (data['id'] < 1) <<-
@@ -98,14 +96,14 @@ def saveTask(data: dict) -> int:
 
     # always update time after any changes
     data['update_time'] = timestampstr
-    if(data['id'] > 0):  # dont change this values!
+    if (data['id'] > 0):  # dont change this values!
         data.pop('created', None)
         data.pop('globalid', None)
 
     sql = ''
-    if(data['id'] > 0):
-        sql = 'update tasks set ' + \
-            __build_update(data) + ' where id=' + data['id']
+    if (data['id'] > 0):
+        sql = 'update tasks set ' +\
+              __build_update(data) + ' where id=' + data['id']
         try:
             mydb.execute(sql)
         except Exception:
@@ -128,10 +126,10 @@ def __build_update(data: dict) -> str:
     for key, value in data.items():
         if (key == 'id') or (key == 'globalid') or (key == 'created'):  # ignore this fields
             continue
-        if(isinstance(value, str)):
-            result = result + key + '="' + \
-                mydb_connection.escape_string(value) + '",'
-        elif(isinstance(value, int)):
+        if (isinstance(value, str)):
+            result = result + key + '="' +\
+                     mydb_connection.escape_string(value) + '",'
+        elif (isinstance(value, int)):
             result = result + key + '=' + str(value) + ','
     return result.strip(", ")
 
@@ -144,10 +142,10 @@ def __build_insert(data: dict) -> str:
             continue
         if (isinstance(value, str)):
             prefix = prefix + key + ','
-            postfix = postfix + '"' + \
-                mydb_connection.escape_string(value) + '",'
+            postfix = postfix + '"' +\
+                      mydb_connection.escape_string(value) + '",'
 
-        elif(isinstance(value, int)):
+        elif (isinstance(value, int)):
             prefix = prefix + key + ','
             postfix = postfix + str(value) + ','
     # return last part of insert statement
@@ -202,13 +200,13 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             result_all[row['id']] = row['id']
             result_in_all[row['id']] = row['id']
             obj = {'src': row['id'], 'dst': row['dst']}
-            if(row['sync0'] == 0):
+            if (row['sync0'] == 0):
                 result_in['0'].append(obj)
-            if(row['sync1'] == 1):
+            if (row['sync1'] == 1):
                 result_in['1'].append(obj)
-            if(row['sync2'] == 2):
+            if (row['sync2'] == 2):
                 result_in['2'].append(obj)
-            if(row['sync3'] == 3):
+            if (row['sync3'] == 3):
                 result_in['3'].append(obj)
 
     if outgoing:
@@ -235,13 +233,13 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             result_all[row['id']] = row['id']
             result_out_all[row['id']] = row['id']
             obj = {'src': row['src'], 'dst': row['id']}
-            if(row['sync0'] == 0):
+            if (row['sync0'] == 0):
                 result_out['0'].append(obj)
-            if(row['sync1'] == 1):
+            if (row['sync1'] == 1):
                 result_out['1'].append(obj)
-            if(row['sync2'] == 2):
+            if (row['sync2'] == 2):
                 result_out['2'].append(obj)
-            if(row['sync3'] == 3):
+            if (row['sync3'] == 3):
                 result_out['3'].append(obj)
 
     return result
@@ -250,7 +248,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
 def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
 
-    sql = '''select d.id,d.name,sync0,sync1,sync2,sync3
+    sql = '''select d.id,d.name,0 as sync0,1 as sync1,2 as sync2,3 as sync3
     from devices d
     where d.uid=''' + str(user_id) + ''' and d.state>0
     '''
@@ -272,13 +270,13 @@ def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
     # myown device will get all data that its owned
     for row in rows:
         result['all'].append(row)
-        if(row['sync0'] == 0):
+        if (row['sync0'] == 0):
             result['0'].append(row['id'])
-        if(row['sync1'] == 1):
+        if (row['sync1'] == 1):
             result['1'].append(row['id'])
-        if(row['sync2'] == 2):
+        if (row['sync2'] == 2):
             result['2'].append(row['id'])
-        if(row['sync3'] == 3):
+        if (row['sync3'] == 3):
             result['3'].append(row['id'])
     return result
 

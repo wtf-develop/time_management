@@ -6,8 +6,9 @@ import inspect
 import json
 import hashlib
 import time
+
 currentdir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
+        inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
 from _common.api import utils
 from _common.api import headers
@@ -21,19 +22,21 @@ def badExit(index: int):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
+    mobile.elog('Request error - ' + str(index), 'reg')
     headers.errorResponse(
-        '@str.error', ' @str.bad_request - ' + str(index), 400)
+            '@str.error', ' @str.bad_request - ' + str(index), 400)
 
 
 def wrongCred(index: int):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
+    mobile.elog('Credentials error - ' + str(index), 'auth')
     headers.errorResponse('@str.error', '@str.not_found - ' + str(index), 404)
 
 
 # Registration only from mobile device (mobile application)
-if not(auth.isMobile):
+if not (auth.isMobile):
     badExit(0)
 
 timestamp_string = str(int(time.time() * 1000))
@@ -64,18 +67,18 @@ if len(jsonpost['device']) < 1:
 
 jsonpost['login'] = utils.clearUserLogin(jsonpost['login'])
 jsonpost['password'] = hashlib.md5(
-    (jsonpost['password']).encode('utf-8')).hexdigest().lower()
+        (jsonpost['password']).encode('utf-8')).hexdigest().lower()
 
 auth.user_some_state = 0
 auth.user_id = 0
 mydb.execute(
-    'select id,login,password,state from users where login="' + jsonpost['login'] + '"')
+        'select id,login,password,state from users where login="' + jsonpost['login'] + '"')
 usr = mydb.fetchone()
 if usr is None:  # Need to create new record
     mydb.execute(
-        'insert into users set login="' +
-        jsonpost['login'] + '", password="' + jsonpost['password'] +
-        '", state=1, created=' + timestamp_string)
+            'insert into users set login="' +
+            jsonpost['login'] + '", password="' + jsonpost['password'] +
+            '", state=1, created=' + timestamp_string)
     auth.user_id = mydb_connection.insert_id()
     mobile.log('New user registered id:' + auth.user_id)
 else:
@@ -90,16 +93,16 @@ else:
 if auth.user_id < 1:
     wrongCred(3)
 mydb.execute(
-    'select id from devices where uid=' + str(auth.user_id) +
-    ' and name="' + jsonpost['device'] +
-    '" and state>0')
+        'select id from devices where uid=' + str(auth.user_id) +
+        ' and name="' + jsonpost['device'] +
+        '" and state>0')
 dev = mydb.fetchone()
 if dev is None:  # Need to add new device to user
     mydb.execute(
-        'insert into devices set uid=' + str(auth.user_id) +
-        ', name="' + jsonpost['device'] +
-        '", state=1, created=' + timestamp_string +
-        ', lastconnect=' + timestamp_string)
+            'insert into devices set uid=' + str(auth.user_id) +
+            ', name="' + jsonpost['device'] +
+            '", state=1, created=' + timestamp_string +
+            ', lastconnect=' + timestamp_string)
     auth.user_some_state = mydb_connection.insert_id()
     mobile.log('New device added id:' + auth.user_some_state)
 else:
@@ -109,7 +112,7 @@ if auth.user_some_state < 1:
     wrongCred(4)
 
 auth.credentials = auth.buildCredentials(
-    int(usr['id']), usr['login'], usr['password'], 1, auth.user_some_state)
+        int(usr['id']), usr['login'], usr['password'], 1, auth.user_some_state)
 headers.jsonAPI(False)
 print('{"accepted": true, "token":"' + auth.credentials + '"}')
 mobile.log('Token was sent to device id:' + auth.user_some_state)
