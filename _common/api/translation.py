@@ -29,7 +29,8 @@ lang = {
         'completed': 'Completed',
         'canceled': 'Canceled',
         'archived': 'Archived',
-        'all_devices': 'All devices'
+        'all_devices': 'All devices',
+        'mobile_too_short': 'Minimum 4 symbols for each value',
 
     },
     'ru': {
@@ -60,8 +61,8 @@ lang = {
         'completed': 'Завершенные',
         'canceled': 'Отмененные',
         'archived': 'Архивные',
-        'all_devices': 'Все устройства'
-
+        'all_devices': 'Все устройства',
+        'mobile_too_short': 'Минимум 4 символа для каждого поля',
 
     },
     'de': {
@@ -105,7 +106,7 @@ def get_array(lang_code: str):
 
 
 def get_array_with_code(lang_code: str):
-    if lang is None:
+    if lang_code is None:
         return json.dumps({'code': 'en', 'data': lang['en']})
     if lang_code == 'en':
         return json.dumps({'code': 'en', 'data': lang['en']})
@@ -118,10 +119,17 @@ def get_array_with_code(lang_code: str):
 
 
 def getAppName(lang_code: str) -> str:
-    if (lang is None) or (lang_code == 'en'):
-        return lang['en']['application']
+    return getValue('application',lang_code)
+
+
+def getValue(key: str, lang_code: str):
+    if (lang_code is None) or (lang_code == 'en'):
+        lang_code = 'en'
     if (not (lang_code in lang)) or (lang[lang_code] is None):
-        return lang['en']['application']
-    if 'application' not in lang[lang_code]:
-        return lang['en']['application']
-    return lang[lang_code]['application']
+        lang_code = 'en'
+    if key not in lang[lang_code]:
+        lang_code = 'en'
+    if (lang is None) or (lang_code not in lang) or (lang[lang_code] is None) or (key not in lang[lang_code]) or (
+            lang[lang_code][key] is None):
+        return key
+    return lang[lang_code][key]

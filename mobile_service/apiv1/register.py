@@ -16,6 +16,7 @@ from _common.api import auth
 from _common.api._settings import mydb, mydb_connection
 from _common.api import db
 from mobile_service.apiv1 import mobile
+from _common.api import translation
 
 
 def badExit(index: int):
@@ -24,7 +25,7 @@ def badExit(index: int):
     time.sleep(1)
     mobile.elog('Request error - ' + str(index), 'reg')
     headers.errorResponse(
-            '@str.error', ' @str.bad_request - ' + str(index), 400)
+            'Bad request - ' + str(index), ' Request to server is incorrect', 400)
 
 
 def wrongCred(index: int):
@@ -32,7 +33,7 @@ def wrongCred(index: int):
     headers.jsonAPI(False)
     time.sleep(1)
     mobile.elog('Credentials error - ' + str(index), 'auth')
-    headers.errorResponse('@str.error', '@str.not_found - ' + str(index), 404)
+    headers.errorResponse('Incorrect login or password', 'user not found - ' + str(index), 404)
 
 
 # Registration only from mobile device (mobile application)
@@ -54,8 +55,12 @@ if 'password' not in jsonpost:
 if 'device' not in jsonpost:
     badExit(4)
 
-if len(jsonpost['device']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['password']) < 4:
-    headers.errorResponse('Too short values. Minimum 4 symbols')
+if len(jsonpost['login']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['device']) < 4:
+    auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
+    headers.jsonAPI(False)
+    time.sleep(1)
+    mobile.elog('Too short symbols', 'auth')
+    headers.errorResponse(translation.getValue('mobile_too_short', auth.req_language))
 
 jsonpost['remember'] = -1
 if auth.isMobile:  # Yes only from Mobile!!!
