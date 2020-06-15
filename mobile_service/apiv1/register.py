@@ -60,7 +60,7 @@ if len(jsonpost['login']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['
     headers.jsonAPI(False)
     time.sleep(1)
     mobile.elog('Too short symbols', 'auth')
-    headers.errorResponse(translation.getValue('mobile_too_short', auth.req_language))
+    headers.errorResponse(translation.getValue('mobile_too_short'))
 
 jsonpost['remember'] = -1
 if auth.isMobile:  # Yes only from Mobile!!!

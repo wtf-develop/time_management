@@ -1,4 +1,5 @@
 import json
+from _common.api import auth
 
 lang = {
     'en': {
@@ -119,10 +120,10 @@ def get_array_with_code(lang_code: str):
 
 
 def getAppName(lang_code: str) -> str:
-    return getValue('application',lang_code)
+    return getValue('application', lang_code)
 
 
-def getValue(key: str, lang_code: str):
+def getValue(key: str, lang_code: str = auth.req_language):
     if (lang_code is None) or (lang_code == 'en'):
         lang_code = 'en'
     if (not (lang_code in lang)) or (lang[lang_code] is None):
