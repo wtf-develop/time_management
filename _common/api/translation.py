@@ -93,7 +93,7 @@ lang = {
 }
 
 
-def get_array(lang_code: str):
+def get_array(lang_code: str):# for injecting into HTML pages
     if lang is None:
         return json.dumps(lang['en'])
     if lang_code == 'en':
@@ -108,15 +108,15 @@ def get_array(lang_code: str):
 
 def get_array_with_code(lang_code: str):
     if lang_code is None:
-        return json.dumps({'code': 'en', 'data': lang['en']})
+        return ({'code': 'en', 'data': lang['en']})
     if lang_code == 'en':
-        return json.dumps({'code': 'en', 'data': lang['en']})
+        return ({'code': 'en', 'data': lang['en']})
     if (not (lang_code in lang)) or (lang[lang_code] is None):
-        return json.dumps({'code': 'en', 'data': lang['en']})
+        return ({'code': 'en', 'data': lang['en']})
     result = lang['en']
     for key in lang[lang_code]:
         result[key] = lang[lang_code][key]
-    return json.dumps({'code': lang_code, 'data': result})
+    return ({'code': lang_code, 'data': result})
 
 
 def getAppName(lang_code: str) -> str:

@@ -2,10 +2,10 @@ import pymysql
 
 # Database access information
 mydb_connection = pymysql.connect(
-    host="localhost",
-    database='reminder',
-    user="root",
-    passwd=""
+        host="localhost",
+        database='reminder',
+        user="root",
+        passwd=""
 )
 
 # check write folder permissions.
@@ -13,6 +13,8 @@ mydb_connection = pymysql.connect(
 logs_path = '/var/log/planme/'
 enable_logging = True
 
+# enable GZIP compression for JSON APIs
+enable_gzip = True
 
 # ---------------- Don't change code below ----------------
 # ---------------- Don't change code below ----------------

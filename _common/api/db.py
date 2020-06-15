@@ -83,23 +83,44 @@ def saveTask(data: dict) -> int:
 
     timestampstr = str(int(time.time() * 1000))
 
-    if ('id' not in data) or (data['id'] < 1):  # new record in tasks
+    if ('id' not in data) or (data['id'] is None) or (data['id'] < 1):  # new record in tasks
         data['id'] = 0
+
+    if ('globalid' not in data) or (data['globalid'] is None) or len(data['globalid']) < 10:
+        data['globalid'] = ''
+
+    if (data['id'] == 0) and len(data['globalid']) == 0:
         data['globalid'] = timestampstr + '-' + utils.rand_string() +\
                            str(data['type'] + str(data['devid']))
+    elif (data['id'] != 0) and len(data['globalid']) == 0:
+        pass
+    elif (data['id'] == 0) and len(data['globalid']) != 0:
+        data['id'] = getIdFromGlobal(data['globalid'])
+    elif (data['id'] != 0) and len(data['globalid']) != 0:
+        pass  # may be check that globalid is correct with id
+    else:
+        pass  # not possible
+
+    if (data['id'] == 0) and (('created' not in data) or (data['created'] is None)):
         data['created'] = timestampstr  # dont change this later never!
 
-    if ('globalid' not in data) or (len(data['globalid']) < 10):
-        # Error globalid must always present!
-        # if its new record - it will be updated by prev condition
-        # ->> if('id' not in data) or (data['id'] < 1) <<-
-        return -10
+    # if ('globalid' not in data) or (len(data['globalid']) < 3):
+    # Error globalid must always present!
+    # if its new record - it will be updated by prev condition
+    # ->> if('id' not in data) or (data['id'] < 1) <<-
+    #    return -10
 
     # always update time after any changes
-    data['update_time'] = timestampstr
+    if ('update_time' not in data) or (data['update_time'] is None):
+        data['update_time'] = timestampstr
+
+    # always change serial after any updates ;-)
+    if ('serial' not in data) or (data['serial'] is None):
+        data['serial'] = random.randint(0, 10000)
+
     if (data['id'] > 0):  # dont change this values!
-        data.pop('created', None)
-        data.pop('globalid', None)
+        data.pop('created', None)  # dont change this values!
+        data.pop('globalid', None)  # dont change this values!
 
     sql = ''
     if (data['id'] > 0):
@@ -151,6 +172,15 @@ def __build_insert(data: dict) -> str:
             postfix = postfix + str(value) + ','
     # return last part of insert statement
     return '(' + prefix.strip(", ") + ') values (' + postfix.strip(", ") + ')'
+
+
+def getIdFromGlobal(global_id: str) -> int:
+    sql = 'select id from tasks where globalid="' + global_id + '"'
+    mydb.execute(sql)
+    row = mydb.fetchone()
+    if not (row is None):
+        return int(row['id'])
+    return 0
 
 
 def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, outgoing: bool = True) -> dict:

@@ -11,6 +11,4 @@ from _common.api import headers
 from _common.api import auth
 
 headers.jsonAPI(False)
-
-
-print(translation.get_array_with_code(auth.user_lang))
+headers.goodResponse(translation.get_array_with_code(auth.user_lang))

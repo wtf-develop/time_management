@@ -56,8 +56,8 @@ print("""<!DOCTYPE html>
         storeLang(selectedLang);
         J2H.getJSON('api/get_login_translation.py',function(json){
             if(isGoodResponse(json)){
-                J2H.setTranslationArray(json.data);
-                extLang=json.code;
+                J2H.setTranslationArray(json.data.data);
+                extLang=json.data.code;
                 storeLang(extLang);
                 J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }else{
