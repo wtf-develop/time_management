@@ -38,7 +38,8 @@ def saveTask(data: dict) -> int:
     int_fields = set(['id', 'devid', 'type', 'alarm_type', 'state', 'priority',
                       'ordr', 'start_time', 'done_time', 'duration_time',
                       'repeat_type', 'repeat_value', 'defered_interval', 'year',
-                      'month', 'day', 'hour', 'minute', 'timezone', 'utc_flag'])
+                      'month', 'day', 'hour', 'minute', 'timezone',
+                      'utc_flag', 'serial'])
     for key, value in data:
         if (key in int_fields):
             if not (isinstance(value, int)):

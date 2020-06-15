@@ -18,7 +18,7 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     tasks = getLinkedTasks(user_id, devid)
     result = []
     sql = '''
-    select group_concat(globalid separator ',') as val, max(update_time) as time from tasks
+    select group_concat(globalid separator ',') as val, max(update_time) as time, sum(serial) as serial from tasks
     where state=20 and
     (
     (id in (''' + ','.join(tasks) + '''))
@@ -35,11 +35,11 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     mydb.execute(sql)
     row = mydb.fetchone()
     if (row is None):
-        return {'val': '', 'time': 0}
+        return {'val': '', 'time': 0, 'serial': 0}
     if 'val' not in row:
-        return {'val': '', 'time': 0}
+        return {'val': '', 'time': 0, 'serial': 0}
     if row['val'] is None:
-        return {'val': '', 'time': 0}
+        return {'val': '', 'time': 0, 'serial': 0}
     return row
     # myown device will get all data that its owned
 
