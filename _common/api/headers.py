@@ -26,14 +26,14 @@ def htmlPage(check_auth: bool = True, fail_redirection: str = "../login/index.py
 def jsonAPI(check_auth: bool = True):
     today = datetime.datetime.now()
     if _settings.enable_gzip:
-        sys.stdout.write("Content-type: application/json;charset=utf-8\n")
-        sys.stdout.write("Expires: Wed, 11 May 1983 17:30:00 GMT\n")
-        sys.stdout.write("Cache-Control: no-store, no-cache, must-revalidate\n")
-        sys.stdout.write("Cache-Control: post-check=0, pre-check=0\n")
-        sys.stdout.write("Last-Modified: " + today.strftime("%a, %d %b %Y %H:%M:%S") + " GMT\n")
-        sys.stdout.write("Pragma: no-cache\n")
-        sys.stdout.write(auth.credentialsHeader() + "\n")
-        sys.stdout.write('Content-Encoding: gzip\n\n')
+        sys.stdout.write("Content-type: application/json;charset=utf-8\r\n")
+        sys.stdout.write("Expires: Wed, 11 May 1983 17:30:00 GMT\r\n")
+        sys.stdout.write("Cache-Control: no-store, no-cache, must-revalidate\r\n")
+        sys.stdout.write("Cache-Control: post-check=0, pre-check=0\r\n")
+        sys.stdout.write("Last-Modified: " + today.strftime("%a, %d %b %Y %H:%M:%S") + " GMT\r\n")
+        sys.stdout.write("Pragma: no-cache\r\n")
+        sys.stdout.write(auth.credentialsHeader() + "\r\n")
+        sys.stdout.write('Content-Encoding: gzip\r\n\r\n')
         sys.stdout.flush()
         if check_auth:
             if auth.access_levels == 0:
