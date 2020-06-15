@@ -25,13 +25,16 @@ tasks_keymap = {
 
 }
 
+lastSQL = ''
+
 
 # return id or 0 - error, anything < 0 is  also error
 def saveTask(data: dict) -> int:
+    global lastSQL
     # do all necessary checks and convert types
     data = utils.replace_keys(data, tasks_keymap)
-    required = set(['devid', 'title', 'desc', 'type'])
-    if not (required.isubset(data.keys())):
+    required = {'devid', 'title', 'desc', 'type'}
+    if not (required.issubset(data.keys())):
         return -1
     # Convert all values only to Integers and Strings.
     # Other primitive types except float - it's a big lying
@@ -40,7 +43,8 @@ def saveTask(data: dict) -> int:
                       'repeat_type', 'repeat_value', 'defered_interval', 'year',
                       'month', 'day', 'hour', 'minute', 'timezone',
                       'utc_flag', 'serial'])
-    for key, value in data:
+    for key in data:
+        value = data[key]
         if (key in int_fields):
             if not (isinstance(value, int)):
                 try:
@@ -61,22 +65,22 @@ def saveTask(data: dict) -> int:
         required = set(['alarm_type', 'start_time', 'repeat_type',
                         'repeat_value', 'defered_interval', 'year', 'month',
                         'day', 'hour', 'minute', 'timezone', 'utc_flag'])
-        if not (required.isubset(data.keys())):
+        if not (required.issubset(data.keys())):
             return -5
     elif data['type'] == 1:  # for the whole day
-        required = set(['start_time', 'duration_time', 'repeat_type',
+        required = set(['start_time', 'repeat_type',
                         'repeat_value', 'year', 'month', 'day', 'timezone'])
-        if not (required.isubset(data.keys())):
+        if not (required.issubset(data.keys())):
             return -6
     elif data['type'] == 2:  # notes
-        required = set(['state', 'priority', 'ordr'])
-        if not (required.isubset(data.keys())):
+        required = set(['state', 'priority'])
+        if not (required.issubset(data.keys())):
             return -7
 
     elif data['type'] == 3:  # geo based reminders
         required = set(['start_time', 'repeat_type',
                         'repeat_value', 'locations'])
-        if not (required.isubset(data.keys())):
+        if not (required.issubset(data.keys())):
             return -8
     else:
         return -9  # not supported task type
@@ -93,7 +97,7 @@ def saveTask(data: dict) -> int:
         data['globalid'] = timestampstr + '-' + utils.rand_string() +\
                            str(data['type'] + str(data['devid']))
     elif (data['id'] != 0) and len(data['globalid']) == 0:
-        pass
+        data['globalid'] = getGlobalFromId(data['id'])
     elif (data['id'] == 0) and len(data['globalid']) != 0:
         data['id'] = getIdFromGlobal(data['globalid'])
     elif (data['id'] != 0) and len(data['globalid']) != 0:
@@ -118,6 +122,7 @@ def saveTask(data: dict) -> int:
     if ('serial' not in data) or (data['serial'] is None):
         data['serial'] = random.randint(0, 10000)
 
+    temp_global_id = data['globalid'] # store value before unset
     if (data['id'] > 0):  # dont change this values!
         data.pop('created', None)  # dont change this values!
         data.pop('globalid', None)  # dont change this values!
@@ -125,19 +130,22 @@ def saveTask(data: dict) -> int:
     sql = ''
     if (data['id'] > 0):
         sql = 'update tasks set ' +\
-              __build_update(data) + ' where id=' + data['id']
+              __build_update(data) + ' where id=' + str(data['id'])
         try:
             mydb.execute(sql)
         except Exception:
             return -11
+        data['globalid'] = temp_global_id
         return data['id']
     else:
         sql = 'insert into tasks ' + __build_insert(data)
+        lastSQL = sql
         try:
             mydb.execute(sql)
         except Exception:
             return -12
         data['id'] = mydb_connection.insert_id()
+        data['globalid'] = temp_global_id
         return data['id']
 
     return 0
@@ -149,10 +157,10 @@ def __build_update(data: dict) -> str:
         if (key == 'id') or (key == 'globalid') or (key == 'created'):  # ignore this fields
             continue
         if (isinstance(value, str)):
-            result = result + key + '="' +\
+            result = result + '`' + key + '`="' +\
                      mydb_connection.escape_string(value) + '",'
         elif (isinstance(value, int)):
-            result = result + key + '=' + str(value) + ','
+            result = result + '`' + key + '`=' + str(value) + ','
     return result.strip(", ")
 
 
@@ -163,12 +171,12 @@ def __build_insert(data: dict) -> str:
         if (key == 'id'):  # ignore this fields
             continue
         if (isinstance(value, str)):
-            prefix = prefix + key + ','
+            prefix = prefix + '`' + key + '`,'
             postfix = postfix + '"' +\
                       mydb_connection.escape_string(value) + '",'
 
         elif (isinstance(value, int)):
-            prefix = prefix + key + ','
+            prefix = prefix + '`' + key + '`,'
             postfix = postfix + str(value) + ','
     # return last part of insert statement
     return '(' + prefix.strip(", ") + ') values (' + postfix.strip(", ") + ')'
@@ -181,6 +189,15 @@ def getIdFromGlobal(global_id: str) -> int:
     if not (row is None):
         return int(row['id'])
     return 0
+
+
+def getGlobalFromId(id: int) -> str:
+    sql = 'select globalid from tasks where id="' + str(id) + '"'
+    mydb.execute(sql)
+    row = mydb.fetchone()
+    if not (row is None):
+        return str(row['globalid'])
+    return ""
 
 
 def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, outgoing: bool = True) -> dict:
@@ -321,7 +338,7 @@ def getUserLinkedTasks(user_id: int, devid: int = 0) -> list:
     sql = '''select t.id
         from tasks as t
         inner join sync_tasks as s on t.id=s.tid
-        inner join devices as d on d.id=s.dst and d.uid=''' + str(uid) + addsql + ''' and d.state>0
+        inner join devices as d on d.id=s.dst and d.uid=''' + str(user_id) + addsql + ''' and d.state>0
     '''
     mydb.execute(sql)
     rows = mydb.fetchall()

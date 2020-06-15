@@ -189,9 +189,10 @@ if req_method.lower().strip() == "post":
         _POST = None
 
 credentials = None
-if not (_GET is None) and ('credentials' in _GET) and not (_GET['credentials'] is None):
+if not (_GET is None) and ('credentials' in _GET) and not (_GET['credentials'] is None) and not (
+        _GET['credentials'][0] is None):
     # try fetch token from GET parameter (ONLY AFTER COOKIE!!)
-    credentials = _GET['credentials']
+    credentials = _GET['credentials'][0]
 else:
     credentials = req_cookie.get("credentials")
     if not (credentials is None):

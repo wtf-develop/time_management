@@ -35,9 +35,16 @@ mobile_serial = json['sync_info']['serial']
 saved_ids = []
 if len(data) > 0:
     for task in data:
-        if (db.saveTask(task) > 0):
+        task['devid'] = auth.user_some_state
+        #headers.errorResponse(str(task))
+        save_result = db.saveTask(task)
+
+        if (save_result > 0):
             saved_ids.append(task['globalid'])
+        else:
             pass
+            #headers.errorResponse('error n-' + str(save_result)+"=="+db.lastSQL)
+
 # After updating we check CRC32 values,
 # if they are different - need to check
 obj = mobile.getTotalIdsString(auth.user_id, auth.user_some_state)

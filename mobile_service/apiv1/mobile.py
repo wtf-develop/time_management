@@ -21,15 +21,15 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     select group_concat(globalid separator ',') as val, max(update_time) as time, sum(serial) as serial from tasks
     where state=20 and
     (
-    (id in (''' + ','.join(tasks) + '''))
+    (id in (''' + ','.join(str(x) for x in tasks) + '''))
     or
-    (type=0 and devid in (''' + (','.join(list(set().union(links['0'], own['0'])))) + '''))
+    (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
     or
-    (type=1 and devid in (''' + (','.join(list(set().union(links['1'], own['1'])))) + '''))
+    (type=1 and devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
     or
-    (type=2 and devid in (''' + (','.join(list(set().union(links['2'], own['2'])))) + '''))
+    (type=2 and devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
     or
-    (type=3 and devid in (''' + (','.join(list(set().union(links['3'], own['3'])))) + '''))
+    (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + '''))
     )
     '''
     mydb.execute(sql)

@@ -38,7 +38,7 @@ def jsonAPI(check_auth: bool = True):
         if check_auth:
             if auth.access_levels == 0:
                 sys.stdout.buffer.write(__compress_string(
-                    '{"error":{"state":true,"code":401,"title":"Unauthorized","message":"Please open login page"}}'))
+                    '{"error":{"state":true,"code":401,"title":"Unauthorized'+str(auth.credentials)+'","message":"Please open login page"}}'))
                 sys.exit()
     else:
         print("Content-type: application/json;charset=utf-8")
