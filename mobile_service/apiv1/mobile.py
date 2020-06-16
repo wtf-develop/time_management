@@ -14,14 +14,13 @@ from _common.api import db
 # SQL query MUST be optimized - later
 def getTotalIdsString(user_id: int, devid: int) -> str:
     links = getLinkedDevices(user_id, devid)
-    own = getOwnDevices(user_id, devid) #except myself
+    own = getOwnDevices(user_id, devid)  # except myself
     tasks = getLinkedTasks(user_id, devid)
-    result = []
     sql = '''
-    select group_concat(globalid separator ',') as val, max(update_time) as time, sum(serial) as serial from tasks
+    select count(*) as count, group_concat(globalid separator ',') as val, max(update_time) as time, sum(serial) as serial from tasks
     where state=20 and
     (
-    (devid='''+str(devid)+''')
+    (devid=''' + str(devid) + ''')
     or
     (id in (''' + ','.join(str(x) for x in tasks) + '''))
     or
@@ -33,15 +32,17 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     or
     (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + '''))
     )
+    order by serial,update_time
     '''
     mydb.execute(sql)
     row = mydb.fetchone()
     if (row is None):
-        return {'val': '', 'time': 0, 'serial': 0}
+        return {'val': '', 'time': 0, 'serial': 0, 'count': 0}
     if 'val' not in row:
-        return {'val': '', 'time': 0, 'serial': 0}
+        return {'val': '', 'time': 0, 'serial': 0, 'count': 0}
     if row['val'] is None:
-        return {'val': '', 'time': 0, 'serial': 0}
+        return {'val': '', 'time': 0, 'serial': 0, 'count': 0}
+    # utils.log(row['val'], 'info', 'ids')
     return row
     # myown device will get all data that its owned
 
@@ -77,9 +78,9 @@ def getLinkedDevices(user_id: int, devid: int) -> dict:
     return result
 
 
-#except myself
+# except myself
 def getOwnDevices(user_id: int, devid: int) -> dict:
-    result = db.getUserOwnDevices(user_id, devid)#except myself
+    result = db.getUserOwnDevices(user_id, devid)  # except myself
 
     if len(result['0']) < 1:
         result['0'].append(0)

@@ -25,12 +25,9 @@ tasks_keymap = {
 
 }
 
-lastSQL = ''
-
 
 # return id or 0 - error, anything < 0 is  also error
 def saveTask(data: dict) -> int:
-    global lastSQL
     # do all necessary checks and convert types
     data = utils.replace_keys(data, tasks_keymap)
     required = {'devid', 'title', 'desc', 'type'}
@@ -38,11 +35,9 @@ def saveTask(data: dict) -> int:
         return -1
     # Convert all values only to Integers and Strings.
     # Other primitive types except float - it's a big lying
-    int_fields = set(['id', 'devid', 'type', 'alarm_type', 'state', 'priority',
-                      'ordr', 'start_time', 'done_time', 'duration_time',
-                      'repeat_type', 'repeat_value', 'defered_interval', 'year',
-                      'month', 'day', 'hour', 'minute', 'timezone',
-                      'utc_flag', 'serial'])
+    int_fields = {'id', 'devid', 'type', 'alarm_type', 'state', 'priority', 'ordr', 'start_time', 'done_time',
+                  'duration_time', 'repeat_type', 'repeat_value', 'defered_interval', 'year', 'month', 'day', 'hour',
+                  'minute', 'timezone', 'utc_flag', 'serial'}
     for key in data:
         value = data[key]
         if (key in int_fields):
@@ -62,24 +57,21 @@ def saveTask(data: dict) -> int:
         return -4
 
     if data['type'] == 0:  # timer
-        required = set(['alarm_type', 'start_time', 'repeat_type',
-                        'repeat_value', 'defered_interval', 'year', 'month',
-                        'day', 'hour', 'minute', 'timezone', 'utc_flag'])
+        required = {'alarm_type', 'start_time', 'repeat_type', 'repeat_value', 'defered_interval', 'year', 'month',
+                    'day', 'hour', 'minute', 'timezone', 'utc_flag'}
         if not (required.issubset(data.keys())):
             return -5
     elif data['type'] == 1:  # for the whole day
-        required = set(['start_time', 'repeat_type',
-                        'repeat_value', 'year', 'month', 'day', 'timezone'])
+        required = {'start_time', 'repeat_type', 'repeat_value', 'year', 'month', 'day', 'timezone'}
         if not (required.issubset(data.keys())):
             return -6
     elif data['type'] == 2:  # notes
-        required = set(['state', 'priority'])
+        required = {'state', 'priority'}
         if not (required.issubset(data.keys())):
             return -7
 
     elif data['type'] == 3:  # geo based reminders
-        required = set(['start_time', 'repeat_type',
-                        'repeat_value', 'locations'])
+        required = {'start_time', 'repeat_type', 'repeat_value', 'locations'}
         if not (required.issubset(data.keys())):
             return -8
     else:
@@ -103,7 +95,7 @@ def saveTask(data: dict) -> int:
     elif (data['id'] != 0) and len(data['globalid']) != 0:
         pass  # may be check that globalid is correct with id
     else:
-        pass  # not possible
+        return -100  # not possible
 
     if (data['id'] == 0) and (('created' not in data) or (data['created'] is None)):
         data['created'] = timestampstr  # dont change this later never!
@@ -120,7 +112,7 @@ def saveTask(data: dict) -> int:
 
     # always change serial after any updates ;-)
     if ('serial' not in data) or (data['serial'] is None):
-        data['serial'] = random.randint(0, 10000)
+        data['serial'] = random.randint(1, 100000)
 
     temp_global_id = data['globalid']  # store value before unset
     if (data['id'] > 0):  # dont change this values!
@@ -133,23 +125,24 @@ def saveTask(data: dict) -> int:
     if (data['id'] > 0):
         sql = 'update tasks set ' +\
               __build_update(data) + ' where id=' + str(data['id'])
+        data['globalid'] = temp_global_id
         try:
             mydb.execute(sql)
-        except Exception:
+        except Exception as ex:
+            utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
             return -11
-        data['globalid'] = temp_global_id
         return data['id']
     else:
         sql = 'insert into tasks ' + __build_insert(data)
-        lastSQL = sql
+        data['globalid'] = temp_global_id
         try:
             mydb.execute(sql)
-        except Exception:
+        except Exception as ex:
+            utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
             return -12
         data['id'] = mydb_connection.insert_id()
-        data['globalid'] = temp_global_id
-        return data['id']
 
+        return data['id']
     return 0
 
 
