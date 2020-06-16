@@ -53,10 +53,11 @@ if len(data) > 0:
 # if they are different - need to check
 obj = mobile.getTotalIdsString(auth.user_id, auth.user_some_state)
 obj['crc32'] = utils.crc32(obj['val'])
+obj2 = {'crc32': obj['crc32'], 'time': obj['time'], 'serial': obj['serial']}
 if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_serial != obj['serial'])):
     headers.goodResponse({
-         'mobile': json['sync_info'],
-        # 'srv': obj,
+        'mobile': json['sync_info'],
+        'srv': obj2,
         'saved': {'state': True,
                   'ids': ','.join(saved_ids),
                   'broken': ','.join(broken_ids),

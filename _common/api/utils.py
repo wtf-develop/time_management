@@ -101,7 +101,7 @@ def rand_string() -> str:
 
 # result not depend from simbols order. Good!
 def crc32(s: str) -> int:
-    return zlib.crc32(s.encode(encoding="utf-8", errors="ignore"), 2)
+    return zlib.crc32(s.encode(encoding="utf-8", errors="ignore"))
 
 
 # convert keys for database
