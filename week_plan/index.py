@@ -15,19 +15,19 @@ headers.htmlPage()
 print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Reminder web application">
-    <meta name="author" content="Arefev Leonid">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Reminder web application" />
+    <meta name="author" content="Arefev Leonid" />
     <title>""" + translation.getAppName(auth.user_lang) + """: Week</title>
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-
-    <link href="css/timeline.css" rel="stylesheet">
-    <link href="../_common/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../_common/css/custom.css" rel="stylesheet">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <meta name="referrer" content="no-referrer" />
+    <link href="css/timeline.css" rel="stylesheet" />
+    <link href="../_common/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../_common/css/custom.css" rel="stylesheet" />
 
 
 </head>

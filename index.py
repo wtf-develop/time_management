@@ -15,28 +15,27 @@ headers.htmlPage(True, "login/index.py")
 print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Reminder web application">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Reminder web application" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-title" content="Full Screen" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Full Screen" />
 
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-status-bar-style" content="default">
-    <meta name="mobile-web-app-title" content="Full Screen">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Full Screen">
-
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="author" content="Arefev Leonid">
+    <link rel="manifest" href="manifest.json" />
+    <meta name="author" content="Arefev Leonid" />
     <title>""" + translation.getAppName(auth.user_lang) + """</title>
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <link href="_common/css/bootstrap.min.css" rel="stylesheet">
-    <link href="_common/css/custom.css" rel="stylesheet">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <link href="_common/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="_common/css/custom.css" rel="stylesheet" />
 </head>
 
 <body>

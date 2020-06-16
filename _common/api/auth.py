@@ -5,13 +5,13 @@ import http.cookies
 import hashlib
 import time
 from urllib import parse
-from _common.api._settings import mydb, mydb_connection
+from _common.api._settings import mydb, mydb_connection, server_token_key
 from _common.api import utils
 from _common.api import db
 
 
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
-    global req_agent, req_scheme, req_language, __hash_key
+    global req_agent, req_scheme, req_language
     if uid == 0:
         return ''
     timestamp = 0
@@ -22,7 +22,7 @@ def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_stat
         timestamp = int(time.time()) + 30 * 60
     hashstr = hashlib.md5(
             (str(timestamp) + str(some_state) + login + str(remember) + str(
-                    uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
+                    uid) + passwd + server_token_key + req_agent + req_scheme + req_language).encode(
                     'utf-8')).hexdigest().lower()
     return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hashstr
 
@@ -39,7 +39,7 @@ def __resetAuth():
 
 
 def checkCredentials(arr: list):
-    global __hash_key, user_sync0, user_sync1, user_sync2, user_sync3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
+    global user_sync0, user_sync1, user_sync2, user_sync3, isMobile, user_id, user_role, user_login, user_password, user_remember, user_some_state, req_agent, req_scheme, req_language
     if len(arr) != 5:
         return __resetAuth()
 
@@ -103,7 +103,7 @@ def checkCredentials(arr: list):
 
     hash2 = hashlib.md5(
             (str(timestamp) + str(some_state) + login + str(remember) + str(
-                    uid) + passwd + __hash_key + req_agent + req_scheme + req_language).encode(
+                    uid) + passwd + server_token_key + req_agent + req_scheme + req_language).encode(
                     'utf-8')).hexdigest().lower()
     if myhash != hash2:
         return __resetAuth()
@@ -153,7 +153,6 @@ def credentialsHeader():
 # -------- run part -------
 # -------- run part -------
 # -------- run part -------
-__hash_key = 'WASSUP!'
 req_cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
 req_ip = (os.environ.get("REMOTE_ADDR") or "").strip()[:39]
 req_method = (os.environ.get("REQUEST_METHOD") or "").strip()[:10]
@@ -169,14 +168,6 @@ if req_agent.startswith('PlanMe mobile reminder APP'):
 _GET = None  # always not NONE. Check exact values. Device-id is always there
 if len(req_query) > 0:
     _GET = parse.parse_qs(req_query)
-    if ('devid' not in _GET):
-        _GET['devid'] = 0
-    try:
-        _GET['devid'] = int(_GET['devid'])
-    except Exception:
-        _GET['devid'] = 0
-else:
-    _GET = {'devid': 0}
 
 req_rawpost = None
 _POST = None

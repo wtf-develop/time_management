@@ -1,6 +1,8 @@
 import pymysql
 
 # Database access information
+# Alter tables sql-request should be permitted
+# for this database and user
 mydb_connection = pymysql.connect(
         host="localhost",
         database='reminder',
@@ -8,19 +10,37 @@ mydb_connection = pymysql.connect(
         passwd=""
 )
 
-# check write folder permissions.
-# last slash '/' - REQUIRED!!!
+# Log some actions and errors to special folder.
+# if you don't want to store this information,
+# just set: enable_logging = False
+# -- Check write folder permissions.
+# -- last slash '/' - REQUIRED!!!
 logs_path = '/var/log/planme/'
 enable_logging = True
 
-# enable GZIP compression for JSON APIs
+# enable GZIP compression for JSON APIs response
+# if you will have some network problems with
+# browsers or mobile application you can try
+# set it to False.
 enable_gzip = True
 
+# Server token hash key.
+# Don't have too much sense. Just make token
+# incompatible between different servers.
+# You can also reset all token sessions by
+# changing this value to something else.
+# All mobile and web-users will need to re-login
+server_token_key = 'WASSUP!'
+
+#
+#
 # ---------------- Don't change code below ----------------
 # ---------------- Don't change code below ----------------
 # ---------------- Don't change code below ----------------
 # ---------------- Don't change code below ----------------
 # ---------------- Don't change code below ----------------
 # ---------------- Don't change code below ----------------
+#
+#
 mydb = mydb_connection.cursor(cursor=pymysql.cursors.DictCursor)
 mydb.execute("SET NAMES 'utf8mb4'")

@@ -20,9 +20,10 @@ print("""<!DOCTYPE html>
     <title>""" + translation.getAppName(auth.user_lang) + """ - Android application</title>
     <meta name="description" content="The application will notify the user about various events. Widgets: Week, Colored Notes, Microphone, Calendar. Time and place reminder">
     <meta name="keywords" content="Reminder, Android, Time and Place, Запоминатор, Напоминалка, Напоминатор, MachEs!">
-    <meta name="author" content="Arefev Leonid">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Arefev Leonid" />
+    <meta charset="utf-8" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />

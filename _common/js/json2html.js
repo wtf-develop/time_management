@@ -1080,6 +1080,10 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         var translation_strings = null;
 
         function setTranslationArray(jsonObject) {
+            if (jsonObject === undefined) {
+                console.log('Translation array is undefined');
+                return;
+            }
             translation_strings = jsonObject;
             if (Object.keys(translation_strings).length == 0) {
                 translation_strings = null;

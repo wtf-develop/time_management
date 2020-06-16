@@ -38,7 +38,8 @@ def jsonAPI(check_auth: bool = True):
         if check_auth:
             if auth.access_levels == 0:
                 sys.stdout.buffer.write(__compress_string(
-                    '{"error":{"state":true,"code":401,"title":"Unauthorized'+str(auth.credentials)+'","message":"Please open login page"}}'))
+                        '{"error":{"state":true,"code":401,"title":"Login session failed",' +
+                        '"message":"Please open login page"}}'))
                 sys.exit()
     else:
         print("Content-type: application/json;charset=utf-8")
@@ -51,7 +52,9 @@ def jsonAPI(check_auth: bool = True):
         print("")
         if check_auth:
             if auth.access_levels == 0:
-                print('{"error":{"state":true,"code":401,"title":"Unauthorized","message":"Please open login page"}}')
+                print(
+                        '{"error":{"state":true,"code":401,"title":"Login session failed",' +
+                        '"message":"Please open login page"}}')
                 sys.exit()
 
 
@@ -85,9 +88,11 @@ def goodResponse(outputData: dict):
         'dst': time.daylight,
         'timeoffset': toffset,
         'isotime': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat(),
-        'info': datetime.datetime.now().timetuple(),
-
+        'info': datetime.datetime.now().timetuple()
     }
+    if auth.isMobile:
+        server_info['token'] = auth.credentials
+
     obj = {'server': server_info, 'data': outputData}
     if _settings.enable_gzip:
         sys.stdout.buffer.write(__compress_string(json.dumps(obj)))
