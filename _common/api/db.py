@@ -122,11 +122,13 @@ def saveTask(data: dict) -> int:
     if ('serial' not in data) or (data['serial'] is None):
         data['serial'] = random.randint(0, 10000)
 
-    temp_global_id = data['globalid'] # store value before unset
+    temp_global_id = data['globalid']  # store value before unset
     if (data['id'] > 0):  # dont change this values!
         data.pop('created', None)  # dont change this values!
         data.pop('globalid', None)  # dont change this values!
 
+    if ('locations' in data) and not (data['locations'] is None):
+        data['locations'] = str(data['locations'])[:2048]
     sql = ''
     if (data['id'] > 0):
         sql = 'update tasks set ' +\

@@ -14,13 +14,15 @@ from _common.api import db
 # SQL query MUST be optimized - later
 def getTotalIdsString(user_id: int, devid: int) -> str:
     links = getLinkedDevices(user_id, devid)
-    own = getOwnDevices(user_id, devid)
+    own = getOwnDevices(user_id, devid) #except myself
     tasks = getLinkedTasks(user_id, devid)
     result = []
     sql = '''
     select group_concat(globalid separator ',') as val, max(update_time) as time, sum(serial) as serial from tasks
     where state=20 and
     (
+    (devid='''+str(devid)+''')
+    or
     (id in (''' + ','.join(str(x) for x in tasks) + '''))
     or
     (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
@@ -75,8 +77,9 @@ def getLinkedDevices(user_id: int, devid: int) -> dict:
     return result
 
 
+#except myself
 def getOwnDevices(user_id: int, devid: int) -> dict:
-    result = db.getUserOwnDevices(user_id, devid)
+    result = db.getUserOwnDevices(user_id, devid)#except myself
 
     if len(result['0']) < 1:
         result['0'].append(0)

@@ -29,6 +29,7 @@ if 'data' not in json:
     mobile.elog('Incorrect info format uid:' + auth.user_id)
     headers.errorResponse('Nothing was sent')
 data = json['data']
+
 mobile_crc32 = json['sync_info']['crc32']
 mobile_time = json['sync_info']['time']
 mobile_serial = json['sync_info']['serial']
