@@ -41,9 +41,15 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extend: bool = 
     )
     order by serial,update_time
     '''
-    mydb.execute(sql)
-    rows = mydb.fetchall()
     result = {'val': '', 'time': 0, 'serial': 0, 'count': 0, 'db': []}
+    try:
+        mydb.execute(sql)
+    except Exception as ex:
+        utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+        return None
+
+    rows = mydb.fetchall()
+
     val_arr = []
     count = 0
     max_time = 0

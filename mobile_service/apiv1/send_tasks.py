@@ -49,6 +49,8 @@ if len(data) > 0:
 # After updating we check CRC32 values,
 # if they are different - need to check
 obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state)
+if obj is None:
+    headers.errorResponse('SQL error')
 obj['crc32'] = utils.crc32(obj['val'])
 obj2 = {'crc32': obj['crc32'], 'time': obj['time'], 'serial': obj['serial'], 'count': obj['count']}
 if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_serial != obj['serial'])or (mobile_count != obj['count'])):

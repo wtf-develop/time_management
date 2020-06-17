@@ -28,4 +28,6 @@ if 'tasks' not in json:
 tasks = json['tasks']
 
 obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, cross=tasks, extend=True)
+if obj is None:
+    headers.errorResponse('SQL error')
 headers.goodResponse(obj)
