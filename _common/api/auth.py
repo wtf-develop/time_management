@@ -5,7 +5,7 @@ import http.cookies
 import hashlib
 import time
 from urllib import parse
-from _common.api._settings import mydb, mydb_connection, server_token_key
+from _common.api._settings import mydb, mydb_connection, server_token_key, debug, logs_path
 from _common.api import utils
 from _common.api import db
 
@@ -161,6 +161,35 @@ req_language = (os.environ.get("HTTP_ACCEPT_LANGUAGE") or "").strip()[:2]
 req_scheme = (os.environ.get("REQUEST_SCHEME")
               or "").strip()[:5]  # http or https
 req_query = (os.environ.get("QUERY_STRING") or "").strip()[:350]  # parameters
+
+# --- debug part start ---
+# --- debug part start ---
+# --- debug part start ---
+load_debug_config = False
+if (debug):
+    # if run from console or start from debuger< there is no User-Agent
+    load_debug_config = (len(req_agent) == 0)
+    if load_debug_config:
+        dfile = open(logs_path + '_debug_headers_dump.json', "r")
+        req_headers = json.load(dfile)
+        req_ip = req_headers['req_ip']
+        req_method = req_headers['req_method']
+        req_agent = req_headers['req_agent']
+        req_language = req_headers['req_language']
+        req_scheme = req_headers['req_scheme']
+        req_query = req_headers['req_query']
+        dfile.close()
+    else:
+        dfile = open(logs_path + '_debug_headers_dump.json', "w")
+        dfile.write(json.dumps(
+                {'req_ip': req_ip, 'req_method': req_method, 'req_agent': req_agent, 'req_language': req_language,
+                 'req_scheme': req_scheme, 'req_query': req_query}))
+        dfile.close()
+# --- debug part ends ---
+# --- debug part ends ---
+# --- debug part ends ---
+
+
 isMobile = False
 if req_agent.startswith('PlanMe mobile reminder APP'):
     isMobile = True
@@ -171,13 +200,39 @@ if len(req_query) > 0:
 
 req_rawpost = None
 _POST = None
-if req_method.lower().strip() == "post":
-    req_rawpost = sys.stdin.read()
-    try:
-        _POST = json.loads(req_rawpost)
-        req_rawpost = None
-    except Exception:
-        _POST = None
+if (debug and load_debug_config):
+    pass
+else:
+    if req_method.lower().strip() == "post":
+        req_rawpost = sys.stdin.read()
+        try:
+            _POST = json.loads(req_rawpost)
+            req_rawpost = None
+        except Exception:
+            _POST = None
+
+# --- debug part start ---
+# --- debug part start ---
+# --- debug part start ---
+if (debug):
+    if load_debug_config:
+        dfile = open(logs_path + '_debug_post_dump.json', "r")
+        try:
+            _POST = json.load(dfile)
+        except Exception:
+            _POST = None
+        dfile.close()
+    else:
+        dfile = open(logs_path + '_debug_post_dump.json', "w")
+        if (_POST is None):
+            dfile.write('')
+        else:
+            dfile.write(json.dumps(_POST))
+        dfile.close()
+# --- debug part ends ---
+# --- debug part ends ---
+# --- debug part ends ---
+
 
 credentials = None
 if not (_GET is None) and ('credentials' in _GET) and not (_GET['credentials'] is None) and not (
@@ -209,6 +264,26 @@ if not (isMobile):
             user_indx = 0
     else:
         user_indx = 0
+
+# --- debug part start ---
+# --- debug part start ---
+# --- debug part start ---
+if (debug):
+    if load_debug_config:
+        dfile = open(logs_path + '_debug_extra_dump.json', "r")
+        extra = json.load(dfile)
+        user_indx = extra['user_indx']
+        user_lang = extra['user_lang']
+        credentials = extra['credentials']
+        dfile.close()
+    else:
+        dfile = open(logs_path + '_debug_extra_dump.json', "w")
+        dfile.write(json.dumps({'user_indx': user_indx, 'user_lang': user_lang, 'credentials': credentials}))
+        dfile.close()
+# --- debug part ends ---
+# --- debug part ends ---
+# --- debug part ends ---
+
 
 user_role = "GUEST"
 access_levels = 0

@@ -17,7 +17,7 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     own = getOwnDevices(user_id, devid)  # except myself
     tasks = getLinkedTasks(user_id, devid)
     sql = '''
-    select count(*) as count, group_concat(globalid separator ',') as val, max(update_time) as time, sum(serial) as serial from tasks
+    select globalid as val, update_time as time, `serial` from tasks
     where state=20 and
     (
     (devid=''' + str(devid) + ''')
@@ -35,15 +35,24 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     order by serial,update_time
     '''
     mydb.execute(sql)
-    row = mydb.fetchone()
-    if (row is None):
-        return {'val': '', 'time': 0, 'serial': 0, 'count': 0}
-    if 'val' not in row:
-        return {'val': '', 'time': 0, 'serial': 0, 'count': 0}
-    if row['val'] is None:
-        return {'val': '', 'time': 0, 'serial': 0, 'count': 0}
-    # utils.log(row['val'], 'info', 'ids')
-    return row
+    rows = mydb.fetchall()
+    result = {'val': '', 'time': 0, 'serial': 0, 'count': 0}
+    val_arr = []
+    count = 0
+    max_time = 0
+    serial = 0
+    for row in rows:
+        val_arr.append(row['val'])
+        count = count + 1
+        temp = int(row['time'])
+        if temp > max_time:
+            max_time = temp
+        serial = serial + int(row['serial'])
+    result['val'] = ','.join(val_arr)
+    result['time'] = max_time
+    result['count'] = count
+    result['serial'] = serial
+    return result
     # myown device will get all data that its owned
 
 

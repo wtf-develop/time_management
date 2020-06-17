@@ -10,6 +10,11 @@ mydb_connection = pymysql.connect(
         passwd=""
 )
 
+# Must be ALWAYS "False" on real server
+# For developers only to special debug
+# last request that was send to some api
+debug = True  # debug = False # for production servers
+
 # Log some actions and errors to special folder.
 # if you don't want to store this information,
 # just set: enable_logging = False

@@ -115,9 +115,11 @@ def saveTask(data: dict) -> int:
         data['serial'] = random.randint(1, 100000)
 
     temp_global_id = data['globalid']  # store value before unset
+    temp_dev_id = data['devid']
     if (data['id'] > 0):  # dont change this values!
         data.pop('created', None)  # dont change this values!
         data.pop('globalid', None)  # dont change this values!
+        data.pop('devid', None)  # dont change this values!
 
     if ('locations' in data) and not (data['locations'] is None):
         data['locations'] = str(data['locations'])[:2048]
@@ -126,6 +128,7 @@ def saveTask(data: dict) -> int:
         sql = 'update tasks set ' +\
               __build_update(data) + ' where id=' + str(data['id'])
         data['globalid'] = temp_global_id
+        data['devid'] = temp_dev_id
         try:
             mydb.execute(sql)
         except Exception as ex:
@@ -135,6 +138,7 @@ def saveTask(data: dict) -> int:
     else:
         sql = 'insert into tasks ' + __build_insert(data)
         data['globalid'] = temp_global_id
+        data['devid'] = temp_dev_id
         try:
             mydb.execute(sql)
         except Exception as ex:
