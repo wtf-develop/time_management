@@ -36,10 +36,6 @@ def wrongCred(index: int):
     headers.errorResponse('Incorrect login or password', 'user not found - ' + str(index), 404)
 
 
-# Registration only from mobile device (mobile application)
-if not (auth.isMobile):
-    badExit(0)
-
 timestamp_string = str(int(time.time() * 1000))
 jsonpost = auth._POST
 

@@ -19,7 +19,9 @@ def htmlPage(check_auth: bool = True, fail_redirection: str = "../login/index.py
     print("Cache-Control: post-check=0, pre-check=0")
     print("Last-Modified:", today.strftime("%a, %d %b %Y %H:%M:%S"), "GMT")
     print("Pragma: no-cache")
-    print(auth.credentialsHeader())
+    if not auth.isMobile:
+        print(auth.credentialsHeader())
+
     print("")
 
 
@@ -32,7 +34,9 @@ def jsonAPI(check_auth: bool = True):
         sys.stdout.write("Cache-Control: post-check=0, pre-check=0\r\n")
         sys.stdout.write("Last-Modified: " + today.strftime("%a, %d %b %Y %H:%M:%S") + " GMT\r\n")
         sys.stdout.write("Pragma: no-cache\r\n")
-        sys.stdout.write(auth.credentialsHeader() + "\r\n")
+        if not auth.isMobile:
+            sys.stdout.write(auth.credentialsHeader() + "\r\n")
+
         sys.stdout.write('Content-Encoding: gzip\r\n\r\n')
         sys.stdout.flush()
         if check_auth:
@@ -48,7 +52,8 @@ def jsonAPI(check_auth: bool = True):
         print("Cache-Control: post-check=0, pre-check=0")
         print("Last-Modified:", today.strftime("%a, %d %b %Y %H:%M:%S"), "GMT")
         print("Pragma: no-cache")
-        print(auth.credentialsHeader())
+        if not auth.isMobile:
+            print(auth.credentialsHeader())
         print("")
         if check_auth:
             if auth.access_levels == 0:

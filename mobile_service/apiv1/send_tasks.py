@@ -16,10 +16,6 @@ from _common.api import db
 from mobile_service.apiv1 import mobile
 
 headers.jsonAPI()
-if not (auth.isMobile):  # check that this request from mobile application
-    mobile.elog('Only from mobile uid:' + auth.user_id)
-    headers.errorResponse('Wrong type')
-
 devid = auth.user_some_state
 if (auth._POST is None):  # only POST accepted
     mobile.elog('No posted info uid:' + auth.user_id)
@@ -52,7 +48,7 @@ if len(data) > 0:
 
 # After updating we check CRC32 values,
 # if they are different - need to check
-obj = mobile.getTotalIdsString(auth.user_id, auth.user_some_state)
+obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state)
 obj['crc32'] = utils.crc32(obj['val'])
 obj2 = {'crc32': obj['crc32'], 'time': obj['time'], 'serial': obj['serial'], 'count': obj['count']}
 if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_serial != obj['serial'])or (mobile_count != obj['count'])):

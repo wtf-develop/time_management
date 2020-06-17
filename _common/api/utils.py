@@ -25,10 +25,19 @@ def clearUserLogin(login: str) -> str:
     login = removeQuotes(login)
     login = removeNonUTF(login)
     login = login.replace('\\', '').replace(
-        '/', '').replace('<', '').replace('>', '').replace('[', '').replace(
-        ']', '').replace('{', '').replace('}', '').replace('%', '').replace(',', '')
+            '/', '').replace('<', '').replace('>', '').replace('[', '').replace(
+            ']', '').replace('{', '').replace('}', '').replace('%', '').replace(',', '')
     login = removeDoubleSpaces(login).lower()
     return login
+
+
+__hard_chars = set(string.ascii_letters + string.digits + ',-_')
+
+
+def clearHard(s: str) -> str:
+    global __hard_chars
+    s = ''.join(filter(lambda x: x in __hard_chars, s))
+    return s
 
 
 tag_html = None
@@ -99,6 +108,7 @@ def rand_string() -> str:
     rand_str = ''.join(random.choice(__letters) for i in range(9))
     return rand_str.lower()
 
+
 # result not depend from simbols order. Good!
 def crc32(s: str) -> int:
     return zlib.crc32(s.encode(encoding="utf-8", errors="ignore"))
@@ -107,7 +117,7 @@ def crc32(s: str) -> int:
 # convert keys for database
 def replace_keys(data: dict, keymap: dict) -> dict:
     for key, value in keymap.items():
-        if(key in data):
+        if (key in data):
             data[value] = data.pop(key, None)
     # and return updated fields
     return data

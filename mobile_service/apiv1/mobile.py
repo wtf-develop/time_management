@@ -9,16 +9,23 @@ from _common.api import auth
 from _common.api._settings import mydb_connection, mydb
 from _common.api import utils
 from _common.api import db
+from _common.api import headers
 
 
 # SQL query MUST be optimized - later
-def getTotalIdsString(user_id: int, devid: int) -> str:
+def getTotalIdsString(user_id: int, devid: int, cross: str = '', extend: bool = False) -> str:
     links = getLinkedDevices(user_id, devid)
     own = getOwnDevices(user_id, devid)  # except myself
     tasks = getLinkedTasks(user_id, devid)
+    cross = utils.clearHard(cross)
+    add_fields = ''
+    if extend:
+        add_fields = ' *,'
+    if len(cross) > 0:
+        cross = ' and globalid in (' + ("'" + "','".join(cross.split(',')) + "'") + ') '
     sql = '''
-    select globalid as val, update_time as time, `serial` from tasks
-    where state=20 and
+    select ''' + add_fields + '''globalid as fval, update_time as ftime, `serial` as fserial from tasks
+    where state=20 ''' + cross + ''' and
     (
     (devid=''' + str(devid) + ''')
     or
@@ -36,18 +43,24 @@ def getTotalIdsString(user_id: int, devid: int) -> str:
     '''
     mydb.execute(sql)
     rows = mydb.fetchall()
-    result = {'val': '', 'time': 0, 'serial': 0, 'count': 0}
+    result = {'val': '', 'time': 0, 'serial': 0, 'count': 0, 'db': []}
     val_arr = []
     count = 0
     max_time = 0
     serial = 0
     for row in rows:
-        val_arr.append(row['val'])
+        val_arr.append(row['fval'])
         count = count + 1
-        temp = int(row['time'])
+        temp = int(row['ftime'])
+        serial = serial + int(row['fserial'])
         if temp > max_time:
             max_time = temp
-        serial = serial + int(row['serial'])
+        if extend:
+            row.pop('fval',None)
+            row.pop('ftime', None)
+            row.pop('fserial', None)
+            result['db'].append(row)
+
     result['val'] = ','.join(val_arr)
     result['time'] = max_time
     result['count'] = count
@@ -117,3 +130,9 @@ def log(message: str, tag: str = '  info'):
 
 def elog(message: str, tag: str = 'error'):
     utils.log(message, tag, 'mobile_error')
+
+
+if not (auth.isMobile):  # check that this request from mobile application
+    headers.jsonAPI(False)
+    elog('Only from mobile uid:' + auth.user_id)
+    headers.errorResponse('Wrong type')
