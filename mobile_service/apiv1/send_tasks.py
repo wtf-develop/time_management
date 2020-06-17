@@ -33,6 +33,7 @@ data = json['data']
 mobile_crc32 = json['sync_info']['crc32']
 mobile_time = json['sync_info']['time']
 mobile_serial = json['sync_info']['serial']
+mobile_count = json['sync_info']['count']
 saved_ids = []
 broken_ids = []
 # headers.errorResponse('error n-' + str(len(data)))
@@ -54,7 +55,7 @@ if len(data) > 0:
 obj = mobile.getTotalIdsString(auth.user_id, auth.user_some_state)
 obj['crc32'] = utils.crc32(obj['val'])
 obj2 = {'crc32': obj['crc32'], 'time': obj['time'], 'serial': obj['serial'], 'count': obj['count']}
-if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_serial != obj['serial'])):
+if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_serial != obj['serial'])or (mobile_count != obj['count'])):
     headers.goodResponse({
         'mobile': json['sync_info'],
         'srv': obj2,
@@ -68,7 +69,8 @@ if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_seri
     })
 else:
     headers.goodResponse({'saved': {'state': True,
-                                    'ids': ','.join(saved_ids)
+                                    'ids': ','.join(saved_ids),
+                                    'broken': ','.join(broken_ids),
                                     },
                           'diff': {'state': False}
                           })

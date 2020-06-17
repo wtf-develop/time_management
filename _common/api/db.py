@@ -78,6 +78,7 @@ def saveTask(data: dict) -> int:
         return -9  # not supported task type
 
     timestampstr = str(int(time.time() * 1000))
+    gid_generator = str(int(time.time() * 1000) - 1000000000000)
 
     if ('id' not in data) or (data['id'] is None) or (data['id'] < 1):  # new record in tasks
         data['id'] = 0
@@ -86,10 +87,13 @@ def saveTask(data: dict) -> int:
         data['globalid'] = ''
 
     if (data['id'] == 0) and len(data['globalid']) == 0:
-        data['globalid'] = timestampstr + '-' + utils.rand_string() +\
+        data['globalid'] = gid_generator + '-' + utils.rand_string() +\
                            str(data['type'] + str(data['devid']))
     elif (data['id'] != 0) and len(data['globalid']) == 0:
         data['globalid'] = getGlobalFromId(data['id'])
+        if len(data['globalid']) == 0:
+            data['globalid'] = gid_generator + '-' + utils.rand_string() +\
+                               str(data['type'] + str(data['devid']))
     elif (data['id'] == 0) and len(data['globalid']) != 0:
         data['id'] = getIdFromGlobal(data['globalid'])
     elif (data['id'] != 0) and len(data['globalid']) != 0:

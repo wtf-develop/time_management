@@ -97,7 +97,7 @@ __letters = string.ascii_lowercase
 
 def rand_string() -> str:
     rand_str = ''.join(random.choice(__letters) for i in range(9))
-
+    return rand_str.lower()
 
 # result not depend from simbols order. Good!
 def crc32(s: str) -> int:
