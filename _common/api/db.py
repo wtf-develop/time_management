@@ -83,16 +83,16 @@ def saveTask(data: dict) -> int:
     if ('id' not in data) or (data['id'] is None) or (data['id'] < 1):  # new record in tasks
         data['id'] = 0
 
-    if ('globalid' not in data) or (data['globalid'] is None) or len(data['globalid']) < 10:
+    if ('globalid' not in data) or (data['globalid'] is None) or len(data['globalid']) < 5:
         data['globalid'] = ''
 
     if (data['id'] == 0) and len(data['globalid']) == 0:
-        data['globalid'] = gid_generator + '-' + utils.rand_string() +\
+        data['globalid'] = gid_generator + utils.rand_string() +\
                            str(data['type'] + str(data['devid']))
     elif (data['id'] != 0) and len(data['globalid']) == 0:
         data['globalid'] = getGlobalFromId(data['id'])
         if len(data['globalid']) == 0:
-            data['globalid'] = gid_generator + '-' + utils.rand_string() +\
+            data['globalid'] = gid_generator + utils.rand_string() +\
                                str(data['type'] + str(data['devid']))
     elif (data['id'] == 0) and len(data['globalid']) != 0:
         data['id'] = getIdFromGlobal(data['globalid'])

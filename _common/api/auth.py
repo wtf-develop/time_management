@@ -167,10 +167,12 @@ req_query = (os.environ.get("QUERY_STRING") or "").strip()[:350]  # parameters
 # --- debug part start ---
 load_debug_config = False
 if (debug):
+    prefix = sys.modules['__main__'].__file__.replace('\\', '/').split('/')
+    prefix = prefix[len(prefix) - 1].split('.')[0]
     # if run from console or start from debuger< there is no User-Agent
     load_debug_config = (len(req_agent) == 0)
     if load_debug_config:
-        dfile = open(logs_path + '_debug_headers_dump.json', "r")
+        dfile = open(logs_path + prefix + '_debug_headers_dump.json', "r")
         req_headers = json.load(dfile)
         req_ip = req_headers['req_ip']
         req_method = req_headers['req_method']
@@ -180,7 +182,7 @@ if (debug):
         req_query = req_headers['req_query']
         dfile.close()
     else:
-        dfile = open(logs_path + '_debug_headers_dump.json', "w")
+        dfile = open(logs_path + prefix + '_debug_headers_dump.json', "w")
         dfile.write(json.dumps(
                 {'req_ip': req_ip, 'req_method': req_method, 'req_agent': req_agent, 'req_language': req_language,
                  'req_scheme': req_scheme, 'req_query': req_query}))
@@ -200,8 +202,14 @@ if len(req_query) > 0:
 
 req_rawpost = None
 _POST = None
+# --- debug part start ---
+# --- debug part start ---
+# --- debug part start ---
 if (debug and load_debug_config):
     pass
+# --- debug part ends ---
+# --- debug part ends ---
+# --- debug part ends ---
 else:
     if req_method.lower().strip() == "post":
         req_rawpost = sys.stdin.read()
@@ -215,15 +223,17 @@ else:
 # --- debug part start ---
 # --- debug part start ---
 if (debug):
+    prefix = sys.modules['__main__'].__file__.replace('\\', '/').split('/')
+    prefix = prefix[len(prefix) - 1].split('.')[0]
     if load_debug_config:
-        dfile = open(logs_path + '_debug_post_dump.json', "r")
+        dfile = open(logs_path + prefix + '_debug_post_dump.json', "r")
         try:
             _POST = json.load(dfile)
         except Exception:
             _POST = None
         dfile.close()
     else:
-        dfile = open(logs_path + '_debug_post_dump.json', "w")
+        dfile = open(logs_path + prefix + '_debug_post_dump.json', "w")
         if (_POST is None):
             dfile.write('')
         else:
@@ -269,15 +279,17 @@ if not (isMobile):
 # --- debug part start ---
 # --- debug part start ---
 if (debug):
+    prefix = sys.modules['__main__'].__file__.replace('\\', '/').split('/')
+    prefix = prefix[len(prefix) - 1].split('.')[0]
     if load_debug_config:
-        dfile = open(logs_path + '_debug_extra_dump.json', "r")
+        dfile = open(logs_path + prefix + '_debug_extra_dump.json', "r")
         extra = json.load(dfile)
         user_indx = extra['user_indx']
         user_lang = extra['user_lang']
         credentials = extra['credentials']
         dfile.close()
     else:
-        dfile = open(logs_path + '_debug_extra_dump.json', "w")
+        dfile = open(logs_path + prefix + '_debug_extra_dump.json', "w")
         dfile.write(json.dumps({'user_indx': user_indx, 'user_lang': user_lang, 'credentials': credentials}))
         dfile.close()
 # --- debug part ends ---

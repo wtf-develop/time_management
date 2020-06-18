@@ -21,10 +21,10 @@ if (auth._POST is None):  # only POST accepted
     mobile.elog('No posted info uid:' + auth.user_id)
     headers.errorResponse('Wrong information')
 json = auth._POST
-if 'data' not in json:
+if 'tasks' not in json:
     mobile.elog('Incorrect info format uid:' + auth.user_id)
     headers.errorResponse('Nothing was sent')
-data = json['data']
+tasks = json['tasks']
 
 mobile_crc32 = json['sync_info']['crc32']
 mobile_time = json['sync_info']['time']
@@ -32,11 +32,26 @@ mobile_serial = json['sync_info']['serial']
 mobile_count = json['sync_info']['count']
 saved_ids = []
 broken_ids = []
+remove_ids = []
 # headers.errorResponse('error n-' + str(len(data)))
 counter = 0
-if len(data) > 0:
-    # headers.errorResponse('error n-' + str(len(data)))
-    for task in data:
+if len(tasks) > 0:
+    obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=0)
+    set_ids = set(obj['val']['ids'].split(','))
+    remove_objects = []
+    # create list of all existing (not new) global ids
+    for task in tasks:
+        if ('globalid' in task) and (not (task['globalid'] is None)) and len(task['globalid']) > 5:
+            if not (task['globalid'] in set_ids):  # check that its not exists in approved area
+                task['id'] = db.getIdFromGlobal(task['globalid'])
+                if task['id'] > 0:  # check that this id exists in DB
+                    remove_ids.append(task['globalid'])  # if so - remove this from mobile
+                    remove_objects.append(task)  # and remove from tasks
+
+    for toremove in remove_objects:
+        tasks.remove(toremove)
+
+    for task in tasks:
         task['devid'] = auth.user_some_state
         # headers.errorResponse(str(task))
         save_result = db.saveTask(task)
@@ -48,21 +63,23 @@ if len(data) > 0:
 
 # After updating we check CRC32 values,
 # if they are different - need to check
-obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state)
+obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=2)
 if obj is None:
     headers.errorResponse('SQL error')
-obj['crc32'] = utils.crc32(obj['val'])
+obj['crc32'] = utils.crc32(obj['val']['ids'])
 obj2 = {'crc32': obj['crc32'], 'time': obj['time'], 'serial': obj['serial'], 'count': obj['count']}
-if (mobile_crc32 != obj['crc32']) or (mobile_time != obj['time'] or (mobile_serial != obj['serial'])or (mobile_count != obj['count'])):
+if (mobile_crc32 != obj['crc32']) or (
+        mobile_time != obj['time'] or (mobile_serial != obj['serial']) or (mobile_count != obj['count'])):
     headers.goodResponse({
-        'mobile': json['sync_info'],
-        'srv': obj2,
+        # 'mobile': json['sync_info'],
+        # 'srv': obj2,
         'saved': {'state': True,
                   'ids': ','.join(saved_ids),
                   'broken': ','.join(broken_ids),
+                  'remove': ','.join(remove_ids),
                   },
         'diff': {'state': True,
-                 'ids': obj['val']
+                 'info': obj['val']
                  }
     })
 else:

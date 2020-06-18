@@ -13,18 +13,21 @@ from _common.api import headers
 
 
 # SQL query MUST be optimized - later
-def getTotalIdsString(user_id: int, devid: int, cross: str = '', extend: bool = False) -> str:
+# extendType = 0 - only array of current ids in ['val']['ids']
+# extendType = 1 - current records directly from database in ['db'] field
+# extendType = 0 - array of current ids, serials, updates - ['val']['ids','serials','updates']
+def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int = 0) -> dict:
     links = getLinkedDevices(user_id, devid)
     own = getOwnDevices(user_id, devid)  # except myself
     tasks = getLinkedTasks(user_id, devid)
     cross = utils.clearHard(cross)
-    add_fields = ''
-    if extend:
+    add_fields = ''  # when extendType==0
+    if extendType == 1:
         add_fields = ' *,'
     if len(cross) > 0:
         cross = ' and globalid in (' + ("'" + "','".join(cross.split(',')) + "'") + ') '
     sql = '''
-    select ''' + add_fields + '''globalid as fval, update_time as ftime, `serial` as fserial from tasks
+    select ''' + add_fields + ''' globalid as fval, update_time as ftime, `serial` as fserial from tasks
     where state=20 ''' + cross + ''' and
     (
     (devid=''' + str(devid) + ''')
@@ -41,7 +44,7 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extend: bool = 
     )
     order by serial,update_time
     '''
-    result = {'val': '', 'time': 0, 'serial': 0, 'count': 0, 'db': []}
+    result = {'val': {}, 'time': 0, 'serial': 0, 'count': 0, 'db': []}
     try:
         mydb.execute(sql)
     except Exception as ex:
@@ -51,23 +54,32 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extend: bool = 
     rows = mydb.fetchall()
 
     val_arr = []
+    ser_arr = []
+    upd_arr = []
     count = 0
     max_time = 0
     serial = 0
     for row in rows:
         val_arr.append(row['fval'])
+        tserial = int(row['fserial'])
+        tupdate = int(row['ftime'])
+        if extendType == 2:
+            ser_arr.append(str(tserial))
+            upd_arr.append(str(tupdate))
         count = count + 1
-        temp = int(row['ftime'])
-        serial = serial + int(row['fserial'])
-        if temp > max_time:
-            max_time = temp
-        if extend:
-            row.pop('fval',None)
+        serial = serial + tserial
+        if tupdate > max_time:
+            max_time = tupdate
+        if extendType == 1:
+            row.pop('fval', None)
             row.pop('ftime', None)
             row.pop('fserial', None)
             result['db'].append(row)
 
-    result['val'] = ','.join(val_arr)
+    result['val']['ids'] = ','.join(val_arr)
+    if extendType == 2:
+        result['val']['serials'] = ','.join(ser_arr)
+        result['val']['updates'] = ','.join(upd_arr)
     result['time'] = max_time
     result['count'] = count
     result['serial'] = serial

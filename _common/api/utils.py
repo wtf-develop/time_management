@@ -105,7 +105,7 @@ __letters = string.ascii_lowercase
 
 
 def rand_string() -> str:
-    rand_str = ''.join(random.choice(__letters) for i in range(9))
+    rand_str = ''.join(random.choice(__letters) for i in range(8))
     return rand_str.lower()
 
 
