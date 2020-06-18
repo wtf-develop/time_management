@@ -77,8 +77,9 @@ def saveTask(data: dict) -> int:
     else:
         return -9  # not supported task type
 
-    timestampstr = str(int(time.time() * 1000))
-    gid_generator = str(int(time.time() * 1000) - 1000000000000)
+    timestamplong=int(time.time()* 1000)
+    timestampstr = str(int(timestamplong))
+    gid_generator = str(int(timestamplong) - 1000000000000)
 
     if ('id' not in data) or (data['id'] is None) or (data['id'] < 1):  # new record in tasks
         data['id'] = 0
