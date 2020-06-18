@@ -37,7 +37,7 @@ remove_ids = []
 counter = 0
 if len(tasks) > 0:
     obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=0)
-    set_ids = set(obj['val']['ids'].split(','))
+    set_ids = set(obj['info']['ids'].split(','))
     remove_objects = []
     # create list of all existing (not new) global ids
     for task in tasks:
@@ -66,7 +66,7 @@ if len(tasks) > 0:
 obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=2)
 if obj is None:
     headers.errorResponse('SQL error')
-obj['crc32'] = utils.crc32(obj['val']['ids'])
+obj['crc32'] = utils.crc32(obj['info']['ids'])
 obj2 = {'crc32': obj['crc32'], 'time': obj['time'], 'serial': obj['serial'], 'count': obj['count']}
 if (mobile_crc32 != obj['crc32']) or (
         mobile_time != obj['time'] or (mobile_serial != obj['serial']) or (mobile_count != obj['count'])):
@@ -79,7 +79,7 @@ if (mobile_crc32 != obj['crc32']) or (
                   'remove': ','.join(remove_ids),
                   },
         'diff': {'state': True,
-                 'info': obj['val']
+                 'info': obj['info']
                  }
     })
 else:

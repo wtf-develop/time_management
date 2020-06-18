@@ -36,6 +36,8 @@ __hard_chars = set(string.ascii_letters + string.digits + ',-_')
 
 def clearHard(s: str) -> str:
     global __hard_chars
+    if len(s) < 1:
+        return ''
     s = ''.join(filter(lambda x: x in __hard_chars, s))
     return s
 
