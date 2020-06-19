@@ -51,6 +51,16 @@ if 'password' not in jsonpost:
 if 'device' not in jsonpost:
     badExit(4)
 
+if ('crc32_control' not in jsonpost) or ('crc32_str' not in jsonpost):
+    badExit(5)
+crc32_control = int(jsonpost['crc32_control'])
+if crc32_control != utils.crc32(str(jsonpost['crc32_str'])):
+    auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
+    headers.jsonAPI(False)
+    time.sleep(1)
+    mobile.elog('CRC32 algorithm control mistake', 'critical')
+    headers.errorResponse("CRC32 algorithm error")
+
 if len(jsonpost['login']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['device']) < 4:
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
