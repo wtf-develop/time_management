@@ -77,7 +77,7 @@ def saveTask(data: dict) -> int:
     else:
         return -9  # not supported task type
 
-    timestamplong=int(time.time()* 1000)
+    timestamplong = int(time.time() * 1000)
     timestampstr = str(int(timestamplong))
     gid_generator = str(int(timestamplong) - 1000000000000)
 
@@ -204,7 +204,16 @@ def getGlobalFromId(id: int) -> str:
     return ""
 
 
-def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, outgoing: bool = True) -> dict:
+__linkedDevices = None
+__ownDevices = None
+__linkedTasks = None
+
+
+def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, outgoing: bool = True,
+                         cache: bool = True) -> dict:
+    global __linkedDevices
+    if (devid == 0) and incomming and outgoing and cache and (not (__linkedDevices is None)):
+        return __linkedDevices.copy()
     result = {
         'in': {
             '0': [], '1': [], '2': [], '3': [],
@@ -294,10 +303,16 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             if (row['sync3'] == 3):
                 result_out['3'].append(obj)
 
+    if (devid == 0) and incomming and outgoing:
+        __linkedDevices = result.copy()
     return result
 
 
-def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
+def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
+    global __ownDevices
+    if (devid == 0) and cache and (not (__ownDevices is None)):
+        return __ownDevices.copy()
+
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
 
     sql = '''select d.id,d.name,0 as sync0,1 as sync1,2 as sync2,3 as sync3
@@ -330,12 +345,17 @@ def getUserOwnDevices(user_id: int, devid: int = 0) -> dict:
             result['2'].append(row['id'])
         if (row['sync3'] == 3):
             result['3'].append(row['id'])
+
+    if (devid == 0):
+        __ownDevices = result.copy()
     return result
 
 
-def getUserLinkedTasks(user_id: int, devid: int = 0) -> list:
+def getUserLinkedTasks(user_id: int, devid: int = 0, cache: bool = True) -> list:
+    global __linkedTasks
+    if (devid == 0) and cache and (not (__linkedTasks is None)):
+        return __linkedTasks.copy()
     result = []
-
     addsql = ''
     if devid > 0:
         addsql = ' and d.id=' + str(devid) + ' '
@@ -350,4 +370,25 @@ def getUserLinkedTasks(user_id: int, devid: int = 0) -> list:
     # myown device will get all data that its owned
     for row in rows:
         result.append(row['id'])
+    if (devid == 0):
+        __linkedTasks = result.copy()
     return result
+
+
+def buildSqlPermissionfilter(user_id: int, devid: int) -> str:
+    links = getUserLinkedDevices(user_id, devid)
+    own = getUserOwnDevices(user_id, devid)
+    tasks = getUserLinkedTasks(user_id, devid)
+    return '''(
+            (devid=''' + str(devid) + ''')
+            or
+            (id in (''' + ','.join(str(x) for x in tasks) + '''))
+            or
+            (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
+    or
+    (type=1 and devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
+    or
+    (type=2 and devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
+    or
+    (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + '''))
+    )'''

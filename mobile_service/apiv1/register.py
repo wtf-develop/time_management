@@ -58,7 +58,7 @@ if crc32_control != utils.crc32(str(jsonpost['crc32_str'])):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    mobile.elog('CRC32 algorithm control mistake', 'critical')
+    mobile.elog('CRC32 control mistake', 'critical')
     headers.errorResponse("CRC32 algorithm error")
 
 if len(jsonpost['login']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['device']) < 4:
