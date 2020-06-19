@@ -10,6 +10,20 @@ body {
 }
 #content{
     height: 100vh;
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+}
+#particles-js{
+    height: 100vh;
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    background: url(../img/back.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover; /* For WebKit*/
+    -moz-background-size: cover;    /* Mozilla*/
+    -o-background-size: cover;      /* Opera*/
+    background-size: cover;         /* Generic*/
 }
 .container {
   display: flex;
@@ -21,12 +35,6 @@ body {
   height: 100vh;
   min-height: 100%;
   padding: 20px;
-    background: url(../img/back.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover; /* For WebKit*/
-    -moz-background-size: cover;    /* Mozilla*/
-    -o-background-size: cover;      /* Opera*/
-    background-size: cover;         /* Generic*/
-
 }
 
 #login-row {
@@ -47,8 +55,8 @@ body {
 #formFooter {
   background-color: #f6f6f6;
   border-top: 1px solid #dce8f1;
-  padding-top: 1px;
-  padding-bottom: 5px;
+  padding-top: 0px;
+  padding-bottom: 4px;
   padding-left: 3px;
   padding-right: 3px;
   text-align: center;
@@ -73,11 +81,11 @@ body {
 .google-link{
     color: #eee;
     text-decoration: none;
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 .google-link:hover{
     color: #eee;
     text-decoration: none;
-    opacity: 0.9;
+    opacity: 0.8;
 }

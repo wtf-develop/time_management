@@ -8,6 +8,10 @@ from _common.api import auth
 from _common.api import _settings
 
 
+def getServerVersion() -> str:
+    return "0.1"
+
+
 def removeDoubleSpaces(s: str) -> str:
     return ' '.join(s.strip().split())
 

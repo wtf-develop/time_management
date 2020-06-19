@@ -5,6 +5,7 @@ import json
 import gzip
 from _common.api import auth
 from _common.api import _settings
+from _common.api.utils import getServerVersion
 
 
 def htmlPage(check_auth: bool = True, fail_redirection: str = "../login/index.py"):
@@ -93,7 +94,8 @@ def goodResponse(outputData: dict):
         'dst': time.daylight,
         'timeoffset': toffset,
         'isotime': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat(),
-        'info': datetime.datetime.now().timetuple()
+        'info': datetime.datetime.now().timetuple(),
+        'version': getServerVersion()
     }
     if auth.isMobile:
         server_info['token'] = auth.credentials

@@ -162,6 +162,11 @@ req_scheme = (os.environ.get("REQUEST_SCHEME")
               or "").strip()[:5]  # http or https
 req_query = (os.environ.get("QUERY_STRING") or "").strip()[:350]  # parameters
 
+isMobile = False
+if req_agent.startswith('PlanMe mobile reminder APP'):
+    isMobile = True
+else:
+    req_agent = req_agent[:23]
 # --- debug part start ---
 # --- debug part start ---
 # --- debug part start ---
@@ -180,21 +185,18 @@ if (debug):
         req_language = req_headers['req_language']
         req_scheme = req_headers['req_scheme']
         req_query = req_headers['req_query']
+        isMobile = req_headers['isMobile']
         dfile.close()
     else:
         dfile = open(logs_path + prefix + '_debug_headers_dump.json', "w")
         dfile.write(json.dumps(
                 {'req_ip': req_ip, 'req_method': req_method, 'req_agent': req_agent, 'req_language': req_language,
-                 'req_scheme': req_scheme, 'req_query': req_query}))
+                 'req_scheme': req_scheme, 'req_query': req_query, 'isMobile': isMobile}))
         dfile.close()
 # --- debug part ends ---
 # --- debug part ends ---
 # --- debug part ends ---
 
-
-isMobile = False
-if req_agent.startswith('PlanMe mobile reminder APP'):
-    isMobile = True
 
 _GET = None  # always not NONE. Check exact values. Device-id is always there
 if len(req_query) > 0:

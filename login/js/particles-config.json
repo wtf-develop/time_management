@@ -1,0 +1,105 @@
+{
+  "particles": {
+    "number": {
+      "value": 35,
+      "density": {
+        "enable": true,
+        "value_area": 236.74802907265777
+      }
+    },
+    "color": {
+      "value": "#dadada"
+    },
+    "shape": {
+      "type": "circle",
+      "stroke": {
+        "width": 0,
+        "color": "#a7a4a4"
+      },
+      "polygon": {
+        "nb_sides": 3
+      }
+    },
+    "opacity": {
+      "value": 0.08280407727276487,
+      "random": false,
+      "anim": {
+        "enable": false,
+        "speed": 1,
+        "opacity_min": 0.1,
+        "sync": false
+      }
+    },
+    "size": {
+      "value": 3,
+      "random": true,
+      "anim": {
+        "enable": false,
+        "speed": 40,
+        "size_min": 0.1,
+        "sync": false
+      }
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 150,
+      "color": "#666666",
+      "opacity": 0.16560815454552974,
+      "width": 1
+    },
+    "move": {
+      "enable": true,
+      "speed": 1,
+      "direction": "none",
+      "random": false,
+      "straight": false,
+      "out_mode": "bounce",
+      "bounce": true,
+      "attract": {
+        "enable": true,
+        "rotateX": 600,
+        "rotateY": 1200
+      }
+    }
+  },
+  "interactivity": {
+    "detect_on": "canvas",
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "bubble"
+      },
+      "onclick": {
+        "enable": true,
+        "mode": "push"
+      },
+      "resize": true
+    },
+    "modes": {
+      "grab": {
+        "distance": 143.84694684855307,
+        "line_linked": {
+          "opacity": 1
+        }
+      },
+      "bubble": {
+        "distance": 203.7831747021169,
+        "size": 3,
+        "duration": 1.8380443208426227,
+        "opacity": 0.43953233759280114,
+        "speed": 3
+      },
+      "repulse": {
+        "distance": 39.95748523570919,
+        "duration": 0.4
+      },
+      "push": {
+        "particles_nb": 4
+      },
+      "remove": {
+        "particles_nb": 2
+      }
+    }
+  },
+  "retina_detect": true
+}

@@ -2,7 +2,7 @@ function storeLang(cvalue) {
     var d = new Date();
     d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
-    document.cookie = "lang=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = "lang=" + cvalue + ";" + expires + ";sameSite=strict; path=/";
 }
 
 function checkLogin(data) {

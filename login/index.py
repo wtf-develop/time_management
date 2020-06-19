@@ -27,20 +27,23 @@ print("""<!DOCTYPE html>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <link href="../_common/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../_common/css/custom.css" rel="stylesheet">
-    <link href="css/login.css" rel="stylesheet">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <link href="../_common/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../_common/css/custom.css" rel="stylesheet" />
+    <link href="css/login.css" rel="stylesheet" />
 
 </head>
 
 <body>
+<div id="particles-js" style="position: absolute;left:0;top:0;"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1829" height="429"></canvas></div>
     <div id="content">
     </div>
+
     <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
     <script type="text/javascript" src="../_common/js/json2html.js"></script>
     <script type="text/javascript" src="../_common/js/project_functions.js"></script>
     <script type="text/javascript" src="js/functions.js"></script>
+    <script type="text/javascript" src="js/particles.min.js"></script>
 
 <script type="text/javascript">
     var templates = {};
@@ -59,6 +62,7 @@ print("""<!DOCTYPE html>
             if(isGoodResponse(json)){
                 J2H.setTranslationArray(json.data.data);
                 extLang=json.data.code;
+                version=json.server.version;
                 storeLang(extLang);
                 J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }else{
@@ -69,11 +73,14 @@ print("""<!DOCTYPE html>
     }
 
     var extLang='en';
+    var version='';
     function buildWebUI() { //create all elements inside page (Structure of page)
-        $("#content").html(J2H.process("page",{code:extLang}));
+        $("#content").html(J2H.process("page",{code:extLang,version:version}));
         $("#content").fadeIn(150);
     }
 
+
+particlesJS.load('particles-js', 'js/particles-config.json', function() {});
 </script>
 </body>
 </html>""")
