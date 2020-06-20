@@ -32,6 +32,7 @@ lang = {
         'archived': 'Archived',
         'all_devices': 'All devices',
         'mobile_too_short': 'Minimum 4 symbols for each value',
+        'remove_account_message': 'Ok, goodbye!',
 
     },
     'ru': {
@@ -64,6 +65,7 @@ lang = {
         'archived': 'Архивные',
         'all_devices': 'Все устройства',
         'mobile_too_short': 'Минимум 4 символа для каждого поля',
+        'remove_account_message': 'Прощай, но это... возвращайся, если что',
 
     },
     'de': {
@@ -93,7 +95,7 @@ lang = {
 }
 
 
-def get_array(lang_code: str):# for injecting into HTML pages
+def get_array(lang_code: str):  # for injecting into HTML pages
     if lang is None:
         return json.dumps(lang['en'])
     if lang_code == 'en':
