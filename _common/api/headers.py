@@ -1,10 +1,11 @@
-import sys
 import datetime
-import time
-import json
 import gzip
-from _common.api import auth
+import json
+import sys
+import time
+
 from _common.api import _settings
+from _common.api import auth
 from _common.api.utils import getServerVersion
 
 

@@ -1,13 +1,17 @@
+import hashlib
+import http.cookies
+import json
 import os
 import sys
-import json
-import http.cookies
-import hashlib
 import time
 from urllib import parse
-from _common.api._settings import mydb, mydb_connection, server_token_key, debug, logs_path
-from _common.api import utils
+
 from _common.api import db
+from _common.api import utils
+from _common.api._settings import debug
+from _common.api._settings import logs_path
+from _common.api._settings import mydb
+from _common.api._settings import server_token_key
 
 
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):

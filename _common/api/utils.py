@@ -1,11 +1,11 @@
-import re
-import sys
 import random
+import re
 import string
-import zlib
 import time
-from _common.api import auth
+import zlib
+
 from _common.api import _settings
+from _common.api import auth
 
 
 def getServerVersion() -> str:

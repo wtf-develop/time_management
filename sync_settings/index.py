@@ -1,8 +1,9 @@
 #!/usr/local/bin/python3
 
+import inspect
 import os
 import sys
-import inspect
+
 currentdir = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(currentdir))

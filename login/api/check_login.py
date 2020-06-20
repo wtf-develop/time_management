@@ -1,10 +1,9 @@
 #!/usr/local/bin/python3
 
+import hashlib
+import inspect
 import os
 import sys
-import inspect
-import json
-import hashlib
 import time
 
 currentdir = os.path.dirname(os.path.abspath(
@@ -13,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
 from _common.api import utils
 from _common.api import headers
 from _common.api import auth
-from _common.api._settings import mydb, mydb_connection
+from _common.api._settings import mydb
 
 
 def badExit(index: int):

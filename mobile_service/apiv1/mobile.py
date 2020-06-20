@@ -1,15 +1,8 @@
-import sys
-import datetime
-import time
-import json
-import random
-import string
-
 from _common.api import auth
-from _common.api._settings import mydb_connection, mydb
-from _common.api import utils
 from _common.api import db
 from _common.api import headers
+from _common.api import utils
+from _common.api._settings import mydb
 
 __speedup_cache = None  # tasks not cached
 

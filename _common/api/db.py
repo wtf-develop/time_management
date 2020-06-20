@@ -1,12 +1,9 @@
-import sys
-import datetime
-import time
-import json
 import random
-import string
+import time
 
-from _common.api._settings import mydb_connection, mydb
 from _common.api import utils
+from _common.api._settings import mydb
+from _common.api._settings import mydb_connection
 
 #
 # Functions for storing data for different tables

@@ -1,19 +1,15 @@
 #!/usr/local/bin/python3
 
+import inspect
 import os
 import sys
-import inspect
-import json
 import time
 
 currentdir = os.path.dirname(os.path.abspath(
         inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
-from _common.api._settings import mydb, mydb_connection
-from _common.api import auth
-from _common.api.auth import _GET, _POST
+from _common.api.auth import _GET
 from _common.api import headers
-from _common.api import utils
 
 headers.jsonAPI()
 
