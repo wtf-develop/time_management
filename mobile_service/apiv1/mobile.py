@@ -39,7 +39,7 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
         or
         (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + ''')) '''
 
-    cross = utils.clearHard(cross)
+    cross = utils.clearStringHard(cross)
     add_fields = ''  # when extendType==0
     if extendType == 1:
         add_fields = ' *,'

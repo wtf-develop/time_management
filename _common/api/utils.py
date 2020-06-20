@@ -36,13 +36,40 @@ def clearUserLogin(login: str) -> str:
 
 
 __hard_chars = set(string.ascii_letters + string.digits + ',-_')
+__float_chars = set(string.digits + '-.')
+__int_chars = set(string.digits + '-')
+__digits_chars = set(string.digits)
 
 
-def clearHard(s: str) -> str:
+def clearStringHard(s: str) -> str:
     global __hard_chars
     if len(s) < 1:
         return ''
     s = ''.join(filter(lambda x: x in __hard_chars, s))
+    return s
+
+
+def clearFloat(s: str) -> str:
+    global __float_chars
+    if len(s) < 1:
+        return ''
+    s = ''.join(filter(lambda x: x in __float_chars, s))
+    return s
+
+
+def clearInt(s: str) -> str:
+    global __int_chars
+    if len(s) < 1:
+        return ''
+    s = ''.join(filter(lambda x: x in __int_chars, s))
+    return s
+
+
+def clearDigits(s: str) -> str:
+    global __digits_chars
+    if len(s) < 1:
+        return ''
+    s = ''.join(filter(lambda x: x in __digits_chars, s))
     return s
 
 
@@ -110,8 +137,8 @@ def bits2array(intval: int, bitscount: int = 32) -> list:
 __letters = string.ascii_lowercase
 
 
-def rand_string() -> str:
-    rand_str = ''.join(random.choice(__letters) for i in range(8))
+def rand_string(strlength: int) -> str:
+    rand_str = ''.join(random.choice(__letters) for i in range(strlength))
     return rand_str.lower()
 
 
