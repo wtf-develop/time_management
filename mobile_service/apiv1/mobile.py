@@ -11,15 +11,34 @@ from _common.api import utils
 from _common.api import db
 from _common.api import headers
 
+__speedup_cache = None  # tasks not cached
+
+
+def clearPermissionSQLCache():
+    global __speedup_cache
+    __speedup_cache = None
+
 
 # SQL query MUST be optimized - later
 # extendType = 0 - only array of current ids in ['val']['ids']
 # extendType = 1 - current records directly from database in ['db'] field Only DATABASE
 # extendType = 0 - array of current ids, serials, updates - ['val']['ids','serials','updates']
 def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int = 0) -> dict:
-    links = getLinkedDevices(user_id, devid)
-    own = getOwnDevices(user_id, devid)  # except myself
+    global __speedup_cache
+
     tasks = getLinkedTasks(user_id, devid)
+    if __speedup_cache is None:
+        links = getLinkedDevices(user_id, devid)
+        own = getOwnDevices(user_id, devid)  # except myself
+        __speedup_cache = ''' 
+        (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
+        or
+        (type=1 and devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
+        or
+        (type=2 and devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
+        or
+        (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + ''')) '''
+
     cross = utils.clearHard(cross)
     add_fields = ''  # when extendType==0
     if extendType == 1:
@@ -32,15 +51,9 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
     (
     (devid=''' + str(devid) + ''')
     or
+    ''' + __speedup_cache + '''
+    or
     (id in (''' + ','.join(str(x) for x in tasks) + '''))
-    or
-    (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
-    or
-    (type=1 and devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
-    or
-    (type=2 and devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
-    or
-    (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + '''))
     )
     order by serial,update_time
     '''
@@ -62,6 +75,8 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
     for row in rows:
 
         tserial = int(row['fserial'])
+        if row['ftime'] is None:
+            row['ftime'] = 0
         tupdate = int(row['ftime'])
         if (extendType == 0) or (extendType == 2):
             ids_arr.append(row['fval'])
@@ -96,7 +111,7 @@ def getLinkedDevices(user_id: int, devid: int) -> dict:
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
 
     links = db.getUserLinkedDevices(
-            user_id=user_id, devid=devid, incomming=True, outgoing=False)
+            user_id=user_id, devid=devid, incomming=True, outgoing=False, cache=False)
 
     for key, value in links['all']:
         result['all'].append({'id': value, 'name': links['names'][value]})
@@ -125,7 +140,7 @@ def getLinkedDevices(user_id: int, devid: int) -> dict:
 
 # except myself
 def getOwnDevices(user_id: int, devid: int) -> dict:
-    result = db.getUserOwnDevices(user_id, devid)  # except myself
+    result = db.getUserOwnDevices(user_id=user_id, devid=devid, cache=False)  # except myself
 
     if len(result['0']) < 1:
         result['0'].append(0)
@@ -141,7 +156,7 @@ def getOwnDevices(user_id: int, devid: int) -> dict:
 
 
 def getLinkedTasks(user_id: int, devid: int) -> list:
-    result = db.getUserLinkedTasks(user_id, devid)
+    result = db.getUserLinkedTasks(user_id=user_id, devid=devid, cache=False)
     if len(result) < 1:
         result.append(0)
     return result

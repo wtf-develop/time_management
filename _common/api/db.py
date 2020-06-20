@@ -117,7 +117,7 @@ def saveTask(data: dict) -> int:
 
     # always change serial after any updates ;-)
     if ('serial' not in data) or (data['serial'] is None):
-        data['serial'] = random.randint(1, 100000)
+        data['serial'] = random.randint(1, 50000)
 
     temp_global_id = data['globalid']  # store value before unset
     temp_dev_id = data['devid']
