@@ -170,6 +170,14 @@ def elog(message: str, tag: str = 'error'):
     utils.log(message, tag, 'mobile_error')
 
 
+def sql_request(sql: str):
+    try:
+        mydb.execute(sql)
+    except Exception as ex:
+        utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+        headers.errorResponse('SQL error')
+
+
 if not (auth.isMobile):  # check that this request from mobile application
     headers.jsonAPI(False)
     elog('Only from mobile uid:' + auth.user_id)
