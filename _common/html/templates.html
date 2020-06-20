@@ -1,7 +1,7 @@
 NextTemplateName: loader_big
 <center>
-    <br />&nbsp;<br />
-    <img src="../_common/img/loader.gif" />
+    <br/>&nbsp;<br/>
+    <img src="../_common/img/loader.gif"/>
 </center>
 
 
@@ -14,10 +14,13 @@ NextTemplateName: select_option
 
 
 NextTemplateName: toast_message
-<div id="toast_modal" role="alert" aria-live="assertive" aria-atomic="true" class="bg-dark toast fade show" style="background-color:white; position: fixed; top: 30px;right:100px;display:block;z-index:10000;" data-autohide="false">
+<div id="toast_modal" role="alert" aria-live="assertive" aria-atomic="true" class="bg-dark toast fade show"
+     style="background-color:white; position: fixed; top: 30px;right:100px;display:block;z-index:10000;"
+     data-autohide="false">
     <div class="toast-header bg-dark">
         <strong class="mr-auto text-[*toast.title,ifc=``then`success`else`warning`*]">[*toast.title,ifc=``then`@str.information`*]</strong>
-        <button onClick="$('#toast_modal').remove();return false;" type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <button onClick="$('#toast_modal').remove();return false;" type="button" class="ml-2 mb-1 close"
+                data-dismiss="toast" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -40,7 +43,9 @@ NextTemplateName: error_message
                 <p>[*error.message*]</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="$('#error_modal').remove();return false;">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        onClick="$('#error_modal').remove();return false;">Close
+                </button>
             </div>
         </div>
     </div>

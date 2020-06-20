@@ -5,12 +5,11 @@ import os
 import sys
 
 currentdir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
+        inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(currentdir))
 from _common.api import headers
 from _common.api import auth
 from _common.api import translation
-
 
 auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
 headers.htmlPage(False)

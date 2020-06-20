@@ -4,7 +4,9 @@ NextTemplateName: page_structure
     <div class="row p-0 m-0 w-100" style="height: 100%; width:100%;" align="left" width="100%" height="100%">
         {{left_menu}}
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 p-0 m-0">
-            <iframe name="frame_content" id="frame_content" class="frame_content" src="_common/img/loader.gif" scrolling="yes" noresize="noresize" title="frame_content" framespacing="0" frameborder="0" border="0"></iframe>
+            <iframe name="frame_content" id="frame_content" class="frame_content" src="_common/img/loader.gif"
+                    scrolling="yes" noresize="noresize" title="frame_content" framespacing="0" frameborder="0"
+                    border="0"></iframe>
         </main>
     </div>
 </div>
@@ -12,8 +14,10 @@ NextTemplateName: page_structure
 
 NextTemplateName: top_navigation
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" onclick="return false;" href="#"><span data-feather="user"></span> <span style="text-transform: capitalize;">[*data.login*]</span></a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" onclick="return false;" href="#"><span
+            data-feather="user"></span> <span style="text-transform: capitalize;">[*data.login*]</span></a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+            data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -33,7 +37,8 @@ NextTemplateName: top_navigation
                     </a>
                 </td>
                 <td align=center>
-                    <a class="nav-link px-4" href="login/index.py" title="@str.logout"><span data-feather="log-out"></span> @str.logout</a>
+                    <a class="nav-link px-4" href="login/index.py" title="@str.logout"><span
+                            data-feather="log-out"></span> @str.logout</a>
                 </td>
             </tr>
         </table>
@@ -42,7 +47,9 @@ NextTemplateName: top_navigation
 
 NextTemplateName: left_dropdown
 <div class="dropdown show w-100">
-    <a id="dropdev_all" class="nowrap dropdown-toggle w-100 text-muted" style="display:inline-block;text-decoration:underline;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a id="dropdev_all" class="nowrap dropdown-toggle w-100 text-muted"
+       style="display:inline-block;text-decoration:underline;" href="#" role="button" id="dropdownMenuLink"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @str.all_devices
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -55,14 +62,17 @@ NextTemplateName: left_dropdown
 </div>
 
 NextTemplateName: left_dropdown_item
-<a id="dropdev[*id*]" onclick="return setDevId('[*id*]');" style="text-transform: none;" class="dropdev_items dropdown-item [*selected,if=`true||1`then`active`else``*]" href="#">[*user, ift=``then``else`user_name_dropdown`*][*name*]</a>
+<a id="dropdev[*id*]" onclick="return setDevId('[*id*]');" style="text-transform: none;"
+   class="dropdev_items dropdown-item [*selected,if=`true||1`then`active`else``*]" href="#">[*user,
+    ift=``then``else`user_name_dropdown`*][*name*]</a>
 
 NextTemplateName: user_name_dropdown
 <b>[*user*]</b>&nbsp;-&nbsp;
 
 
 NextTemplateName: left_menu
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" style="overflow: hidden;width: 100%;height: 100%;">
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse"
+     style="overflow: hidden;width: 100%;height: 100%;">
     <div class="sidebar-sticky pt-0" style="width: 100%;overflow-y: auto;padding-right:17px;box-sizing: content-box;">
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-2 text-muted pb-0">
             {{left_dropdown}}
@@ -70,7 +80,8 @@ NextTemplateName: left_menu
         <ul class="nav flex-column">
             <li class="nav-item nowrap">
                 <nobr>
-                    <a onclick="selectLeftMenu(0)" id="menuitem0" class="nav-link active" href="week_plan/index.py" target="frame_content">
+                    <a onclick="selectLeftMenu(0)" id="menuitem0" class="nav-link active" href="week_plan/index.py"
+                       target="frame_content">
                         <span data-feather="list"></span>
                         @str.list_global_plan
                     </a>
@@ -79,7 +90,8 @@ NextTemplateName: left_menu
 
             <li class="nav-item nowrap">
                 <nobr>
-                    <a onclick="selectLeftMenu(1)" id="menuitem1" class="nav-link" href="calendar/index.py" target="frame_content">
+                    <a onclick="selectLeftMenu(1)" id="menuitem1" class="nav-link" href="calendar/index.py"
+                       target="frame_content">
                         <span data-feather="calendar"></span>
                         @str.list_calendar
                     </a>
@@ -89,7 +101,8 @@ NextTemplateName: left_menu
 
             <li class="nav-item nowrap">
                 <nobr>
-                    <a onclick="selectLeftMenu(2)" id="menuitem2" class="nav-link" href="tasks_list/index.py" target="frame_content">
+                    <a onclick="selectLeftMenu(2)" id="menuitem2" class="nav-link" href="tasks_list/index.py"
+                       target="frame_content">
                         <span data-feather="edit"></span>
                         @str.list_notes
                     </a>
@@ -104,7 +117,8 @@ NextTemplateName: left_menu
         <ul class="nav flex-column mb-2">
             <li class="nav-item nowrap">
                 <nobr>
-                    <a onclick="selectLeftMenu(3)" id="menuitem3" class="nav-link" href="sync_settings/index.py" target="frame_content">
+                    <a onclick="selectLeftMenu(3)" id="menuitem3" class="nav-link" href="sync_settings/index.py"
+                       target="frame_content">
                         <span data-feather="cloud"></span>
                         @str.device_sync
                     </a>

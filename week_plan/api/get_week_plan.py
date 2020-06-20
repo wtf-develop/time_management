@@ -23,7 +23,7 @@ def getDays():
 devid = 0
 if not (_GET is None) and ('devid' in _GET) and not (_GET['devid'] is None) and not (_GET['devid'][0] is None):
     devid = int(_GET['devid'][0])
-if devid<1:
+if devid < 1:
     pass
 data = {}
 data['daily'] = []
