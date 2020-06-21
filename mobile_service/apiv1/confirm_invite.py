@@ -20,7 +20,7 @@ if (jsonpost is None) or ('invite' not in jsonpost):
 invite = utils.clearStringHard(str(jsonpost['invite']))[:7]
 if len(invite) < 3:
     headers.errorResponse('Too short invite')
-sql_request('select id from sync_devices where dst=' + auth.user_some_state + ' and invite=' + invite)
+sql_request('select id from sync_devices where dst=' + str(auth.user_some_state) + ' and invite="' + invite+'"')
 row = mydb.fetchone()
 id = 0
 if row is None:
@@ -28,5 +28,6 @@ if row is None:
 id = int(row['id'])
 if id < 1:
     headers.errorResponse('Not found')
-    sql_request('update sync_devices set invite="", state=1 where id=' + str(id))
+
+sql_request('update sync_devices set invite="", state=1 where id=' + str(id))
 headers.goodResponse({'state': True})

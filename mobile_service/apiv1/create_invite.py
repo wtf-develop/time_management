@@ -2,6 +2,7 @@
 import inspect
 import os
 import sys
+import time
 
 currentdir = os.path.dirname(os.path.abspath(
         inspect.getfile(inspect.currentframe())))
@@ -42,7 +43,8 @@ my_device = auth.user_some_state
 if (auth.user_id == uid) or (another_device == my_device):
     headers.errorResponse('You already have full access to your own devices')
 
-sql_request('select id, state, invite from sync_devices where src=' + my_device + ' and dst=' + another_device)
+sql_request(
+    'select id, state, invite from sync_devices where src=' + str(my_device) + ' and dst=' + str(another_device))
 link_id = 0
 link_state = 0
 link_invite = ''
@@ -63,7 +65,8 @@ if link_id > 0:
 else:
     link_invite = utils.rand_string(5)
     sql_request(
-            'insert into sync_devices (src,dst,state,created) values (' + my_device + ',' + another_device + ',0,"' + link_invite + '")')
+            'insert into sync_devices (src,dst,state,invite,created) values (' + str(my_device) + ',' + str(
+                another_device) + ',0,"' + link_invite + '",' + str(int(time.time() * 1000)) + ')')
     headers.goodResponse({'invite': link_invite})
 
 headers.errorResponse('Unexpected end of request')
