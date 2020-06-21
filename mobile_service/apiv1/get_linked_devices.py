@@ -11,12 +11,17 @@ from _common.api import headers
 from _common.api import db
 
 headers.jsonAPI()
-links = db.getUserLinkedDevices(user_id=auth.user_id, devid=auth.user_some_state, incomming=True, outgoing=True,
-                                cache=True)
+in_bool = True
+if ('share' in auth._GET):
+    in_bool = False
+links = db.getUserLinkedDevices(user_id=auth.user_id, devid=auth.user_some_state, incomming=in_bool, outgoing=True,
+                                cache=False)
 own = db.getUserOwnDevices(user_id=auth.user_id, devid=auth.user_some_state, cache=False)  # except myself
 result = {'own': [], 'in': [], 'out': []}
-
+def_id = db.getDefaultDevice(auth.user_id)
 for dev in own['all']:
+    if (dev['id'] == def_id) or (dev['id'] == auth.user_id):
+        continue
     result['own'].append({'id': dev['id'], 'device': dev['name']})
 
 for key in links['in']['all']:

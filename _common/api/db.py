@@ -306,7 +306,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
 
 
 def getDefaultDevice(user_id: int) -> int:
-    sql = 'select id from device where uid=' + str(user_id) + ' order by `default` desc,id limit 1'
+    sql = 'select id from devices where uid=' + str(user_id) + ' order by `default` desc,id limit 1'
     mydb.execute(sql)
     row = mydb.fetchone()
     if row is None:
