@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3
-
 import hashlib
 import inspect
 import os
@@ -95,6 +94,11 @@ if usr is None:  # Need to create new record
             '", state=1, created=' + timestamp_string)
     auth.user_id = mydb_connection.insert_id()
     mobile.log('New user registered id:' + str(auth.user_id))
+    mydb.execute(
+            'insert into devices set `default`=1, uid=' + str(auth.user_id) +
+            ', name="account", state=1, created=' + timestamp_string +
+            ',sync0=0,sync1=1,sync2=2,sync3=3' +
+            ', lastconnect=' + timestamp_string)
 else:
     if int(usr['state']) < 1:  # if user exists, but wrong password
         usr['id'] = 0
@@ -107,19 +111,21 @@ else:
 if auth.user_id < 1:
     wrongCred(3)
 mydb.execute(
-        'select id from devices where uid=' + str(auth.user_id) +
+        'select id,`default` from devices where uid=' + str(auth.user_id) +
         ' and name="' + jsonpost['device'] +
         '" and state>0')
 dev = mydb.fetchone()
 if dev is None:  # Need to add new device to user
     mydb.execute(
-            'insert into devices set uid=' + str(auth.user_id) +
+            'insert into devices set `default`=0, uid=' + str(auth.user_id) +
             ', name="' + jsonpost['device'] +
             '", state=1, created=' + timestamp_string +
             ', lastconnect=' + timestamp_string)
     auth.user_some_state = mydb_connection.insert_id()
     mobile.log('New device added id:' + str(auth.user_some_state))
 else:
+    if int(dev['default']) > 0:
+        headers.errorResponse('You can not use this device name')
     auth.user_some_state = int(dev['id'])
 
 if auth.user_some_state < 1:

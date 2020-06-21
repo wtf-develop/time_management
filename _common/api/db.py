@@ -305,6 +305,15 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
     return result
 
 
+def getDefaultDevice(user_id: int) -> int:
+    sql = 'select id from device where uid=' + str(user_id) + ' order by `default` desc,id limit 1'
+    mydb.execute(sql)
+    row = mydb.fetchone()
+    if row is None:
+        return 0
+    return int(row['id'])
+
+
 def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
     global __ownDevices
     if (devid == 0) and cache and (not (__ownDevices is None)):
