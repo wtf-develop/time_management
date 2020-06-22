@@ -234,7 +234,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
         # get external devices that send info to user  id - src (ext-dev), dst - user device
         sql = '''select u.login,d2.name as dst_name,s.dst,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3
                 from devices as d
-                inner join sync_devices as s on s.src=d.id
+                inner join sync_devices as s on s.src=d.id and s.`state`>0
                 inner join devices as d2 on s.dst=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
                 inner join users as u on d.uid=u.id
                 where d.state>0
@@ -269,7 +269,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
     if outgoing:
         # get external devices that receive info from user  id - desctination (ext-dev), src - user device
         sql = '''select u.login,d2.name as src_name,s.src,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3 from devices as d
-            inner join sync_devices as s on s.dst=d.id
+            inner join sync_devices as s on s.dst=d.id and s.`state`>0
             inner join devices as d2 on s.src=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
             inner join users as u on d.uid=u.id
             where d.state>0

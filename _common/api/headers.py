@@ -116,13 +116,13 @@ def redirectionPage(url: str):
     print("Location: " + url)
     print("")
     print("""<!DOCTYPE html><html>
-                            <head>
-                            <meta http-equiv="Refresh" content="0;url='""" + url + """'" />
-                            <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-                            <script type="text/javascript">
-                                window.location.href = '""" + url + """'
-                            </script>
-                            </head><body>
-                            <p>Please follow <a href='""" + url + """'>this link</a>.</p>
-                        </body></html>""")
+             <head>
+             <meta http-equiv="Refresh" content="0;url='""" + url + """'" />
+             <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+             <script type="text/javascript">
+                 window.location.href = '""" + url + """'
+             </script>
+             </head><body>
+             <p>Please follow <a href='""" + url + """'>this link</a>.</p>
+             </body></html>""")
     sys.exit()

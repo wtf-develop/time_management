@@ -20,7 +20,8 @@ if (jsonpost is None) or ('invite' not in jsonpost):
 invite = utils.clearStringHard(str(jsonpost['invite']))[:7]
 if len(invite) < 3:
     headers.errorResponse('Too short invite')
-sql_request('select id from sync_devices where ((dst=' + str(auth.user_some_state) + ') or (`default`=1)) and invite="' + invite+'"')
+sql_request('select id from sync_devices where (dst=' + str(
+    auth.user_some_state) + ') and invite="' + invite + '"')
 row = mydb.fetchone()
 id = 0
 if row is None:
