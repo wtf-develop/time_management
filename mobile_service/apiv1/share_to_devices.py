@@ -49,7 +49,7 @@ def_id = db.getDefaultDevice(auth.user_id)
 
 if (len(all_devices) < 1) or len(tasks) < 1:
     headers.errorResponse(
-            "Nothing to do")
+            "Error, nothing to do")
 
 if str(auth.user_id) in all_devices:
     all_devices.remove(str(auth.user_id))
@@ -59,7 +59,7 @@ if str(def_id) in all_devices:
 
 if len(all_devices) < 1:
     headers.errorResponse(
-            "You can not share to your current or default devices")
+            "You can't share to your current or default devices")
 
 own_dict = db.getUserOwnDevices(user_id=auth.user_id, devid=auth.user_some_state)
 out_dict = db.getUserLinkedDevices(user_id=auth.user_id, devid=auth.user_some_state, incomming=False, outgoing=True)

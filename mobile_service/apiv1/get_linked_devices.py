@@ -32,4 +32,6 @@ for key in links['out']['all']:
     dev = links['out']['all'][key]
     result['out'].append({'id': dev, 'device': links['names'][dev]['device'], 'user': links['names'][dev]['user']})
 
+if len(result['out']) < 1 and len(result['in']) < 1 and len(result['own']) < 1:
+    headers.errorResponse('No devices available.\nInvite new devices on settings page')
 headers.goodResponse(result)
