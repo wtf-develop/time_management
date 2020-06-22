@@ -29,7 +29,7 @@ for key in links['in']['all']:
     result['in'].append({'id': dev, 'device': links['names'][dev]['device'], 'user': links['names'][dev]['user']})
 
 for key in links['out']['all']:
-    dev = links['in']['all'][key]
+    dev = links['out']['all'][key]
     result['out'].append({'id': dev, 'device': links['names'][dev]['device'], 'user': links['names'][dev]['user']})
 
 headers.goodResponse(result)
