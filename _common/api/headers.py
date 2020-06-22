@@ -18,7 +18,7 @@ def htmlPage(check_auth: bool = True, fail_redirection: str = "../login/index.py
     print("Content-Type: text/html;charset=utf-8")
     print("Expires: Wed, 11 May 1983 17:30:00 GMT")
     print("Cache-Control: no-store, no-cache, must-revalidate")
-    print("Cache-Control: post-check=0, pre-check=0")
+    # print("Cache-Control: post-check=0, pre-check=0")
     print("Last-Modified:", today.strftime("%a, %d %b %Y %H:%M:%S"), "GMT")
     print("Pragma: no-cache")
     if not auth.isMobile:
@@ -33,7 +33,7 @@ def jsonAPI(check_auth: bool = True):
         sys.stdout.write("Content-type: application/json;charset=utf-8\r\n")
         sys.stdout.write("Expires: Wed, 11 May 1983 17:30:00 GMT\r\n")
         sys.stdout.write("Cache-Control: no-store, no-cache, must-revalidate\r\n")
-        sys.stdout.write("Cache-Control: post-check=0, pre-check=0\r\n")
+        # sys.stdout.write("Cache-Control: post-check=0, pre-check=0\r\n")
         sys.stdout.write("Last-Modified: " + today.strftime("%a, %d %b %Y %H:%M:%S") + " GMT\r\n")
         sys.stdout.write("Pragma: no-cache\r\n")
         if not auth.isMobile:
@@ -51,7 +51,7 @@ def jsonAPI(check_auth: bool = True):
         print("Content-type: application/json;charset=utf-8")
         print("Expires: Wed, 11 May 1983 17:30:00 GMT")
         print("Cache-Control: no-store, no-cache, must-revalidate")
-        print("Cache-Control: post-check=0, pre-check=0")
+        # print("Cache-Control: post-check=0, pre-check=0")
         print("Last-Modified:", today.strftime("%a, %d %b %Y %H:%M:%S"), "GMT")
         print("Pragma: no-cache")
         if not auth.isMobile:

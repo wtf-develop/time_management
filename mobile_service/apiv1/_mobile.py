@@ -13,9 +13,9 @@ def clearPermissionSQLCache():
 
 
 # SQL query MUST be optimized - later
-# extendType = 0 - only array of current ids in ['val']['ids']
+# extendType = 0 - only array of current ids in ['info']['ids']
 # extendType = 1 - current records directly from database in ['db'] field Only DATABASE
-# extendType = 0 - array of current ids, serials, updates - ['val']['ids','serials','updates']
+# extendType = 2 - array of current ids, serials, updates - ['val']['ids','serials','updates']
 def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int = 0) -> dict:
     global __speedup_cache
 
@@ -36,6 +36,7 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
     add_fields = ''  # when extendType==0
     if extendType == 1:
         add_fields = ' *,'
+
     if len(cross) > 0:
         cross = ' and globalid in (' + ("'" + "','".join(cross.split(',')) + "'") + ') '
     sql = '''
@@ -169,6 +170,13 @@ def sql_request(sql: str):
     except Exception as ex:
         utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
         headers.errorResponse('SQL error')
+
+
+def sql_request_ignore_error(sql: str):
+    try:
+        mydb.execute(sql)
+    except Exception:
+        pass
 
 
 if not (auth.isMobile):  # check that this request from mobile application

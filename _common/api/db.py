@@ -228,6 +228,8 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
     if devid > 0:
         addsql = ' and d2.id=' + str(devid) + ' '
 
+    result_all = result['all']
+    result_names = result['names']
     if incomming:
         # get external devices that send info to user  id - src (ext-dev), dst - user device
         sql = '''select u.login,d2.name as dst_name,s.dst,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3
@@ -241,9 +243,6 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
         # utils.debug(sql)
         mydb.execute(sql)
         rows = mydb.fetchall()
-        result_all = result['all']
-        result_names = result['names']
-
         result_in = result['in']
         result_in_all = result_in['all']
         obj = {}

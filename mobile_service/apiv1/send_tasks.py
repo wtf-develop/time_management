@@ -10,17 +10,17 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import utils
 from _common.api import db
-from mobile_service.apiv1 import mobile
+from mobile_service.apiv1 import _mobile
 
 headers.jsonAPI()
-mobile.clearPermissionSQLCache()
+_mobile.clearPermissionSQLCache()
 devid = auth.user_some_state
 if (auth._POST is None):  # only POST accepted
-    mobile.elog('No posted info uid:' + auth.user_id)
+    _mobile.elog('No posted info uid:' + auth.user_id)
     headers.errorResponse('Wrong information')
 json = auth._POST
 if 'tasks' not in json:
-    mobile.elog('Incorrect info format uid:' + auth.user_id)
+    _mobile.elog('Incorrect info format uid:' + auth.user_id)
     headers.errorResponse('Nothing was sent')
 tasks = json['tasks']
 
@@ -34,7 +34,7 @@ remove_ids = []
 # headers.errorResponse('error n-' + str(len(data)))
 counter = 0
 if len(tasks) > 0:
-    obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=0)
+    obj = _mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=0)
     set_ids = set(obj['info']['ids'].split(','))
     remove_objects = []
     # create list of all existing (not new) global ids
@@ -62,7 +62,7 @@ if len(tasks) > 0:
 
 # After updating we check db values and CRC32,
 # if they are different - need to check
-obj = mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=2)
+obj = _mobile.getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, extendType=2)
 if obj is None:
     headers.errorResponse('SQL error')
 if (mobile_time != obj['time'] or (mobile_serial != obj['serial']) or

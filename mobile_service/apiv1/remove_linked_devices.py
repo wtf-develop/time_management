@@ -10,7 +10,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import db
 from _common.api import utils
-from mobile_service.apiv1.mobile import sql_request
+from mobile_service.apiv1._mobile import sql_request
 
 headers.jsonAPI()
 if (auth._POST is None):

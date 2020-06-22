@@ -12,7 +12,7 @@ from _common.api import utils
 from _common.api import headers
 from _common.api import auth
 from _common.api._settings import mydb, mydb_connection
-from mobile_service.apiv1 import mobile
+from mobile_service.apiv1 import _mobile
 from _common.api import translation
 
 
@@ -20,7 +20,7 @@ def badExit(index: int):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    mobile.elog('Request error - ' + str(index), 'reg')
+    _mobile.elog('Request error - ' + str(index), 'reg')
     headers.errorResponse(
             'Bad request - ' + str(index), ' Request to server is incorrect', 400)
 
@@ -29,7 +29,7 @@ def wrongCred(index: int):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    mobile.elog('Credentials error - ' + str(index), 'auth')
+    _mobile.elog('Credentials error - ' + str(index), 'auth')
     headers.errorResponse('Incorrect login or password', 'user not found - ' + str(index), 404)
 
 
@@ -55,14 +55,14 @@ if crc32_control != utils.crc32(str(jsonpost['crc32_str'])):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    mobile.elog('CRC32 control mistake', 'critical')
+    _mobile.elog('CRC32 control mistake', 'critical')
     headers.errorResponse("CRC32 algorithm error")
 
 if len(jsonpost['login']) < 4 or len(jsonpost['password']) < 4 or len(jsonpost['device']) < 4:
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    mobile.elog('Too short symbols', 'auth')
+    _mobile.elog('Too short symbols', 'auth')
     headers.errorResponse(translation.getValue('mobile_too_short'))
 
 jsonpost['remember'] = -1
@@ -93,7 +93,7 @@ if usr is None:  # Need to create new record
             jsonpost['login'] + '", password="' + jsonpost['password'] +
             '", state=1, created=' + timestamp_string)
     auth.user_id = mydb_connection.insert_id()
-    mobile.log('New user registered id:' + str(auth.user_id))
+    _mobile.log('New user registered id:' + str(auth.user_id))
     mydb.execute(
             'insert into devices set `default`=1, uid=' + str(auth.user_id) +
             ', name="account", state=1, created=' + timestamp_string +
@@ -122,7 +122,7 @@ if dev is None:  # Need to add new device to user
             '", state=1, created=' + timestamp_string +
             ', lastconnect=' + timestamp_string)
     auth.user_some_state = mydb_connection.insert_id()
-    mobile.log('New device added id:' + str(auth.user_some_state))
+    _mobile.log('New device added id:' + str(auth.user_some_state))
 else:
     if int(dev['default']) > 0:
         headers.errorResponse('You can not use this device name')
@@ -134,5 +134,5 @@ if auth.user_some_state < 1:
 auth.credentials = auth.buildCredentials(
         int(auth.user_id), jsonpost['login'], jsonpost['password'], 1, auth.user_some_state)
 headers.jsonAPI(False)
-mobile.log('Token was sent to device id:' + str(auth.user_some_state))
+_mobile.log('Token was sent to device id:' + str(auth.user_some_state))
 headers.goodResponse({'accepted': True, 'token': auth.credentials})
