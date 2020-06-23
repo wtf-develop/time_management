@@ -1,10 +1,17 @@
 function isGoodResponse(json) {
-    J2H.translate(json)
-    if (json.error !== undefined && json.error.state !== undefined && json.error.state) {
-        alert(json.error.title + "\n" + json.error.message); // replace to your own implementation
-        return false;
+    if(json===undefined)return true;
+    showToastIfExists(json);
+    if(json.error===undefined)return true;
+    if(json.error.state===undefined)return true;
+    if(json.error.message===undefined)return true;
+    if(json.error.state.toString().toUpperCase().indexOf('TR')==-1){
+            return true;
     }
-    return true;
+    if($('#error_modal').length>0) return false;
+    J2H.translate(json.error);
+    $('body').append(J2H.process('error_message',json));
+    $('#error_modal').fadeIn(50);
+    return false;
 }
 
 
@@ -76,6 +83,21 @@ function getDevId() {
     } catch (e) {
         return 0
     }
+}
 
-
+function showToastIfExists(json){
+    if(json.toast===undefined)return false;
+    if(json.toast.state===undefined)return false;
+    if(json.toast.message===undefined)return false;
+    if(json.toast.state.toString().toUpperCase().indexOf('TRUE')==-1){
+            return false;
+    }
+    if($('#toast_modal').length>0) return false;
+    translateObject(json.toast);
+    $('body').append(JST.parse_template(template,'toast_message',json));
+    $('#toast_modal').show();
+    setTimeout(function(){
+        $('#toast_modal').remove();
+    }, 4000);
+    return true;
 }

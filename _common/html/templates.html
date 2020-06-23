@@ -15,7 +15,7 @@ NextTemplateName: select_option
 
 NextTemplateName: toast_message
 <div id="toast_modal" role="alert" aria-live="assertive" aria-atomic="true" class="bg-dark toast fade show"
-     style="background-color:white; position: fixed; top: 30px;right:100px;display:block;z-index:10000;"
+     style="background-color:white; position: fixed; top: 20px;right:80px;display:block;z-index:10000;"
      data-autohide="false">
     <div class="toast-header bg-dark">
         <strong class="mr-auto text-[*toast.title,ifc=``then`success`else`warning`*]">[*toast.title,ifc=``then`@str.information`*]</strong>
@@ -30,10 +30,10 @@ NextTemplateName: toast_message
 </div>
 
 NextTemplateName: error_message
-<div id="error_modal" class="modal" tabindex="-1" role="dialog" style="z-index:10000;">
-    <div class="modal-dialog" role="document">
+<div id="error_modal" class="modal fade show" tabindex="-1" role="dialog" style="z-index:10000;background-color: #00000077;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
-            <div class="modal-header" onClick="$('#error_modal').remove();return false;">
+            <div class="modal-header pt-1 pb-0" onClick="$('#error_modal').remove();return false;">
                 <h5 class="modal-title">[*error.title,ifc=``then`@str.error`*]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -42,11 +42,12 @@ NextTemplateName: error_message
             <div class="modal-body">
                 <p>[*error.message*]</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        onClick="$('#error_modal').remove();return false;">Close
-                </button>
+            <div class="modal-footer" style="border-top: 0px solid #dee2e6;">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        onClick="$('#error_modal').remove();return false;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
 </div>
+
+
