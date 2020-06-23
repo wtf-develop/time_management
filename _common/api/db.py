@@ -160,7 +160,8 @@ def saveTask(data: dict, uid: int) -> int:
 
 
 def setTaskTag(tid: int, tag: str, uid: int):
-    tag = utils.removeDoubleSpaces(utils.removeQuotes(utils.removeNonUTF(utils.stripTags(tag.replace(',', '')))))
+    tag = utils.removeDoubleSpaces(
+        utils.removeQuotes(utils.removeNonUTF(utils.stripTags(tag.replace(',', ''))))).title()[:50]
     tag_id = 0
     sql = 'select id from tags where name="' + tag + '"'
     try:

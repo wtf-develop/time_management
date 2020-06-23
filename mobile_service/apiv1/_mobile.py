@@ -24,32 +24,41 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
         links = getLinkedDevices(user_id, devid)
         own = getOwnDevices(user_id, devid)  # except myself
         __speedup_cache = ''' 
-        (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
+        (t.type=0 and t.devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
         or
-        (type=1 and devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
+        (t.type=1 and t.devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
         or
-        (type=2 and devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
+        (t.type=2 and t.devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
         or
-        (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + ''')) '''
+        (t.type=3 and t.devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + ''')) '''
 
     cross = utils.clearStringHard(cross)
     add_fields = ''  # when extendType==0
+    add_condition = ''
     if extendType == 1:
-        add_fields = ' *,'
+        add_fields = " GROUP_CONCAT(tgs.name SEPARATOR ',') as tags,t.*,"
+        add_condition = '''
+        left join tasks_tags as tt on tt.taskid=t.id 
+        left join tags as tgs on tt.tagid=tgs.id
+        '''
 
     if len(cross) > 0:
-        cross = ' and globalid in (' + ("'" + "','".join(cross.split(',')) + "'") + ') '
+        cross = ' and t.globalid in (' + ("'" + "','".join(cross.split(',')) + "'") + ') '
+
+    # building sql request
     sql = '''
-    select ''' + add_fields + ''' globalid as fval, update_time as ftime, `serial` as fserial from tasks
-    where state=20 ''' + cross + ''' and
+    select ''' + add_fields + ''' t.globalid as fval, t.update_time as ftime, t.`serial` as fserial from tasks as t 
+    ''' + add_condition + '''    
+    where t.state=20 ''' + cross + ''' and
     (
-    (devid=''' + str(devid) + ''')
+    (t.devid=''' + str(devid) + ''')
     or
     ''' + __speedup_cache + '''
     or
-    (id in (''' + ','.join(str(x) for x in tasks) + '''))
+    (t.id in (''' + ','.join(str(x) for x in tasks) + '''))
     )
-    order by serial,update_time
+    group by t.id
+    order by t.serial,t.update_time
     '''
     result = {'info': {}, 'time': 0, 'serial': 0, 'count': 0, 'db': []}
     try:
@@ -87,6 +96,8 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
             row.pop('fval', None)
             row.pop('ftime', None)
             row.pop('fserial', None)
+            if row['tags'] is None or (len(row['tags']) < 1):
+                row.pop('tags', None)
             result['db'].append(row)
 
     if (extendType == 0) or (extendType == 2):
