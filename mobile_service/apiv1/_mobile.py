@@ -58,7 +58,7 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
     (t.id in (''' + ','.join(str(x) for x in tasks) + '''))
     )
     group by t.id
-    order by t.serial,t.update_time
+    order by t.update_time,t.`serial`
     '''
     result = {'info': {}, 'time': 0, 'serial': 0, 'count': 0, 'db': []}
     try:
