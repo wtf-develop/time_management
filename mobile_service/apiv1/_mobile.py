@@ -106,8 +106,9 @@ def getLinkedDevices(user_id: int, devid: int) -> dict:
 
     links = db.getUserLinkedDevices(
             user_id=user_id, devid=devid, incomming=True, outgoing=False, cache=False)
-
-    for key, value in links['all']:
+    links_all = links['all']
+    for key in links_all:
+        value = links_all[key]
         result['all'].append({'id': value, 'name': links['names'][value]})
 
     for value in links['in']['0']:

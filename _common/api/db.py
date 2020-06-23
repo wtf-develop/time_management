@@ -154,7 +154,8 @@ def saveTask(data: dict) -> int:
 
 def __build_update(data: dict) -> str:
     result = ""
-    for key, value in data.items():
+    for key in data:
+        value = data[key]
         if (key == 'id') or (key == 'globalid') or (key == 'created'):  # ignore this fields
             continue
         if (isinstance(value, str)):
@@ -168,15 +169,16 @@ def __build_update(data: dict) -> str:
 def __build_insert(data: dict) -> str:
     prefix = ""
     postfix = ""
-    for key, value in data.items():
-        if (key == 'id'):  # ignore this fields
+    for key in data:
+        if key == 'id':  # ignore this fields
             continue
-        if (isinstance(value, str)):
+        value = data[key]
+        if isinstance(value, str):
             prefix = prefix + '`' + key + '`,'
             postfix = postfix + '"' +\
                       mydb_connection.escape_string(value) + '",'
 
-        elif (isinstance(value, int)):
+        elif isinstance(value, int):
             prefix = prefix + '`' + key + '`,'
             postfix = postfix + str(value) + ','
     # return last part of insert statement

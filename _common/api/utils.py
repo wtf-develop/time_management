@@ -99,28 +99,19 @@ def bitClear(number: int, bit_index: int) -> int:
 
 def array2bits(array: list) -> int:
     res = 0
-    mykey = -1
-    for key, value in array:
-        mykey = -1
+    for i in range(len(array)):
         myval = 0
-        try:
-            mykey = int(key)
-        except Exception:
-            continue
-
-        if mykey < 0:
-            continue
 
         try:
-            myval = int(value)
+            myval = int(array[i])
         except Exception:
-            res = bitClear(res, key)
+            res = bitClear(res, i)
             continue
 
         if myval == 1:
-            res = bitSet(res, mykey)
+            res = bitSet(res, i)
         else:
-            res = bitClear(res, mykey)
+            res = bitClear(res, i)
     return res
 
 
@@ -149,8 +140,9 @@ def crc32(s: str) -> int:
 
 # convert keys for database
 def replace_keys(data: dict, keymap: dict) -> dict:
-    for key, value in keymap.items():
-        if (key in data):
+    for key in keymap:
+        value = keymap[key]
+        if key in data:
             data[value] = data.pop(key, None)
     # and return updated fields
     return data
