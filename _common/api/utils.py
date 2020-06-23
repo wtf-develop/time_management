@@ -166,6 +166,8 @@ def log(message: str, tag: str = '  info', file_postfix: str = 'web'):
 
 
 def debug(s):
+    if not _settings.debug:
+        return
     print("Content-Type: text/html;charset=utf-8")
     print("Expires: Wed, 11 May 1983 17:30:00 GMT")
     print("Cache-Control: no-store, no-cache, must-revalidate")

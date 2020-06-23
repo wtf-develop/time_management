@@ -24,7 +24,7 @@ tasks_keymap = {
 
 
 # return id or 0 - error, anything < 0 is  also error
-def saveTask(data: dict) -> int:
+def saveTask(data: dict, uid: int) -> int:
     # do all necessary checks and convert types
     data = utils.replace_keys(data, tasks_keymap)
     required = {'devid', 'title', 'desc', 'type'}
@@ -84,29 +84,23 @@ def saveTask(data: dict) -> int:
     if ('globalid' not in data) or (data['globalid'] is None) or len(data['globalid']) < 5:
         data['globalid'] = ''
 
-    if (data['id'] == 0) and len(data['globalid']) == 0:
+    if (data['id'] == 0) and len(data['globalid']) == 0:  # 1-1
         data['globalid'] = gid_generator + utils.rand_string(6) +\
                            str(data['type'] + str(data['devid']))
-    elif (data['id'] != 0) and len(data['globalid']) == 0:
+    elif (data['id'] != 0) and len(data['globalid']) == 0:  # 0-1
         data['globalid'] = getGlobalFromId(data['id'])
         if len(data['globalid']) == 0:
             data['globalid'] = gid_generator + utils.rand_string(6) +\
                                str(data['type'] + str(data['devid']))
-    elif (data['id'] == 0) and len(data['globalid']) != 0:
+    elif (data['id'] == 0) and len(data['globalid']) != 0:  # 1-0
         data['id'] = getIdFromGlobal(data['globalid'])
-    elif (data['id'] != 0) and len(data['globalid']) != 0:
+    elif (data['id'] != 0) and len(data['globalid']) != 0:  # 0-0
         pass  # may be check that globalid is correct with id
     else:
         return -100  # not possible
 
     if (data['id'] == 0) and (('created' not in data) or (data['created'] is None)):
         data['created'] = timestampstr  # dont change this later never!
-
-    # if ('globalid' not in data) or (len(data['globalid']) < 3):
-    # Error globalid must always present!
-    # if its new record - it will be updated by prev condition
-    # ->> if('id' not in data) or (data['id'] < 1) <<-
-    #    return -10
 
     # always update time after any changes
     if ('update_time' not in data) or (data['update_time'] is None):
@@ -116,8 +110,10 @@ def saveTask(data: dict) -> int:
     if ('serial' not in data) or (data['serial'] is None):
         data['serial'] = random.randint(1, 50000)
 
+    tags = str(data.pop('tags', None))
     temp_global_id = data['globalid']  # store value before unset
     temp_dev_id = data['devid']
+    data['update_devid'] = data['devid']
     if (data['id'] > 0):  # dont change this values!
         data.pop('created', None)  # dont change this values!
         data.pop('globalid', None)  # dont change this values!
@@ -136,7 +132,6 @@ def saveTask(data: dict) -> int:
         except Exception as ex:
             utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
             return -11
-        return data['id']
     else:
         sql = 'insert into tasks ' + __build_insert(data)
         data['globalid'] = temp_global_id
@@ -148,8 +143,49 @@ def saveTask(data: dict) -> int:
             return -12
         data['id'] = mydb_connection.insert_id()
 
-        return data['id']
-    return 0
+    tags_db_ids = []
+    tags_db_ids.append('0')
+    if not (tags is None):
+        tags_arr = tags.split(',')
+        if len(tags_arr) > 0:
+            for tag in tags_arr:
+                tags_db_ids.append(str(setTaskTag(data['id'], tag, uid)))
+                pass
+    sql = 'delete from tasks_tags where taskid=' + str(data['id']) + ' and tagid not in (' + ','.join(tags_db_ids) + ')'
+    try:
+        mydb.execute(sql)
+    except Exception:
+        pass
+    return data['id']
+
+
+def setTaskTag(tid: int, tag: str, uid: int):
+    tag = utils.removeDoubleSpaces(utils.removeQuotes(utils.removeNonUTF(utils.stripTags(tag.replace(',', '')))))
+    tag_id = 0
+    sql = 'select id from tags where name="' + tag + '"'
+    try:
+        mydb.execute(sql)
+    except Exception:
+        pass
+    row = mydb.fetchone()
+    str_time = str(int(time.time() * 1000))
+    if row is None:
+        sql = 'insert into tags (name,created_user,created) values ("' + tag + '",' + str(uid) + ',' + str_time + ')'
+        try:
+            mydb.execute(sql)
+        except Exception:
+            pass
+        tag_id = mydb_connection.insert_id()
+    else:
+        tag_id = int(row['id'])
+    if (tag_id is None) or (tag_id < 1):
+        return
+    sql = 'insert into tasks_tags set taskid=' + str(tid) + ', tagid=' + str(tag_id) + ', created=' + str_time
+    try:
+        mydb.execute(sql)
+    except Exception:
+        pass
+    return tag_id
 
 
 def __build_update(data: dict) -> str:
