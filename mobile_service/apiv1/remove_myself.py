@@ -14,26 +14,14 @@ from _common.api import translation
 
 headers.jsonAPI()
 
+
+
 sql = 'delete from tasks where devid in (select id from devices where uid=' + str(auth.user_id) + ')'
 try:
     mydb.execute(sql)
 except Exception as ex:
     utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
     headers.errorResponse('Can not remove tasks')
-
-sql = 'delete from tasks_tags where tagid in (select id from tags where uid=' + str(auth.user_id) + ')'
-try:
-    mydb.execute(sql)
-except Exception as ex:
-    utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
-    headers.errorResponse('Can not remove tags link')
-
-sql = 'delete from tags where uid=' + str(auth.user_id) + ''
-try:
-    mydb.execute(sql)
-except Exception as ex:
-    utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
-    headers.errorResponse('Can not remove tags')
 
 sql = 'delete from sync_devices where src in (select id from devices where uid=' + str(auth.user_id) + ')'
 try:

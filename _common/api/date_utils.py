@@ -2,7 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 
-
 __timezones = {}
 
 
@@ -43,3 +42,15 @@ def getTimestamp(timezone_offset: int = 0, year: int = None, month: int = None, 
 
 def getStartDayTime(timezone_offset: int) -> dict:
     return getTimestamp(timezone_offset=timezone_offset, hour=0, minute=0, seconds=0)
+
+def getTypeInterval(type:int, value:int, startTime: int):
+    if type==0:
+        return 0
+    elif type==1:
+        return 24*60*60*1000
+    elif type==2:
+        return 7*24*60*60*1000
+    elif type==3:
+        return None
+    elif type==4:
+        return None
