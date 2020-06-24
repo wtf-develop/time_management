@@ -84,6 +84,19 @@ def errorResponse(message: str, title: str='@str.error', code: int = 0):
         print(json.dumps(obj))
     sys.exit()
 
+def infoResponse(message: str, title: str=''):
+    obj = {
+        'toast': {
+            'state': True,
+            'title': title,
+            'message': message
+        }
+    }
+    if _settings.enable_gzip:
+        sys.stdout.buffer.write(__compress_string(json.dumps(obj)))
+    else:
+        print(json.dumps(obj))
+    sys.exit()
 
 def goodResponse(outputData: dict):
     toffset = time.timezone

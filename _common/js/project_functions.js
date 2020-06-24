@@ -85,6 +85,11 @@ function getDevId() {
     }
 }
 
+function getTimezoneParameter(){
+    var d = new Date();
+    return 'timezone='+(0-d.getTimezoneOffset());
+}
+
 function showToastIfExists(json){
     if(json.toast===undefined)return false;
     if(json.toast.state===undefined)return false;
@@ -93,8 +98,8 @@ function showToastIfExists(json){
             return false;
     }
     if($('#toast_modal').length>0) return false;
-    translateObject(json.toast);
-    $('body').append(JST.parse_template(template,'toast_message',json));
+    J2H.translate(json.toast);
+    $('body').append(J2H.process('toast_message',json));
     $('#toast_modal').show();
     setTimeout(function(){
         $('#toast_modal').remove();

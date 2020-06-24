@@ -14,17 +14,17 @@ NextTemplateName: select_option
 
 
 NextTemplateName: toast_message
-<div id="toast_modal" role="alert" aria-live="assertive" aria-atomic="true" class="bg-dark toast fade show"
-     style="background-color:white; position: fixed; top: 20px;right:80px;display:block;z-index:10000;"
+<div id="toast_modal" role="alert" aria-live="assertive" aria-atomic="true" class="toast fade show bg-light"
+     style="min-height: 100px; position: fixed; top: 20px;right:90px;display:block;z-index:10000;"
      data-autohide="false">
-    <div class="toast-header bg-dark">
-        <strong class="mr-auto text-[*toast.title,ifc=``then`success`else`warning`*]">[*toast.title,ifc=``then`@str.information`*]</strong>
+    <div class="toast-header bg-secondary">
+        <span class="mr-auto text-[*toast.title,ifc=``then`white`else`warning`*]">[*toast.title,ifc=``then`@str.information`*]</span>
         <button onClick="$('#toast_modal').remove();return false;" type="button" class="ml-2 mb-1 close"
                 data-dismiss="toast" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="toast-body text-white">
+    <div class="toast-body text-dark">
         [*toast.message*]
     </div>
 </div>

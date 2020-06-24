@@ -96,21 +96,14 @@ def elog(message: str, tag: str = 'error'):
 
 
 def sql_request(sql: str):
-    try:
-        mydb.execute(sql)
-    except Exception as ex:
-        utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
-        headers.errorResponse('SQL error')
+    db.sql_request(sql)
 
 
 def sql_request_ignore_error(sql: str):
-    try:
-        mydb.execute(sql)
-    except Exception:
-        pass
+    db.sql_request_ignore_error(sql)
 
 
-if not (auth.isMobile):  # check that this request from mobile application
+if not auth.isMobile:  # check that this request from mobile application
     headers.jsonAPI(False)
     elog('Only from mobile uid:' + auth.user_id)
     headers.errorResponse('Wrong type')

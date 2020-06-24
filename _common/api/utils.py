@@ -3,6 +3,9 @@ import re
 import string
 import time
 import zlib
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 
 from _common.api import _settings
 from _common.api import auth
@@ -10,6 +13,23 @@ from _common.api import auth
 
 def getServerVersion() -> str:
     return "0.1"
+
+
+def getStartDayTime(timezone_offset: int) -> dict:
+    timezone_obj = timezone(timedelta(minutes=timezone_offset), 'My Own Timezone')
+    today = datetime.now(timezone_obj)
+    today = today.replace(hour=0, minute=0, second=0, microsecond=1)
+    obj = today.timetuple()
+    return {'year': obj.tm_year,
+            'month': obj.tm_mon,
+            'day': obj.tm_mday,
+            'hour': 0,
+            'minute': 0,
+            'tz_offset': timezone_offset,
+            'tz_obj': timezone_obj,
+            'timestamp': int(today.timestamp() * 1000),
+            }
+    # return int(today.timestamp()*1000)
 
 
 def removeDoubleSpaces(s: str) -> str:
