@@ -29,7 +29,8 @@ if devid < 1:
     pass
 data = {}
 data['daily'] = []
-db.getUserLinkedDevices(auth.user_id,devid)
+sql_filter = db.buildSqlPermissionfilter(auth.user_id, devid, True)
+sql = 'select * from tasks t where (t.type=0 or t.type=1) and t.state=20 and ' + sql_filter + ' order by t.type, t.start_time'
 
 for i in range(55):
     obj = {'title': 'daily' +

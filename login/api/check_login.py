@@ -86,7 +86,7 @@ if (abs(timestamp_int - int(usr['fail_login_timestamp'])) < 60 * 1000) and (int(
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    headers.errorResponse('@str.attention', '@str.wait_1_min', 403)
+    headers.errorResponse('@str.wait_1_min', '@str.attention', 403)
 
 timestamp_string = str(timestamp_int)
 if usr['password'] != jsonpost['password'] or int(usr['state']) < 1:

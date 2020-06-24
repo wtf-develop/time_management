@@ -6,7 +6,7 @@ import time
 
 from _common.api import _settings
 from _common.api import auth
-from _common.api.utils import getServerVersion
+from _common.api import utils
 
 
 def htmlPage(check_auth: bool = True, fail_redirection: str = "../login/index.py"):
@@ -69,7 +69,7 @@ def __compress_string(s: str):
     return gzip.compress(s.encode('utf-8'))
 
 
-def errorResponse(title: str, message: str = '', code: int = 0):
+def errorResponse(message: str, title: str='@str.error', code: int = 0):
     obj = {
         'error': {
             'state': True,
@@ -96,7 +96,7 @@ def goodResponse(outputData: dict):
         'timeoffset': toffset,
         'isotime': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat(),
         'info': datetime.datetime.now().timetuple(),
-        'version': getServerVersion()
+        'version': utils.getServerVersion()
     }
     if auth.isMobile:
         server_info['token'] = auth.credentials

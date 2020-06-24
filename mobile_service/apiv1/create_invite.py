@@ -58,15 +58,13 @@ if link_state > 0:
 
 if link_id > 0:
     if len(link_invite) > 3:
-        headers.goodResponse({'invite': link_invite})
+        headers.goodResponse({'invite': link_invite.upper()})
     link_invite = utils.rand_string(5)
     sql_request('update sync_devices set state=0,invite="' + link_invite + '" where id=' + str(link_id))
-    headers.goodResponse({'invite': link_invite})
+
 else:
     link_invite = utils.rand_string(5)
     sql_request(
             'insert into sync_devices (src,dst,state,invite,created) values (' + str(my_device) + ',' + str(
                 another_device) + ',0,"' + link_invite + '",' + str(int(time.time() * 1000)) + ')')
-    headers.goodResponse({'invite': link_invite})
-
-headers.errorResponse('Unexpected end of request')
+headers.goodResponse({'invite': link_invite.upper()})

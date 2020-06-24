@@ -125,7 +125,7 @@ def bits2array(intval: int, bitscount: int = 32) -> list:
     return result
 
 
-__letters = string.ascii_lowercase
+__letters = string.ascii_lowercase + string.digits
 
 
 def rand_string(strlength: int) -> str:

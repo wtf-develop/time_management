@@ -17,7 +17,7 @@ headers.jsonAPI()
 jsonpost = auth._POST
 if (jsonpost is None) or ('invite' not in jsonpost):
     headers.errorResponse('Bad request')
-invite = utils.clearStringHard(str(jsonpost['invite']))[:7]
+invite = utils.clearStringHard(str(jsonpost['invite']))[:7].lower()
 if len(invite) < 3:
     headers.errorResponse('Too short invite')
 sql_request('select id from sync_devices where (dst=' + str(

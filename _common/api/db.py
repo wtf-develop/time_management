@@ -2,6 +2,7 @@ import random
 import time
 
 from _common.api import utils
+from _common.api import headers
 from _common.api._settings import mydb
 from _common.api._settings import mydb_connection
 
@@ -453,3 +454,17 @@ def buildSqlPermissionfilter(user_id: int, devid: int, cache: bool = True) -> st
     if cache:
         __sql_permission_cache[devid] = sql_filter
     return sql_filter
+
+def sql_request(sql: str):
+    try:
+        mydb.execute(sql)
+    except Exception as ex:
+        utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+        headers.errorResponse('SQL error')
+
+
+def sql_request_ignore_error(sql: str):
+    try:
+        mydb.execute(sql)
+    except Exception:
+        pass
