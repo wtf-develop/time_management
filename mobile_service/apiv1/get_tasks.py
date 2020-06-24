@@ -11,7 +11,6 @@ from _common.api import headers
 from mobile_service.apiv1 import _mobile
 
 headers.jsonAPI()
-_mobile.clearPermissionSQLCache()
 devid = auth.user_some_state
 if (auth._POST is None):  # only POST accepted
     _mobile.elog('No posted info uid:' + auth.user_id)

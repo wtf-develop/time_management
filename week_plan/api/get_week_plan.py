@@ -10,6 +10,8 @@ currentdir = os.path.dirname(os.path.abspath(
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
 from _common.api.auth import _GET
 from _common.api import headers
+from _common.api import db
+from _common.api import auth
 
 headers.jsonAPI()
 
@@ -27,6 +29,8 @@ if devid < 1:
     pass
 data = {}
 data['daily'] = []
+db.getUserLinkedDevices(auth.user_id,devid)
+
 for i in range(55):
     obj = {'title': 'daily' +
                     str(i), 'desc': 'example description for element',

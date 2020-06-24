@@ -161,7 +161,7 @@ def saveTask(data: dict, uid: int) -> int:
 
 def setTaskTag(tid: int, tag: str, uid: int):
     tag = utils.removeDoubleSpaces(
-        utils.removeQuotes(utils.removeNonUTF(utils.stripTags(tag.replace(',', ''))))).title()[:50]
+            utils.removeQuotes(utils.removeNonUTF(utils.stripTags(tag.replace(',', ''))))).title()[:50]
     tag_id = 0
     sql = 'select id from tags where name="' + tag + '"'
     try:
@@ -419,20 +419,37 @@ def getUserLinkedTasks(user_id: int, devid: int = 0, cache: bool = True) -> list
     return result
 
 
-def buildSqlPermissionfilter(user_id: int, devid: int) -> str:
-    links = getUserLinkedDevices(user_id, devid)
-    own = getUserOwnDevices(user_id, devid)
-    tasks = getUserLinkedTasks(user_id, devid)
-    return '''(
-            (devid=''' + str(devid) + ''')
-            or
-            (id in (''' + ','.join(str(x) for x in tasks) + '''))
-            or
-            (type=0 and devid in (''' + (','.join(str(x) for x in list(set().union(links['0'], own['0'])))) + '''))
-    or
-    (type=1 and devid in (''' + (','.join(str(x) for x in list(set().union(links['1'], own['1'])))) + '''))
-    or
-    (type=2 and devid in (''' + (','.join(str(x) for x in list(set().union(links['2'], own['2'])))) + '''))
-    or
-    (type=3 and devid in (''' + (','.join(str(x) for x in list(set().union(links['3'], own['3'])))) + '''))
-    )'''
+__sql_permission_cache = {}
+
+
+def buildSqlPermissionfilter(user_id: int, devid: int, cache: bool = True) -> str:
+    if (cache) and (devid in __sql_permission_cache) and (not (__sql_permission_cache[devid] is None)):
+        return __sql_permission_cache[devid]
+    links = getUserLinkedDevices(user_id=user_id, devid=devid, incomming=True, outgoing=False, cache=False)
+    own = getUserOwnDevices(user_id=user_id, devid=devid, cache=cache)
+    tasks = getUserLinkedTasks(user_id=user_id, devid=devid, cache=cache)
+    tasks_links = ','.join(str(x) for x in tasks)
+    dev_0 = ','.join(str(x) for x in list(set().union(links['in']['0'], own['0'])))
+    dev_1 = ','.join(str(x) for x in list(set().union(links['in']['1'], own['1'])))
+    dev_2 = ','.join(str(x) for x in list(set().union(links['in']['2'], own['2'])))
+    dev_3 = ','.join(str(x) for x in list(set().union(links['in']['3'], own['3'])))
+
+    sql_filter = '( '
+
+    if (devid > 0):
+        sql_filter += '(t.devid=' + str(devid) + ') or '
+    if len(tasks_links) > 0:
+        sql_filter += '(t.id in (' + tasks_links + ')) or '
+    if len(dev_0) > 0:
+        sql_filter += '(t.type=0 and t.devid in (' + dev_0 + ')) or '
+    if len(dev_1) > 0:
+        sql_filter += '(t.type=1 and t.devid in (' + dev_1 + ')) or '
+    if len(dev_2) > 0:
+        sql_filter += '(t.type=2 and t.devid in (' + dev_2 + ')) or '
+    if len(dev_3) > 0:
+        sql_filter += '(t.type=3 and t.devid in (' + dev_3 + ')) '
+
+    sql_filter += ')'
+    if cache:
+        __sql_permission_cache[devid] = sql_filter
+    return sql_filter
