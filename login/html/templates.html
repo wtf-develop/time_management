@@ -23,7 +23,7 @@ NextTemplateName: page
            id="login-header"><a style="color:#bbb;" class="google-link"
                                 href="https://github.com/wtf-develop/time_management/releases" target="_blank">[*version*]</a>
         </p>
-        <div id="login-column" class="pt-2">
+        <div id="login-column" class="pt-1">
             <div id="login-box">
                 <form id="login-form" class="form m-0 pl-4 pr-4 pb-4 pt-4" action="#" method="post"
                       onsubmit="return checkLogin($(this).serializeHtmlForm());">
@@ -36,7 +36,7 @@ NextTemplateName: page
                         {{form}}
                     </div>
                     <div class="form-group text-center mt-3 p-0 mb-0">
-                        <select onchange="setLanguage($(this).val());" class="w-50 mb-0 custom-select custom-select-sm"
+                        <select onchange="setLanguage($(this).val());" style="font-size: .85rem;" class="w-50 mb-0 custom-select custom-select-sm"
                                 id="inlineLanguageSelect">
                             <option value="en" [*code,if=`en`then`selected`else``*]>English</option>
                             <option value="ru" [*code,if=`ru`then`selected`else``*]>Русский</option>

@@ -15,19 +15,19 @@ from _common.api import auth
 from _common.api._settings import mydb
 
 
-def badExit(index: int):
+def badExit(index: int = 0):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
     headers.errorResponse(
-            '@str.error', ' @str.bad_request - ' + str(index), 400)
+            '@str.error', ' @str.bad_request', 400)
 
 
-def wrongCred(index: int):
+def wrongCred():
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    headers.errorResponse('@str.error', '@str.not_found - ' + str(index), 404)
+    headers.errorResponse('@str.error', '@str.user_not_found', 404)
 
 
 if (auth.isMobile):  # login from mobile not accepted here
@@ -46,11 +46,6 @@ if 'password' not in jsonpost:
 
 if auth.isMobile:
     badExit(3)
-    """
-    jsonpost['remember'] = 1
-    if 'device' not in jsonpost:
-        badExit(4)
-    """
 else:
     if 'remember' not in jsonpost:
         badExit(5)
@@ -73,42 +68,42 @@ jsonpost['password'] = hashlib.md5(
 auth.user_some_state = 0
 auth.user_id = 0
 mydb.execute(
-        'select id,login,password from users where login="' + jsonpost['login'] +
-        '" and password="' + jsonpost['password'] +
+        'select id,login,fail_login_counter,fail_login_timestamp,password from users where login="' + jsonpost[
+            'login'] +
         '" and state>0')
 usr = mydb.fetchone()
 if usr is None:
-    wrongCred(1)
+    wrongCred()
 
-auth.user_id = int(usr['id'])
-timestamp_string = str(int(time.time() * 1000))
-if auth.isMobile:
-    wrongCred(1)
-    """
+if usr['fail_login_timestamp'] is None:
+    usr['fail_login_timestamp'] = 0
+
+if usr['fail_login_counter'] is None:
+    usr['fail_login_counter'] = 0
+
+timestamp_int = int(time.time() * 1000)
+if (abs(timestamp_int - int(usr['fail_login_timestamp'])) < 60 * 1000) and (int(usr['fail_login_counter']) > 4):
+    auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
+    headers.jsonAPI(False)
+    time.sleep(1)
+    headers.errorResponse('@str.attention', '@str.wait_1_min', 403)
+
+timestamp_string = str(timestamp_int)
+if usr['password'] != jsonpost['password']:
     mydb.execute(
-        'select id from devices where uid=' + str(auth.user_id) +
-        ' and name="' + jsonpost['device'] +
-        '" and state>0')
-    dev = mydb.fetchone()
-    if dev is None:
-        wrongCred(2)
+            'update users set fail_login_counter=(fail_login_counter+1),fail_login_timestamp=' + timestamp_string + ' where id=' + str(
+                    usr['id']))
+    wrongCred()  # auth fail
 
-    auth.user_some_state = int(dev['id'])
-    if auth.user_some_state < 1:
-        wrongCred(3)
-    mydb.execute('update devices set lastconnect=' +
-                 timestamp_string + ' where uid=' + str(auth.user_id) + ' and id=' + str(auth.user_some_state))
-    """
+auth.user_id = int(usr['id'])  # before! buildCredentials call
+if auth.isMobile:
+    badExit()  # using this form from mobile app APIs is not permitted
 else:
-    mydb.execute('update users set lastlogin=' +
+    mydb.execute('update users set fail_login_counter=0,fail_login_timestamp=0,lastlogin=' +
                  timestamp_string + ' where id=' + str(auth.user_id))
 
 auth.credentials = auth.buildCredentials(
         auth.user_id, usr['login'], usr['password'], jsonpost['remember'], auth.user_some_state)
 headers.jsonAPI(False)  # New cookie always there
-if auth.isMobile:
-    badExit(7)
-    # print('{"accepted": true, "token":"' + auth.credentials + '"}')
-else:
-    headers.goodResponse({'accepted': True})
-    utils.log(usr['login'] + ' Logged in', 'Auth')
+headers.goodResponse({'accepted': True})
+utils.log(usr['login'] + ' Logged in', 'Auth')

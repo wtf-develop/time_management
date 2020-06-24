@@ -34,6 +34,10 @@ lang = {
         'all_devices': 'All devices',
         'mobile_too_short': 'Minimum 4 symbols for each value',
         'remove_account_message': 'Ok, goodbye!',
+        'wait_1_min': 'Please wait 60 seconds until your next login attempt',
+        'user_not_found': 'User was not found or password is incorrect',
+        'warning': 'Warning',
+        'attention': 'Attention',
 
     },
     'ru': {
@@ -67,6 +71,10 @@ lang = {
         'all_devices': 'Все устройства',
         'mobile_too_short': 'Минимум 4 символа для каждого поля',
         'remove_account_message': 'Прощай, но это... возвращайся, если что',
+        'wait_1_min': 'Подождите 60 секунд до следующей попытки входа',
+        'user_not_found': 'Пользователь с таким именем не найден или пароль введен неправильно',
+        'warning': 'Предупреждение',
+        'attention': 'Внимание',
 
     },
     'de': {

@@ -32,14 +32,14 @@ NextTemplateName: toast_message
 NextTemplateName: error_message
 <div id="error_modal" class="modal fade show" tabindex="-1" role="dialog" style="z-index:10000;background-color: #00000077;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header pt-1 pb-0" onClick="$('#error_modal').remove();return false;">
+        <div class="modal-content mb-5">
+            <div class="modal-header pt-3 pb-2" style="border-bottom: 0px solid #dee2e6;" onClick="$('#error_modal').remove();return false;">
                 <h5 class="modal-title">[*error.title,ifc=``then`@str.error`*]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="pb-1 modal-body">
                 <p>[*error.message*]</p>
             </div>
             <div class="modal-footer" style="border-top: 0px solid #dee2e6;">
