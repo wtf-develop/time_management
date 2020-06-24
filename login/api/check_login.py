@@ -68,7 +68,7 @@ jsonpost['password'] = hashlib.md5(
 auth.user_some_state = 0
 auth.user_id = 0
 mydb.execute(
-        'select id,login,fail_login_counter,fail_login_timestamp,password from users where login="' + jsonpost[
+        'select id,login,fail_login_counter,fail_login_timestamp,password,state from users where login="' + jsonpost[
             'login'] +
         '" and state>0')
 usr = mydb.fetchone()
@@ -82,14 +82,14 @@ if usr['fail_login_counter'] is None:
     usr['fail_login_counter'] = 0
 
 timestamp_int = int(time.time() * 1000)
-if (abs(timestamp_int - int(usr['fail_login_timestamp'])) < 60 * 1000) and (int(usr['fail_login_counter']) > 4):
+if (abs(timestamp_int - int(usr['fail_login_timestamp'])) < 60 * 1000) and (int(usr['fail_login_counter']) > 5):
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
     headers.errorResponse('@str.attention', '@str.wait_1_min', 403)
 
 timestamp_string = str(timestamp_int)
-if usr['password'] != jsonpost['password']:
+if usr['password'] != jsonpost['password'] or int(usr['state']) < 1:
     mydb.execute(
             'update users set fail_login_counter=(fail_login_counter+1),fail_login_timestamp=' + timestamp_string + ' where id=' + str(
                     usr['id']))

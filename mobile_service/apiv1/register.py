@@ -21,8 +21,7 @@ def badExit(index: int):
     headers.jsonAPI(False)
     time.sleep(1)
     _mobile.elog('Request error - ' + str(index), 'reg')
-    headers.errorResponse(
-            'Bad request - ' + str(index), ' Request to server is incorrect', 400)
+    headers.errorResponse(translation.getValue('bad_request'))
 
 
 def wrongCred(index: int):
@@ -30,10 +29,11 @@ def wrongCred(index: int):
     headers.jsonAPI(False)
     time.sleep(1)
     _mobile.elog('Credentials error - ' + str(index), 'auth')
-    headers.errorResponse('Incorrect login or password', 'user not found - ' + str(index), 404)
+    headers.errorResponse(translation.getValue('user_not_found'))
 
 
-timestamp_string = str(int(time.time() * 1000))
+timestamp_int = int(time.time() * 1000)
+timestamp_string = str(timestamp_int)
 jsonpost = auth._POST
 
 if jsonpost is None:
@@ -85,7 +85,8 @@ jsonpost['password'] = hashlib.md5(
 auth.user_some_state = 0
 auth.user_id = 0
 mydb.execute(
-        'select id,login,password,state from users where login="' + jsonpost['login'] + '"')
+        'select id,login,fail_login_counter,fail_login_timestamp,password,state from users where login="' + jsonpost[
+            'login'] + '"')
 usr = mydb.fetchone()
 if usr is None:  # Need to create new record
     mydb.execute(
@@ -93,23 +94,38 @@ if usr is None:  # Need to create new record
             jsonpost['login'] + '", password="' + jsonpost['password'] +
             '", state=1, created=' + timestamp_string)
     auth.user_id = mydb_connection.insert_id()
-    _mobile.log('New user registered id:' + str(auth.user_id))
-    mydb.execute(
-            'insert into devices set `default`=1, uid=' + str(auth.user_id) +
-            ', name="account", state=1, created=' + timestamp_string +
-            ',sync0=0,sync1=1,sync2=2,sync3=3' +
-            ', lastconnect=' + timestamp_string)
-else:
-    if int(usr['state']) < 1:  # if user exists, but wrong password
+    if auth.user_id > 0:
+        mydb.execute(
+                'insert into devices set `default`=1, uid=' + str(auth.user_id) +
+                ', name="account", state=1, created=' + timestamp_string +
+                ',sync0=0,sync1=1,sync2=2,sync3=3' +
+                ', lastconnect=' + timestamp_string)
+        _mobile.log('New user registered id:' + str(auth.user_id))
+else:  # user exists, need to check permissions
+    if usr['fail_login_timestamp'] is None:
+        usr['fail_login_timestamp'] = 0
+
+    if usr['fail_login_counter'] is None:
+        usr['fail_login_counter'] = 0
+
+    if (abs(timestamp_int - int(usr['fail_login_timestamp'])) < 60 * 1000) and (int(usr['fail_login_counter']) > 5):
+        auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
+        headers.jsonAPI(False)
+        time.sleep(1)
+        _mobile.elog(jsonpost['login'] + ': too often wrong passwords', 'auth')
+        headers.errorResponse(translation.getValue('wait_1_min'))
+    # if user exists, but wrong password or state
+    if (usr['password'] != jsonpost['password']) or (int(usr['state']) < 1):
+        mydb.execute(
+                'update users set fail_login_counter=(fail_login_counter+1),fail_login_timestamp=' + timestamp_string + ' where id=' + str(
+                        usr['id']))
         usr['id'] = 0
         wrongCred(1)
-    if usr['password'] != jsonpost['password']:
-        usr['id'] = 0
-        wrongCred(2)
     auth.user_id = int(usr['id'])
 
 if auth.user_id < 1:
     wrongCred(3)
+mydb.execute('update users set fail_login_counter=0,fail_login_timestamp=0 where id=' + str(auth.user_id))
 mydb.execute(
         'select id,`default` from devices where uid=' + str(auth.user_id) +
         ' and name="' + jsonpost['device'] +
