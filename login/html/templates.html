@@ -3,9 +3,13 @@ NextTemplateName: form
     <input placeholder="@str.login" type="text" name="login" id="username" class="form-control text-body" value=""
            autocorrect="off" autocapitalize="none" autocomplete="off">
 </div>
-<div class="form-group">
+<div class="form-group input-group">
     <input placeholder="@str.password" type="password" name="password" id="password" class="form-control text-body"
            autocorrect="off" autocapitalize="none" autocomplete="off">
+    <div class="input-group-append" style="cursor:pointer;" onclick="return togglePassVisible()">
+        <div class="input-group-text"><span id="passLogo" style="opacity:0.6;" data-feather="eye">&#128065;</span></div>
+    </div>
+
 </div>
 <div class="form-group text-left pl-2">
     <label for="remember-me" class="text-muted m-0 p-0"><span><input id="remember-me" name="remember" type="checkbox"
@@ -36,7 +40,8 @@ NextTemplateName: page
                         {{form}}
                     </div>
                     <div class="form-group text-center mt-3 p-0 mb-0">
-                        <select onchange="setLanguage($(this).val());" style="font-size: .85rem;" class="w-50 mb-0 custom-select custom-select-sm"
+                        <select onchange="setLanguage($(this).val());" style="font-size: .85rem;"
+                                class="w-50 mb-0 custom-select custom-select-sm"
                                 id="inlineLanguageSelect">
                             <option value="en" [*code,if=`en`then`selected`else``*]>English</option>
                             <option value="ru" [*code,if=`ru`then`selected`else``*]>Русский</option>

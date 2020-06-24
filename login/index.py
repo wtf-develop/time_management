@@ -41,6 +41,7 @@ print("""<!DOCTYPE html>
 
     <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
     <script type="text/javascript" src="../_common/js/json2html.js"></script>
+    <script type="text/javascript" src="../_common/js/feather.min.js"></script>
     <script type="text/javascript" src="../_common/js/project_functions.js"></script>
     <script type="text/javascript" src="js/functions.js"></script>
     <script type="text/javascript" src="js/particles.min.js"></script>
@@ -76,6 +77,7 @@ print("""<!DOCTYPE html>
     var version='';
     function buildWebUI() { //create all elements inside page (Structure of page)
         $("#content").html(J2H.process("page",{code:extLang,version:version}));
+        feather.replace();        
         $("#content").fadeIn(150);
     }
 

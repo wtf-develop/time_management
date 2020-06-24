@@ -18,3 +18,20 @@ function checkLogin(data) {
     })
     return false;
 }
+
+function togglePassVisible(){
+    var x = document.getElementById("password");
+    if (x.type == "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+    var y = $("#passLogo");
+    if (x.type == "password"){
+        y.attr('data-feather','eye')
+    }else{
+        y.attr('data-feather','eye-off')
+    }
+    feather.replace();
+    return false;
+}
