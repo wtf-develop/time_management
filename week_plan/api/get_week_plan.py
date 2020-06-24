@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3
-
 import inspect
 import os
 import sys
@@ -13,6 +12,7 @@ from _common.api import headers
 from _common.api import db
 from _common.api import auth
 from _common.api import utils
+from _common.api import date_utils
 from _common.api._settings import mydb
 
 headers.jsonAPI()
@@ -28,7 +28,7 @@ if not (_GET is None) and ('timezone' in _GET) and not (_GET['timezone'] is None
 if devid < 1:
     devid = 0
 
-current_day = utils.getStartDayTime(timezone_offset)
+current_day = date_utils.getStartDayTime(timezone_offset)
 
 data = {}
 data['daily'] = []
@@ -43,14 +43,24 @@ rows = mydb.fetchmany()
 if (rows is None) or len(rows) < 1:
     headers.infoResponse('No plans for this week')
 for row in rows:
+
     if (row['type'] == 1):
-        obj = {'title': row['title'],
+        task_timestamp = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'], month=row['month'],
+                                            day=row['day'], hour=9, minute=5)
+        obj = {'type': 1,
+               'title': row['title'],
                'desc': row['desc'],
                'hour': row['hour'],
                'minute': row['minute']}
         data['daily'].append(obj)
     elif (row['type'] == 0):
-        obj = {'title': row['title'],
+        if (row['utc_flag'] != 0):
+            task_timestamp = row['start_time']
+        else:
+            task_timestamp = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'], month=row['month'],
+                                                day=row['day'], hour=row['hour'], minute=row['minute'])
+        obj = {'type': 0,
+               'title': row['title'],
                'desc': row['desc'],
                'hour': row['hour'],
                'minute': row['minute']}
