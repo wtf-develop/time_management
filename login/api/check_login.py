@@ -20,14 +20,14 @@ def badExit(index: int = 0):
     headers.jsonAPI(False)
     time.sleep(1)
     headers.errorResponse(
-            '@str.error', ' @str.bad_request', 400)
+            ' @str.bad_request', '@str.error',400)
 
 
 def wrongCred():
     auth.credentials = auth.buildCredentials(0, '', '', 0, 0)
     headers.jsonAPI(False)
     time.sleep(1)
-    headers.errorResponse('@str.error', '@str.user_not_found', 404)
+    headers.errorResponse('@str.user_not_found','@str.error',  404)
 
 
 if (auth.isMobile):  # login from mobile not accepted here

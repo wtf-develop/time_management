@@ -51,7 +51,7 @@ print("""<!DOCTYPE html>
 
         function init() {
             J2H.setTranslationArray(""" + translation.get_array(auth.user_lang) + """); // optional
-            J2H.loadTemplatesArray( ["../_common/html/templates.html", "html/templates.html", "html/timeline.html"], loadingCallback);
+            J2H.loadTemplatesArray( ["html/date_parts.html","../_common/html/templates.html", "html/templates.html", "html/timeline.html"], loadingCallback);
         }
 
         function loadingCallback() {

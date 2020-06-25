@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
@@ -6,9 +7,9 @@ __timezones = {}
 
 
 def getTimestamp(timezone_offset: int = 0, year: int = None, month: int = None, day: int = None, hour: int = None,
-                 minute: int = None, seconds: int = 0, ms: int = 1) -> dict:
+                 minute: int = None, seconds: int = 0, ms: int = 0) -> dict:
     timezone_obj = None
-    if (timezone_offset in __timezones):
+    if timezone_offset in __timezones:
         timezone_obj = __timezones[timezone_offset]
     else:
         timezone_obj = timezone(timedelta(minutes=timezone_offset), 'My Own Timezone')
@@ -34,6 +35,32 @@ def getTimestamp(timezone_offset: int = 0, year: int = None, month: int = None, 
             'day': obj.tm_mday,
             'hour': obj.tm_hour,
             'minute': obj.tm_min,
+            'week_day': obj.tm_wday,
+            'tz_offset': timezone_offset,
+            'tz_obj': timezone_obj,
+            'timestamp': int(today.timestamp() * 1000),
+            }
+
+
+def getHumanTime(timezone_offset: int = 0, timestamp: int = None):
+    timezone_obj = None
+    if timezone_offset in __timezones:
+        timezone_obj = __timezones[timezone_offset]
+    else:
+        timezone_obj = timezone(timedelta(minutes=timezone_offset), 'My Own Timezone')
+        __timezones[timezone_offset] = timezone_obj
+    if timestamp is None:
+        timestamp = time.time()
+    else:
+        timestamp = timestamp / 1000
+    today = datetime.fromtimestamp(timestamp, timezone_obj)
+    obj = today.timetuple()
+    return {'year': obj.tm_year,
+            'month': obj.tm_mon,
+            'day': obj.tm_mday,
+            'hour': obj.tm_hour,
+            'minute': obj.tm_min,
+            'week_day': obj.tm_wday,
             'tz_offset': timezone_offset,
             'tz_obj': timezone_obj,
             'timestamp': int(today.timestamp() * 1000),
@@ -41,16 +68,4 @@ def getTimestamp(timezone_offset: int = 0, year: int = None, month: int = None, 
 
 
 def getStartDayTime(timezone_offset: int) -> dict:
-    return getTimestamp(timezone_offset=timezone_offset, hour=0, minute=0, seconds=0)
-
-def getTypeInterval(type:int, value:int, startTime: int):
-    if type==0:
-        return 0
-    elif type==1:
-        return 24*60*60*1000
-    elif type==2:
-        return 7*24*60*60*1000
-    elif type==3:
-        return None
-    elif type==4:
-        return None
+    return getTimestamp(timezone_offset=timezone_offset, hour=0, minute=0, seconds=0, ms=1)

@@ -1,0 +1,37 @@
+NextTemplateName: month_date
+[*day*]
+[*month,if=`0`then`@str.dec`else``*]
+[*month,if=`1`then`@str.jan`else``*]
+[*month,if=`2`then`@str.feb`else``*]
+[*month,if=`3`then`@str.mar`else``*]
+[*month,if=`4`then`@str.apr`else``*]
+[*month,if=`5`then`@str.may`else``*]
+[*month,if=`6`then`@str.jun`else``*]
+[*month,if=`7`then`@str.jul`else``*]
+[*month,if=`8`then`@str.aug`else``*]
+[*month,if=`9`then`@str.sen`else``*]
+[*month,if=`10`then`@str.okt`else``*]
+[*month,if=`11`then`@str.nov`else``*]
+[*month,if=`12`then`@str.dec`else``*]
+[*month,if=`13`then`@str.jan`else``*]
+
+NextTemplateName: day_week_name
+[*day_index,if=`0`then`@str.today<br>`else``*]
+[*day_index,if=`1`then`@str.tomorrow<br>`else``*]
+[*day_index,if=`2`then`@str.after_tomorrow<br>`else``*]
+[*week_day,if=`-2`then`@str.monday`else``*]
+[*week_day,if=`-1`then`@str.sunday`else``*]
+[*week_day,if=`0`then`@str.monday`else``*]
+[*week_day,if=`1`then`@str.tuesday`else``*]
+[*week_day,if=`2`then`@str.wednesday`else``*]
+[*week_day,if=`3`then`@str.thursday`else``*]
+[*week_day,if=`4`then`@str.friday`else``*]
+[*week_day,if=`5`then`@str.saturday`else``*]
+[*week_day,if=`6`then`@str.sunday`else``*]
+[*week_day,if=`7`then`@str.monday`else``*]
+[*day_index,if=`3||4||5||6||7||8||9||10`then`<br>`else``*]
+[*day_index,ift=`3||4||5||6||7||8||9||10`then`month_date`else``*]
+
+
+NextTemplateName: timeline_time
+<b>[*hour*]:[*minute*]</b>

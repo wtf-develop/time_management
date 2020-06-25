@@ -1767,8 +1767,6 @@ mark {
 }
 
 .cd-main-header h1 {
-    font-family: 'Open Sans', sans-serif;
-    font-family: var(--font-secondary);
     color: inherit
 }
 
@@ -1776,15 +1774,9 @@ mark {
     overflow: hidden;
     padding: 2em 0;
     padding: var(--space-lg) 0;
-    color: hsl(207, 10%, 55%);
-    color: var(--cd-color-3);
-    font-family: 'Droid Serif', serif;
-    font-family: var(--font-primary)
 }
 
 .cd-timeline h2 {
-    font-family: 'Open Sans', sans-serif;
-    font-family: var(--font-secondary);
     font-weight: 700
 }
 
@@ -1849,7 +1841,7 @@ mark {
     box-shadow: 0 0 0 4px var(--base-color), inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
     background-color: #343a40;
     color: #fff;
-    font-weight: 600;
+    font-weight: 400;
     font-size: 1.06em !important;
     text-align: center;
     vertical-align: middle;
@@ -1875,9 +1867,9 @@ mark {
     }
 }
 
-.cd-timeline__img--picture {
-    background-color: hsl(111, 51%, 60%);
-    background-color: var(--cd-color-4)
+.cd-timeline__img--day {
+    box-shadow: 0 0 0 0px var(--green-color), inset 0 0px 0 rgba(0, 0, 0, 0.08), 0 0px 0 0px rgba(0, 0, 0, 0.05);
+    background-color: var(--green-color);
 }
 
 .cd-timeline__img--movie {
