@@ -10,7 +10,7 @@ function buildWebUI() {
     })
 }
 
-function drawCalendar(events) {
+function drawCalendar(events_data) {
     calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: ['interaction', 'dayGrid'],
@@ -23,11 +23,22 @@ function drawCalendar(events) {
             right: 'today prev,next'
         },
         defaultView: 'dayGridMonth',
-        //defaultDate: '2020-05-12',
+        //initialView: 'dayGridMonth',
+        eventDidMount: function(info) {
+            var tooltip = new Tooltip(info.el, {
+                title: info.event.extendedProps.description,
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body'
+            });
+        },
         //navLinks: true, // can click day/week names to navigate views
         editable: false,
+        weekNumbers: true,
+      //weekNumbersWithinDays: true,
+        weekNumberCalculation: 'ISO',
         eventLimit: true, // allow "more" link when too many events
-        events: events
+        events: events_data
     });
 
     calendar.render();
@@ -35,5 +46,4 @@ function drawCalendar(events) {
     //$('.feather-arrow-right').attr("data-feather", "arrow-right");
     $('.fc-button-primary').addClass('btn-dark');
     //feather.replace();
-
 }

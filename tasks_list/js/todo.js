@@ -5,7 +5,7 @@ var todo = {};
         J2H.translate(json, ['pname']);
         element.html(J2H.process('all_panels', json));
         // Adding drop function to each category of task
-        $('.todo_content').droppable({
+        /*$('.todo_content').droppable({
             classes: {
                 "ui-droppable-hover": "border border-success rounded"
             },
@@ -20,14 +20,14 @@ var todo = {};
                 reinitDrop();
             }
 
-        });
+        });*/
 
         reinitDrop();
 
     };
 
     function reinitDrop() {
-
+/*
         if (isMobile()) {
             feather.replace();
             $('.todo_content').sortable({
@@ -46,8 +46,9 @@ var todo = {};
                 revertDuration: 100,
                 scroll: true
             });
-        }
+        }*/
         $('.todo_content').disableSelection();
+
     }
 
 })(todo, jQuery);

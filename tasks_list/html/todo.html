@@ -3,9 +3,13 @@ NextTemplateName: all_panels
     [!todo_panel,data.panels!]
 </div>
 
+NextTemplateName: todo_large_width
+[*state,if=`20`then`col-lg-5`else``*]
+[*state,if=`30`then`col-lg-4`else``*]
+[*state,if=`40`then`col-lg-3`else``*]
 
 NextTemplateName: todo_panel
-<div class="card col-sm-12 col-md-6 col-lg-4 p-0 m-0" id="[*id*]">
+<div class="card col-sm-12 col-md-6 {{todo_large_width}} p-0 m-0" id="[*id*]">
     <div class="card-header bg-secondary align-middle text-light text-center pt-2 pb-2">
         <span>[*pname*]</span>
     </div>

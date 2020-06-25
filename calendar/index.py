@@ -42,6 +42,7 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
     <script type="text/javascript" src="../_common/js/json2html.js"></script>
     <script type="text/javascript" src="../_common/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_common/js/popper.min.js"></script>
     <script type="text/javascript" src="../_common/js/feather.min.js"></script>
     <script type="text/javascript" src="../_common/js/project_functions.js"></script>
     <script type="text/javascript" src="js/functions.js"></script>
@@ -49,6 +50,9 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="js/calendar_loc.js"></script>
     <script type="text/javascript" src="js/calendar_events.js"></script>
     <script type="text/javascript" src="js/day_grid.js"></script>
+    <script type="text/javascript" src="js/tooltip.min.js"></script>
+    
+    
 
     <script type="text/javascript">
         var templates = {};
