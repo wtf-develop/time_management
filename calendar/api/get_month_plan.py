@@ -43,7 +43,7 @@ for row in rows:
     event = {}
     event['title'] = row['title']
     if (row['type'] == 1):
-        event['color']='#193'
+        event['color'] = '#193'
         task_time_obj = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'],
                                                 month=row['month'], day=row['day'], hour=0,
                                                 minute=0, seconds=0, ms=1)
@@ -85,60 +85,3 @@ for row in rows:
                            ':00'
     json_result.append(event)
 headers.goodResponse(json_result)
-
-'''
-[{
-                title: 'All Day Event',
-                start: '2020-05-01',
-            },
-            {
-                title: 'Long Event',
-                start: '2020-05-07',
-                end: '2020-05-10'
-            },
-            {
-                groupId: 999,
-                title: 'Repeating Event',
-                start: '2020-05-09T16:00:00'
-            },
-            {
-                groupId: 999,
-                title: 'Repeating Event',
-                start: '2020-05-16T16:00:00'
-            },
-            {
-                title: 'Conference',
-                start: '2020-05-11',
-                end: '2020-05-13'
-            },
-            {
-                title: 'Meeting',
-                start: '2020-05-12T10:30:00',
-                end: '2020-05-12T12:30:00'
-            },
-            {
-                title: 'Lunch',
-                start: '2020-05-12T12:00:00'
-            },
-            {
-                title: 'Meeting',
-                start: '2020-05-12T14:30:00'
-            },
-            {
-                title: 'Happy Hour',
-                start: '2020-05-12T17:30:00'
-            },
-            {
-                title: 'Dinner',
-                start: '2020-05-12T20:00:00'
-            },
-            {
-                title: 'Birthday Party',
-                start: '2020-05-13T07:00:00'
-            },
-            {
-                title: 'Click for Google',
-                url: 'http://google.com/',
-                start: '2020-05-28'
-            }
-        ]'''
