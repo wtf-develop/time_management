@@ -39,7 +39,14 @@ __hard_chars = set(string.ascii_letters + string.digits + ',-_')
 __float_chars = set(string.digits + '-.')
 __int_chars = set(string.digits + '-')
 __digits_chars = set(string.digits)
+__ip_chars = set(string.digits + '.:')
 
+def clearIp(s: str) -> str:
+    global __hard_chars
+    if len(s) < 1:
+        return ''
+    s = ''.join(filter(lambda x: x in __ip_chars, s))
+    return s
 
 def clearStringHard(s: str) -> str:
     global __hard_chars

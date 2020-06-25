@@ -334,11 +334,13 @@ else:
         timestamp_string = str(int(time.time() * 1000))
         if isMobile:
             mydb.execute('update devices set ' +
-                         db.__build_update({'lastconnect': timestamp_string}) +
+                         db.__build_update({'lastconnect': timestamp_string,
+                                            'last_ip': utils.clearIp(req_ip)}) +
                          ' where uid=' + str(user_id) + ' and id=' + str(user_some_state))
         else:
             mydb.execute('update users set ' +
-                         db.__build_update({'lastlogin': timestamp_string}) +
+                         db.__build_update({'lastlogin': timestamp_string,
+                                            'last_ip': utils.clearIp(req_ip)}) +
                          ' where id=' + str(user_id))
     else:
         access_levels = 0

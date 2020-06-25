@@ -2,12 +2,12 @@ function buildWebUI() {
     window.scrollTo(0, 1);
     J2H.getJSON('main/api/base_info.py', function(json) {
         if (isGoodResponse(json)) {
+            J2H.translate(json,['name'])
             $("#content").html(J2H.process("page_structure", json));
             runMenuLink(json.data.some_state)
             selectLeftMenu(json.data.some_state);
             feather.replace();
             window.scrollTo(0, 1);
-            //toggleFullScreen();
         }
     })
 }
