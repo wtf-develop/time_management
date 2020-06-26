@@ -360,13 +360,13 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
 
     result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
 
-    sql = '''select d.id,d.name,0 as sync0,1 as sync1,2 as sync2,3 as sync3
+    sql = '''select d.id,d.name,0 as sync0,1 as sync1,2 as sync2,3 as sync3, d.`default`
     from devices d
     where d.uid=''' + str(user_id) + ''' and d.state>0
     '''
 
     if devid > 0:
-        sql = '''select d.id,d.name,
+        sql = '''select d.id,d.name,d.`default`,
             CASE WHEN d.sync0<d2.sync0 then d.sync0 else d2.sync0 end as sync0,
             CASE WHEN d.sync1<d2.sync1 then d.sync1 else d2.sync1 end as sync1,
             CASE WHEN d.sync2<d2.sync2 then d.sync2 else d2.sync2 end as sync2,
