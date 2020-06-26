@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3
+# this script it's a small Hell
 import inspect
 import os
 import sys
@@ -13,12 +14,12 @@ from _common.api import auth
 
 headers.jsonAPI()
 
-devid = 0
 filter0 = False
 filter1 = False
 filter2 = False
 filter3 = False
 filterl = False
+selected = 0
 if (_GET is not None) and ('devid' in _GET) and (_GET['devid'] is not None) and (_GET['devid'][0] is not None):
     devid = int(_GET['devid'][0])
 
@@ -32,13 +33,15 @@ if (_GET is not None) and ('filter3' in _GET) and (_GET['filter3'] is not None) 
     filter3 = int(_GET['filter3'][0]) == 1
 if (_GET is not None) and ('filterl' in _GET) and (_GET['filterl'] is not None) and (_GET['filterl'][0] is not None):
     filterl = int(_GET['filterl'][0]) == 1
+if (_GET is not None) and ('selected' in _GET) and (_GET['selected'] is not None) and (_GET['selected'][0] is not None):
+    selected = int(_GET['selected'][0])
 
-#if filter0 and filter1 and filter2 and filter3 and filterl:
+# if filter0 and filter1 and filter2 and filter3 and filterl:
 #    filterl = False
 nodes = {}
 edges = {}
-own = db.getUserOwnDevices(auth.user_id, devid, True)
-linked = db.getUserLinkedDevices(auth.user_id, devid, True)
+own = db.getUserOwnDevices(auth.user_id, 0, True)
+linked = db.getUserLinkedDevices(auth.user_id, 0, True)
 
 if filter0:
     own['0'] = []
@@ -62,28 +65,52 @@ if filterl:
     linked['out']['link'] = []
 
 default_id = '0'
+replace_default = False
+our_device_selected=False
+for value in own['all']:
+    if selected == value['id']:
+        our_device_selected=True
+        break
+
 for value in own['all']:
     isDef = ('default' in value) and (int(value['default']) == 1)
     if (isDef):
         default_id = str(value['id'])
+    node_selected = (selected == value['id'])
+    if our_device_selected:
+        if isDef:
+            if not node_selected:
+                replace_default = True
+                continue
     nodes[str(value['id'])] = {'id': value['id'],
                                'name': str(value['name']).title(),
                                'default': isDef,
+                               'selected': node_selected,
                                'own': True}
 
 for key in linked['all']:
     value = linked['all'][key]
     name_obj = linked['names'][value]
+    node_selected = (selected == value)
     nodes[str(value)] = {'id': value,
                          'name': str(name_obj['device']).title(),
                          'user': str(name_obj['user']).title(),
+                         'selected': node_selected,
                          'own': False}
 
+removeId = '0'
+if replace_default:
+    removeId = str(default_id)
+    default_id = str(selected)
 for k in range(5):
     obj_key = str(k)
     if k == 4:
         obj_key = 'link'
     for obj in own[obj_key]:
+        if default_id == str(obj):
+            continue
+        if (removeId == str(obj)):
+            continue
         if default_id not in edges:
             edges[default_id] = {}
         if str(obj) not in edges[default_id]:
@@ -100,6 +127,8 @@ for k in range(5):
     for obj in linked['in'][obj_key]:
         src = str(obj['src'])
         dst = str(obj['dst'])
+        if src == dst:
+            continue
         if src not in edges:
             edges[src] = {}
         if dst not in edges[src]:
@@ -112,6 +141,8 @@ for k in range(5):
     for obj in linked['out'][obj_key]:
         src = str(obj['src'])
         dst = str(obj['dst'])
+        if src == dst:
+            continue
         if src not in edges:
             edges[src] = {}
         if dst not in edges[src]:

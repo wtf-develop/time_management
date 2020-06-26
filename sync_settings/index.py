@@ -64,7 +64,7 @@ print("""<!DOCTYPE html>
         }
 
         function loadingCallback() {
-            buildWebUI();
+            drawUI();
         }
 
         init();

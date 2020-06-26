@@ -16,6 +16,8 @@ var graph = {};
         var gfx = arbor.Graphics(canvas);
         var particleSystem = null;
         var hasSelected = false;
+        var selId=0;
+        var callback=null;
 
         var that = {
             //
@@ -102,7 +104,7 @@ var graph = {};
                     }
 
                     if (hasSelected) {
-                        if (!node.data.linked) {
+                        if ((!node.data.linked) && (!node.data.selected) ){
                             ctx.fillStyle = "#aaa";
                             node.mass = 1;
                         } else {
@@ -134,23 +136,6 @@ var graph = {};
                 });
 
                 particleSystem.eachEdge(function(edge, pt1, pt2) {
-                    // edge: {source:Node, target:Node, length:#, data:{}}
-                    // pt1:  {x:#, y:#}  source position in screen coords
-                    // pt2:  {x:#, y:#}  target position in screen coords
-
-                    // draw a line from pt1 to pt2
-                    /*ctx.strokeStyle = "rgba(0,0,0, .5)"
-                    ctx.lineWidth = 2
-                    ctx.beginPath()
-                    ctx.moveTo(pt1.x, pt1.y)
-                    ctx.lineTo(pt2.x, pt2.y)
-                    ctx.stroke()*/
-
-
-                    // edge: {source:Node, target:Node, length:#, data:{}}
-                    // pt1:  {x:#, y:#}  source position in screen coords
-                    // pt2:  {x:#, y:#}  target position in screen coords
-
                     var color = edge.data.color
 
                     if (!color || ("" + color).match(/^[ \t]*$/)) color = null
@@ -226,6 +211,13 @@ var graph = {};
                 })
 
             },
+            getSelectedId: function(){
+                if(!hasSelected) return 0
+                return selId;
+            },
+            setCallback: function(c){
+                callback=c;
+            },
             initMouseHandling: function() {
                 // no-nonsense drag and drop (thanks springy.js)
                 selected = null;
@@ -254,6 +246,8 @@ var graph = {};
                         })
                         nearest.node.data.selected = !curstate;
                         hasSelected = nearest.node.data.selected
+                        selId=nearest.node.data.id
+                        if(callback!==null)callback()
                         initMoving();
                         return false
                     },
@@ -369,11 +363,12 @@ var graph = {};
 
     var sys
     var dom = {}
-    graph.init = function(data) {
+    graph.init = function(data,callback) {
         dom = $("#viewport").parent();
 
         sys = arbor.ParticleSystem(1000, 600, 0.5, true, 40, 0.01, 0.5)
         sys.renderer = SimpleRenderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
+        sys.renderer.setCallback(callback)
         $(window).resize(sys.renderer.resize)
         sys.renderer.resize()
         sys.renderer.updateLayout()
@@ -388,12 +383,18 @@ var graph = {};
         initMoving();
         return sys
     }
+    graph.getSelectedId=function(){
+        return sys.renderer.getSelectedId()
+    }
+
     graph.merge = function(data){
         sys.merge({
             nodes: data.nodes,
             edges: data.edges
         })
     }
+
+    graph.restartMoving=initMoving
 
     var stoptimer;
 
