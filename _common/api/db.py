@@ -1,8 +1,8 @@
 import random
 import time
 
-from _common.api import utils
 from _common.api import headers
+from _common.api import utils
 from _common.api._settings import mydb
 from _common.api._settings import mydb_connection
 
@@ -253,11 +253,11 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
         return __linkedDevices.copy()
     result = {
         'in': {
-            '0': [], '1': [], '2': [], '3': [],
+            '0': [], '1': [], '2': [], '3': [], 'link': [],
             'all': {}  # map of all external-ids - senders
         },
         'out': {
-            '0': [], '1': [], '2': [], '3': [],
+            '0': [], '1': [], '2': [], '3': [], 'link': [],
             'all': {}  # map of all external-ids - receivers
         },
         'all': {},  # map of all external-ids, without own ids
@@ -297,6 +297,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             result_all[row['id']] = row['id']
             result_in_all[row['id']] = row['id']
             obj = {'src': row['id'], 'dst': row['dst']}
+            result_in['link'].append(obj)
             if (row['sync0'] == 0):
                 result_in['0'].append(obj)
             if (row['sync1'] == 1):
@@ -330,6 +331,7 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             result_all[row['id']] = row['id']
             result_out_all[row['id']] = row['id']
             obj = {'src': row['src'], 'dst': row['id']}
+            result_out['link'].append(obj)
             if (row['sync0'] == 0):
                 result_out['0'].append(obj)
             if (row['sync1'] == 1):
@@ -358,7 +360,7 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
     if (devid == 0) and cache and (not (__ownDevices is None)):
         return __ownDevices.copy()
 
-    result = {'0': [], '1': [], '2': [], '3': [], 'all': []}
+    result = {'0': [], '1': [], '2': [], '3': [], 'link': [], 'all': []}
 
     sql = '''select d.id,d.name,0 as sync0,1 as sync1,2 as sync2,3 as sync3, d.`default`
     from devices d
@@ -382,6 +384,7 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
     # myown device will get all data that its owned
     for row in rows:
         result['all'].append(row)
+        result['link'].append(row['id'])
         if (row['sync0'] == 0):
             result['0'].append(row['id'])
         if (row['sync1'] == 1):
@@ -454,6 +457,7 @@ def buildSqlPermissionfilter(user_id: int, devid: int, cache: bool = True) -> st
     if cache:
         __sql_permission_cache[devid] = sql_filter
     return sql_filter
+
 
 def sql_request(sql: str):
     try:

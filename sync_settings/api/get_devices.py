@@ -14,114 +14,107 @@ from _common.api import auth
 headers.jsonAPI()
 
 devid = 0
-
-if not (_GET is None) and ('devid' in _GET) and not (_GET['devid'] is None) and not (_GET['devid'][0] is None):
+filter0 = False
+filter1 = False
+filter2 = False
+filter3 = False
+filterl = False
+if (_GET is not None) and ('devid' in _GET) and (_GET['devid'] is not None) and (_GET['devid'][0] is not None):
     devid = int(_GET['devid'][0])
 
+if (_GET is not None) and ('filter0' in _GET) and (_GET['filter0'] is not None) and (_GET['filter0'][0] is not None):
+    filter0 = int(_GET['filter0'][0]) == 1
+if (_GET is not None) and ('filter1' in _GET) and (_GET['filter1'] is not None) and (_GET['filter1'][0] is not None):
+    filter1 = int(_GET['filter1'][0]) == 1
+if (_GET is not None) and ('filter2' in _GET) and (_GET['filter2'] is not None) and (_GET['filter2'][0] is not None):
+    filter2 = int(_GET['filter2'][0]) == 1
+if (_GET is not None) and ('filter3' in _GET) and (_GET['filter3'] is not None) and (_GET['filter3'][0] is not None):
+    filter3 = int(_GET['filter3'][0]) == 1
+if (_GET is not None) and ('filterl' in _GET) and (_GET['filterl'] is not None) and (_GET['filterl'][0] is not None):
+    filterl = int(_GET['filterl'][0]) == 1
+
+#if filter0 and filter1 and filter2 and filter3 and filterl:
+#    filterl = False
 nodes = {}
-edges={}
+edges = {}
 own = db.getUserOwnDevices(auth.user_id, devid, True)
 linked = db.getUserLinkedDevices(auth.user_id, devid, True)
+
+if filter0:
+    own['0'] = []
+    linked['in']['0'] = []
+    linked['out']['0'] = []
+if filter1:
+    own['1'] = []
+    linked['in']['1'] = []
+    linked['out']['1'] = []
+if filter2:
+    own['2'] = []
+    linked['in']['2'] = []
+    linked['out']['2'] = []
+if filter3:
+    own['3'] = []
+    linked['in']['3'] = []
+    linked['out']['3'] = []
+if filterl:
+    own['link'] = []
+    linked['in']['link'] = []
+    linked['out']['link'] = []
+
+default_id = '0'
 for value in own['all']:
+    isDef = ('default' in value) and (int(value['default']) == 1)
+    if (isDef):
+        default_id = str(value['id'])
     nodes[str(value['id'])] = {'id': value['id'],
-                               'name': value['name'],
-                               'default': (value['default'] != 0),
+                               'name': str(value['name']).title(),
+                               'default': isDef,
                                'own': True}
 
 for key in linked['all']:
     value = linked['all'][key]
-    name_obj = linked['names'][key]
+    name_obj = linked['names'][value]
     nodes[str(value)] = {'id': value,
-                         'name': name_obj['device'],
-                         'user': name_obj['user'],
+                         'name': str(name_obj['device']).title(),
+                         'user': str(name_obj['user']).title(),
                          'own': False}
 
-headers.goodResponse({'nodes': nodes,'edges':edges})
+for k in range(5):
+    obj_key = str(k)
+    if k == 4:
+        obj_key = 'link'
+    for obj in own[obj_key]:
+        if default_id not in edges:
+            edges[default_id] = {}
+        if str(obj) not in edges[default_id]:
+            edges[default_id][str(obj)] = {}
+        if str(obj) not in edges:
+            edges[str(obj)] = {}
+        if default_id not in edges[str(obj)]:
+            edges[str(obj)][default_id] = {}
 
-headers.jsonAPI()
-data = {
-    "nodes": {
-        "a": {
-            "id": 123,
-            "name": "XiaoMi".title(),
-            "own": True,
-            "selected": False
-        },
-        "c": {
-            "name": "Philips".title(),
-            "own": False,
-            "user": "Семафорович"
-        },
-        "b": {
-            "name": "samSung".title(),
-            "own": True
-        },
-        "e": {"name": "Mein Handy".title(),
-              "default": True
-              },
-        "d": {},
-        "g": {},
-        "f": {},
-        "i": {},
-        "h": {},
-        "k": {},
-        "j": {},
-        "x": {}
-    },
-    "edges": {
-        "a": {
-            "c": {},
-            "b": {},
-            "e": {},
-            "f": {},
-            "i": {},
-            "x": {}
-        },
-        "c": {
-            "a": {},
-            "d": {}
-        },
-        "b": {
-            "i": {},
-            "a": {},
-            "k": {},
-            "j": {}
-        },
-        "e": {
-            "a": {},
-            "h": {},
-            "x": {},
-            "d": {},
-            "f": {}
-        },
-        "d": {
-            "c": {},
-            "e": {}
-        },
-        "g": {
-            "i": {},
-            "h": {}
-        },
-        "f": {
-            "a": {},
-            "e": {}
-        },
-        "i": {
-            "a": {},
-            "x": {},
-            "k": {},
-            "j": {},
-            "g": {}
-        },
-        "h": {
-            "e": {},
-            "g": {}
-        },
-        "j": {
-            "i": {},
-            "x": {}
-        }
-    }
-}
+for k in range(5):
+    obj_key = str(k)
+    if k == 4:
+        obj_key = 'link'
+    for obj in linked['in'][obj_key]:
+        src = str(obj['src'])
+        dst = str(obj['dst'])
+        if src not in edges:
+            edges[src] = {}
+        if dst not in edges[src]:
+            edges[src][dst] = {}
 
-headers.goodResponse(data)
+for k in range(5):
+    obj_key = str(k)
+    if k == 4:
+        obj_key = 'link'
+    for obj in linked['out'][obj_key]:
+        src = str(obj['src'])
+        dst = str(obj['dst'])
+        if src not in edges:
+            edges[src] = {}
+        if dst not in edges[src]:
+            edges[src][dst] = {}
+
+headers.goodResponse({'nodes': nodes, 'edges': edges})

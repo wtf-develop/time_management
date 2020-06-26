@@ -386,8 +386,14 @@ var graph = {};
             sys.renderer.detectSelection();
         }, 200);
         initMoving();
+        return sys
     }
-
+    graph.merge = function(data){
+        sys.merge({
+            nodes: data.nodes,
+            edges: data.edges
+        })
+    }
 
     var stoptimer;
 

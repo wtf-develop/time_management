@@ -97,7 +97,7 @@ if usr is None:  # Need to create new record
     if auth.user_id > 0:
         mydb.execute(
                 'insert into devices set `default`=1, uid=' + str(auth.user_id) +
-                ', name="account", state=1, created=' + timestamp_string +
+                ', name="Server", state=1, created=' + timestamp_string +
                 ',sync0=0,sync1=1,sync2=2,sync3=3' +
                 ', lastconnect=' + timestamp_string)
         _mobile.log('New user registered id:' + str(auth.user_id))

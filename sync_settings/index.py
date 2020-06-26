@@ -26,10 +26,10 @@ print("""<!DOCTYPE html>
     <title>""" + translation.getAppName(auth.user_lang) + """: Sync</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <meta name="referrer" content="no-referrer" />
-    <link href="css/todo.css" rel="stylesheet" />
     <link href="../_common/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../_common/css/jqueryui.min.css" rel="stylesheet" />
     <link href="../_common/css/custom.css" rel="stylesheet" />
+    <link href="css/bootstrap-toggle.min.css" rel="stylesheet" />
 
 
 </head>
@@ -49,6 +49,8 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="js/arbor-tween.js"></script>
     <script type="text/javascript" src="js/arbor-graphics.js"></script>
     <script type="text/javascript" src="js/graph_lib.js"></script>
+    <script type="text/javascript" src="js/bootstrap-toggle.min.js"></script>
+    
 
     <script type="text/javascript" src="js/functions.js"></script>
 

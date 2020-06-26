@@ -68,6 +68,11 @@ lang = {
         'confirm_invite': 'Invite was approved. This device can send tasks to you',
         'device_link_removed': 'Device was removed from your access area',
         'sharing_complete': 'Selected tasks now available on this devices',
+        'timers': 'Timers',
+        'dates': 'Dates',
+        'notes': 'Notes',
+        'geo': 'Locations',
+        'links': 'Sharing',
 
     },
     'ru': {
@@ -135,6 +140,11 @@ lang = {
         'confirm_invite': 'Приглашение подтверждено. Это устройство теперь может присылать вам задачи.',
         'device_link_removed': 'Устройство было удалено из вашей области видимости',
         'sharing_complete': 'Выбранные задачи теперь доступны для этих устройств',
+        'timers': 'Таймеры',
+        'dates': 'Даты',
+        'notes': 'Заметки',
+        'geo': 'Локации',
+        'links': 'Пересылка',
 
     },
     'de': {
