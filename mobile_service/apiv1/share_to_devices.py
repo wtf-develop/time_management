@@ -10,6 +10,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import db
 from _common.api import utils
+from _common.api import translation
 from mobile_service.apiv1._mobile import sql_request_ignore_error, getTotalIdsString, sql_request
 from _common.api._settings import mydb
 
@@ -86,4 +87,4 @@ for device in all_devices:
 
 sql_request_ignore_error('COMMIT')
 
-headers.goodResponse({'status': True})
+headers.goodResponse({'status': True},translation.getValue('sharing_complete'))

@@ -5,7 +5,7 @@ function buildWebUI() {
     J2H.getJSON('api/get_month_plan.py?devid=' + getDevId()+'&'+getTimezoneParameter(), function(json) {
         if (isGoodResponse(json)) {
             $('#content').html(J2H.process('page_structure', json))
-            drawCalendar(json.data);
+            drawCalendar(json.data.events);
         }
     })
 }

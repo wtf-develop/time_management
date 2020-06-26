@@ -61,6 +61,13 @@ lang = {
         'dec': 'December',
         'timer_event': 'Timer',
         'date_event': 'Date',
+        'no_calendar_events': 'No events available',
+        'no_notes': 'There is no notes was created yet',
+        'registration_success': 'Registration complete!\nPlease do not change your Login without Deregistration.\nNow you can use your Login and Password for Web',
+        'sync_success': 'Sync is completed',
+        'confirm_invite': 'Invite was approved. This device can send tasks to you',
+        'device_link_removed': 'Device was removed from your access area',
+        'sharing_complete': 'Selected tasks now available on this devices',
 
     },
     'ru': {
@@ -121,6 +128,13 @@ lang = {
         'dec': 'Декабря',
         'timer_event': 'Таймер',
         'date_event': 'Дата',
+        'no_calendar_events': 'Событий никаких нет',
+        'no_notes': 'Пока что нет ни одной заметки',
+        'registration_success': 'Регистрация подтверждена!\nПожалуйста не меняйте имя пользователя без отмены текущей регистрации. Я предупредил!\nИмя пользователя и пароль теперь можно использовать для входа на портал синхронизации',
+        'sync_success': 'Данные синхронизированы',
+        'confirm_invite': 'Приглашение подтверждено. Это устройство теперь может присылать вам задачи.',
+        'device_link_removed': 'Устройство было удалено из вашей области видимости',
+        'sharing_complete': 'Выбранные задачи теперь доступны для этих устройств',
 
     },
     'de': {

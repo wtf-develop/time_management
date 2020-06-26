@@ -55,8 +55,9 @@ sql = 'select * from tasks t where t.type=2 and ' + sql_filter + ' order by t.st
 db.sql_request(sql)
 rows = mydb.fetchall()
 json_result = []
+toastMessage=None
 if (rows is None) or len(rows) < 1:
-    headers.infoResponse('@str.no_tasks_week')
+    toastMessage='@str.no_notes'
 for row in rows:
     obj = {'id': row['id'], 'title': row['title'], 'desc': row['desc'], 'priority': row['priority']}
     if row['state'] == 20:
@@ -66,4 +67,4 @@ for row in rows:
     elif row['state'] == 40:
         items_40.append(obj)
 
-headers.goodResponse({'panels': panels})
+headers.goodResponse({'panels': panels},toastMessage)

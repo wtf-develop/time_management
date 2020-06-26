@@ -10,6 +10,7 @@ from _common.api._settings import mydb
 from _common.api import auth
 from _common.api import headers
 from _common.api import utils
+from _common.api import translation
 from mobile_service.apiv1._mobile import sql_request
 
 headers.jsonAPI()
@@ -31,4 +32,4 @@ if id < 1:
     headers.errorResponse('Not found')
 
 sql_request('update sync_devices set invite="", state=1 where id=' + str(id))
-headers.goodResponse({'state': True})
+headers.goodResponse({'state': True},translation.getValue('confirm_invite'))

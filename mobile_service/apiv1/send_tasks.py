@@ -11,6 +11,7 @@ from _common.api import headers
 from _common.api import utils
 from _common.api import db
 from mobile_service.apiv1 import _mobile
+from _common.api import translation
 
 headers.jsonAPI()
 devid = auth.user_some_state
@@ -83,4 +84,4 @@ else:
                                     'remove': ','.join(remove_ids),
                                     },
                           'diff': {'state': False}
-                          })
+                          }, translation.getValue('sync_success'))

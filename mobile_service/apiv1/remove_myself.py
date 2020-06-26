@@ -14,8 +14,6 @@ from _common.api import translation
 
 headers.jsonAPI()
 
-
-
 sql = 'delete from tasks where devid in (select id from devices where uid=' + str(auth.user_id) + ')'
 try:
     mydb.execute(sql)
@@ -57,4 +55,4 @@ try:
 except Exception as ex:
     utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
     headers.errorResponse('Can not remove user account')
-headers.goodResponse({'status': True, 'message': translation.getValue('remove_account_message')})
+headers.goodResponse({'status': True}, translation.getValue('remove_account_message'))

@@ -10,6 +10,7 @@ from _common.api import auth
 from _common.api import headers
 from _common.api import db
 from _common.api import utils
+from _common.api import translation
 from mobile_service.apiv1._mobile import sql_request
 
 headers.jsonAPI()
@@ -72,4 +73,4 @@ if len(your_arr) > 0:
     sql_request(
             "delete from devices where id in (" + req_filter + ") and id in (select id from devices where uid=" + str(auth.user_id) + ")")
 
-headers.goodResponse({'status': True})
+headers.goodResponse({'status': True},translation.getValue('device_link_removed'))

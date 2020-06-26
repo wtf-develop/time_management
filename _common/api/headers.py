@@ -69,7 +69,7 @@ def __compress_string(s: str):
     return gzip.compress(s.encode('utf-8'))
 
 
-def errorResponse(message: str, title: str='@str.error', code: int = 0):
+def errorResponse(message: str, title: str = '@str.error', code: int = 0):
     obj = {
         'error': {
             'state': True,
@@ -84,21 +84,17 @@ def errorResponse(message: str, title: str='@str.error', code: int = 0):
         print(json.dumps(obj))
     sys.exit()
 
-def infoResponse(message: str, title: str=''):
-    obj = {
-        'toast': {
-            'state': True,
-            'title': title,
-            'message': message
-        }
-    }
-    if _settings.enable_gzip:
-        sys.stdout.buffer.write(__compress_string(json.dumps(obj)))
-    else:
-        print(json.dumps(obj))
-    sys.exit()
 
-def goodResponse(outputData: dict):
+def __addInfoResponse(message: str, attachTo: dict, title: str = '') -> dict:
+    attachTo['toast'] = {
+        'state': True,
+        'title': title,
+        'message': message
+    }
+    return attachTo
+
+
+def goodResponse(outputData: dict, toastMessage: str = None, toastTitle: str = None):
     toffset = time.timezone
     if time.daylight != 0:
         toffset = toffset - 3600
@@ -115,6 +111,11 @@ def goodResponse(outputData: dict):
         server_info['token'] = auth.credentials
 
     obj = {'server': server_info, 'data': outputData}
+    if (toastMessage is not None) and (len(toastMessage) > 0):
+        if (toastTitle is not None):
+            obj = __addInfoResponse(toastMessage, obj, toastTitle)
+        else:
+            obj = __addInfoResponse(toastMessage, obj)
     if _settings.enable_gzip:
         sys.stdout.buffer.write(__compress_string(json.dumps(obj)))
     else:

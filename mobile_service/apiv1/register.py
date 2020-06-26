@@ -151,4 +151,4 @@ auth.credentials = auth.buildCredentials(
         int(auth.user_id), jsonpost['login'], jsonpost['password'], 1, auth.user_some_state)
 headers.jsonAPI(False)
 _mobile.log('Token was sent to device id:' + str(auth.user_some_state))
-headers.goodResponse({'accepted': True, 'token': auth.credentials})
+headers.goodResponse({'accepted': True, 'token': auth.credentials}, translation.getValue('registration_success'))

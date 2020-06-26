@@ -32,8 +32,8 @@ for key in linked['all']:
     value = linked['all'][key]
     name_obj = linked['names'][key]
     nodes[str(value)] = {'id': value,
-                         'name': name_obj[value]['device'],
-                         'user': name_obj[value]['user'],
+                         'name': name_obj['device'],
+                         'user': name_obj['user'],
                          'own': False}
 
 headers.goodResponse({'nodes': nodes,'edges':edges})

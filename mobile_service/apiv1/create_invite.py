@@ -44,7 +44,7 @@ if (auth.user_id == uid) or (another_device == my_device):
     headers.errorResponse('You already have full access to your own devices')
 
 sql_request(
-    'select id, state, invite from sync_devices where src=' + str(my_device) + ' and dst=' + str(another_device))
+        'select id, state, invite from sync_devices where src=' + str(my_device) + ' and dst=' + str(another_device))
 link_id = 0
 link_state = 0
 link_invite = ''
@@ -66,5 +66,5 @@ else:
     link_invite = utils.rand_string(5)
     sql_request(
             'insert into sync_devices (src,dst,state,invite,created) values (' + str(my_device) + ',' + str(
-                another_device) + ',0,"' + link_invite + '",' + str(int(time.time() * 1000)) + ')')
-headers.goodResponse({'invite': link_invite.upper()})
+                    another_device) + ',0,"' + link_invite + '",' + str(int(time.time() * 1000)) + ')')
+headers.goodResponse({'invite': link_invite.upper()}, '\n' + link_invite.upper() + '\n')

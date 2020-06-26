@@ -35,18 +35,19 @@ sql = 'select * from tasks t where (t.type=0 or t.type=1) and t.state>=20 and t.
 db.sql_request(sql)
 rows = mydb.fetchall()
 json_result = []
+toastMessage = None
 if (rows is None) or len(rows) < 1:
-    headers.infoResponse('@str.no_tasks_week')
+    toastMessage = '@str.no_calendar_events'
 for row in rows:
     task_time_obj = {}
     timestamp = 0
     event = {}
     event['title'] = row['title']
-    event['description']=row['desc']
-    if(row['state']==20):
+    event['description'] = row['desc']
+    if (row['state'] == 20):
         if (row['type'] == 1):
             event['color'] = '#193'
-            event['allDay']=True
+            event['allDay'] = True
             task_time_obj = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'],
                                                     month=row['month'], day=row['day'], hour=0,
                                                     minute=0, seconds=0, ms=1)
@@ -98,4 +99,4 @@ for row in rows:
                          ':00'
         event['color'] = '#d7d7d7'
     json_result.append(event)
-headers.goodResponse(json_result)
+headers.goodResponse({'events': json_result}, toastMessage)

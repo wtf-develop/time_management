@@ -50,8 +50,9 @@ sql = 'select * from tasks t where (t.type=0 or t.type=1) and t.state=20 and t.s
         time_endweek) + ' and ' + sql_filter + ' order by t.type, t.start_time'
 db.sql_request(sql)
 rows = mydb.fetchall()
+toastMessage=None
 if (rows is None) or len(rows) < 1:
-    headers.infoResponse('@str.no_tasks_week')
+    toastMessage='@str.no_tasks_week'
 for row in rows:
     task_time_obj = {}
     timestamp = 0
@@ -78,4 +79,4 @@ for row in rows:
                 break
     #row['hour']=str(row['hour']).rjust(2, '0')
     row['minute'] = str(row['minute']).rjust(2, '0')
-headers.goodResponse({'timers': timers})
+headers.goodResponse({'timers': timers},toastMessage)
