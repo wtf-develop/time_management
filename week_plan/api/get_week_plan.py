@@ -7,7 +7,7 @@ import time
 currentdir = os.path.dirname(os.path.abspath(
         inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
-from _common.api.auth import _GET
+from _common.api.auth import safeGETint
 from _common.api import headers
 from _common.api import db
 from _common.api import auth
@@ -16,13 +16,8 @@ from _common.api._settings import mydb
 
 headers.jsonAPI()
 
-devid = 0
-timezone_offset = 0
-if not (_GET is None) and ('devid' in _GET) and not (_GET['devid'] is None) and not (_GET['devid'][0] is None):
-    devid = int(_GET['devid'][0])
-
-if not (_GET is None) and ('timezone' in _GET) and not (_GET['timezone'] is None) and not (_GET['timezone'][0] is None):
-    timezone_offset = int(_GET['timezone'][0])
+devid = safeGETint('devid')
+timezone_offset = safeGETint('timezone')
 
 if devid < 1:
     devid = 0

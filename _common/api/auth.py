@@ -14,6 +14,24 @@ from _common.api._settings import mydb
 from _common.api._settings import server_token_key
 
 
+def safeGET(param: str) -> str:
+    if (_GET is not None) and (param in _GET) and (_GET[param] is not None) and (
+            _GET[param][0] is not None):
+        return str(_GET[param][0])
+    else:
+        return ''
+
+
+def safeGETint(param: str) -> int:
+    result = 0
+    string = safeGET(param)
+    try:
+        result = int(string)
+    except Exception:
+        pass
+    return result
+
+
 def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_state: int = 0):
     global req_agent, req_scheme, req_language
     if uid == 0:
@@ -250,12 +268,9 @@ if (debug):
 # --- debug part ends ---
 
 
-credentials = None
-if not (_GET is None) and ('credentials' in _GET) and not (_GET['credentials'] is None) and not (
-        _GET['credentials'][0] is None):
+credentials = safeGET('credentials')
+if len(credentials) < 1:
     # try fetch token from GET parameter (ONLY AFTER COOKIE!!)
-    credentials = _GET['credentials'][0]
-else:
     credentials = req_cookie.get("credentials")
     if not (credentials is None):
         # try fetch token from cookie (FIRST!!)

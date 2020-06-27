@@ -5,36 +5,21 @@ import os
 import sys
 
 currentdir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
+        inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
-from _common.api.auth import _GET
+from _common.api.auth import safeGETint
 from _common.api import headers
 from _common.api import db
 from _common.api import auth
 
 headers.jsonAPI()
 
-filter0 = False
-filter1 = False
-filter2 = False
-filter3 = False
-filterl = False
-selected = 0
-if (_GET is not None) and ('devid' in _GET) and (_GET['devid'] is not None) and (_GET['devid'][0] is not None):
-    devid = int(_GET['devid'][0])
-
-if (_GET is not None) and ('filter0' in _GET) and (_GET['filter0'] is not None) and (_GET['filter0'][0] is not None):
-    filter0 = int(_GET['filter0'][0]) == 1
-if (_GET is not None) and ('filter1' in _GET) and (_GET['filter1'] is not None) and (_GET['filter1'][0] is not None):
-    filter1 = int(_GET['filter1'][0]) == 1
-if (_GET is not None) and ('filter2' in _GET) and (_GET['filter2'] is not None) and (_GET['filter2'][0] is not None):
-    filter2 = int(_GET['filter2'][0]) == 1
-if (_GET is not None) and ('filter3' in _GET) and (_GET['filter3'] is not None) and (_GET['filter3'][0] is not None):
-    filter3 = int(_GET['filter3'][0]) == 1
-if (_GET is not None) and ('filterl' in _GET) and (_GET['filterl'] is not None) and (_GET['filterl'][0] is not None):
-    filterl = int(_GET['filterl'][0]) == 1
-if (_GET is not None) and ('selected' in _GET) and (_GET['selected'] is not None) and (_GET['selected'][0] is not None):
-    selected = int(_GET['selected'][0])
+filter0 = safeGETint('filter0') == 1
+filter1 = safeGETint('filter1') == 1
+filter2 = safeGETint('filter2') == 1
+filter3 = safeGETint('filter3') == 1
+filterl = safeGETint('filterl') == 1
+selected = safeGETint('selected')
 
 # if filter0 and filter1 and filter2 and filter3 and filterl:
 #    filterl = False
@@ -42,6 +27,8 @@ nodes = {}
 edges = {}
 own = db.getUserOwnDevices(auth.user_id, 0, True)
 linked = db.getUserLinkedDevices(auth.user_id, 0, True)
+linksIn = linked['in']['link'].copy()
+linksOut = linked['out']['link'].copy()
 
 if filter0:
     own['0'] = []
@@ -160,7 +147,7 @@ if (selected > 0) and replace_default and our_device_selected:
             selLinks['me']['sync3'] = row['sync3']
             break
 
-    for row in linked['in']['link']:
+    for row in linksIn:
         if (row['src'] == selected):
             obj = {}
             obj['id'] = row['src']
@@ -173,7 +160,7 @@ if (selected > 0) and replace_default and our_device_selected:
             obj['sync3'] = row['sync3']
             selLinks['other'].append(obj)
 
-    for row in linked['out']['link']:
+    for row in linksOut:
         if (row['src'] == selected):
             obj = {}
             obj['id'] = row['src']

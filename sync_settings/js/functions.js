@@ -47,14 +47,34 @@ function updateData() {
                     $('#editor').html(J2H.process('editor', json))
                     $('#editor').fadeIn(500)
                     $('.devs').bootstrapToggle();
-                    //$('.devs').change(toggles_func);
-
+                    $('.devs').change(set_new_func);
                 }
-
                 graph.merge(json.data)
                 graph.restartMoving()
 
             }
         })
     }, 500)
+}
+
+timers={}
+function set_new_func(){
+    src=$(this).attr('data-src');
+    dst=$(this).attr('data-dst');
+    parentid='#src'+src+'dst'+dst
+    if(typeof(timers[parentid])!='undefined'){
+        clearTimeout(timers[parentid])
+    }
+    timers[parentid]=setTimeout(function(){
+        parent=$(parentid)
+        sync0='sync0='+(parent.find('#id'+src+'box0'+dst).prop('checked')?'1':'0')
+        sync1='sync1='+(parent.find('#id'+src+'box1'+dst).prop('checked')?'1':'0')
+        sync2='sync2='+(parent.find('#id'+src+'box2'+dst).prop('checked')?'1':'0')
+        sync3='sync3='+(parent.find('#id'+src+'box3'+dst).prop('checked')?'1':'0')
+        J2H.getJSON('api/set_sync_type.py?' + sync0 + '&' + sync1 + '&' + sync2 + '&' + sync3 + '&src=' + src+'&dst='+dst, function(json) {
+            if (isGoodResponse(json)) {
+                updateData()
+            }
+        })
+    },1000)
 }

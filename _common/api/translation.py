@@ -74,6 +74,7 @@ lang = {
         'geo': 'Locations',
         'links': 'Sharing',
         'remove': 'Remove',
+        'permission_denied': 'Permission denied',
 
     },
     'ru': {
@@ -147,6 +148,7 @@ lang = {
         'geo': 'Локации',
         'links': 'Пересылка',
         'remove': 'Удалить',
+        'permission_denied': 'Доступ запрещен',
 
     },
     'de': {
