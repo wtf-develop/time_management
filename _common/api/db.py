@@ -296,7 +296,8 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             }
             result_all[row['id']] = row['id']
             result_in_all[row['id']] = row['id']
-            obj = {'src': row['id'], 'dst': row['dst']}
+            obj = {'src': row['id'], 'dst': row['dst'], 'sync0': row['sync0'],
+                   'sync1': row['sync1'], 'sync2': row['sync2'], 'sync3': row['sync3']}
             result_in['link'].append(obj)
             if (row['sync0'] == 0):
                 result_in['0'].append(obj)
@@ -309,7 +310,8 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
 
     if outgoing:
         # get external devices that receive info from user  id - desctination (ext-dev), src - user device
-        sql = '''select u.login,d2.name as src_name,s.src,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3 from devices as d
+        sql = '''select u.login,d2.name as src_name,s.src,d.name,d.id,s.sync0,s.sync1,s.sync2,s.sync3 
+            from devices as d
             inner join sync_devices as s on s.dst=d.id and s.`state`>0
             inner join devices as d2 on s.src=d2.id and d2.`uid`=''' + str(user_id) + addsql + ''' and d2.`state`>0
             inner join users as u on d.uid=u.id
@@ -330,7 +332,8 @@ def getUserLinkedDevices(user_id: int, devid: int = 0, incomming: bool = True, o
             }
             result_all[row['id']] = row['id']
             result_out_all[row['id']] = row['id']
-            obj = {'src': row['src'], 'dst': row['id']}
+            obj = {'src': row['src'], 'dst': row['id'], 'sync0': row['sync0'],
+                   'sync1': row['sync1'], 'sync2': row['sync2'], 'sync3': row['sync3']}
             result_out['link'].append(obj)
             if (row['sync0'] == 0):
                 result_out['0'].append(obj)
@@ -362,7 +365,7 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
 
     result = {'0': [], '1': [], '2': [], '3': [], 'link': [], 'all': []}
 
-    sql = '''select d.id,d.name,0 as sync0,1 as sync1,2 as sync2,3 as sync3, d.`default`
+    sql = '''select d.id,d.name,d.sync0,d.sync1,d.sync2,d.sync3, d.`default`
     from devices d
     where d.uid=''' + str(user_id) + ''' and d.state>0
     '''

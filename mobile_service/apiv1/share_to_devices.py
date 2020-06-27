@@ -87,4 +87,4 @@ for device in all_devices:
 
 sql_request_ignore_error('COMMIT')
 
-headers.goodResponse({'status': True},translation.getValue('sharing_complete'))
+headers.goodResponse({'status': True}, translation.getValue('sharing_complete'))

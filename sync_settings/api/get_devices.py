@@ -1,11 +1,11 @@
 #!/usr/local/bin/python3
-# this script it's a small Hell
+# this script it's a small Hell. Live is hard...
 import inspect
 import os
 import sys
 
 currentdir = os.path.dirname(os.path.abspath(
-        inspect.getfile(inspect.currentframe())))
+    inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
 from _common.api.auth import _GET
 from _common.api import headers
@@ -66,10 +66,10 @@ if filterl:
 
 default_id = '0'
 replace_default = False
-our_device_selected=False
+our_device_selected = False
 for value in own['all']:
     if selected == value['id']:
-        our_device_selected=True
+        our_device_selected = True
         break
 
 for value in own['all']:
@@ -148,4 +148,44 @@ for k in range(5):
         if dst not in edges[src]:
             edges[src][dst] = {}
 
-headers.goodResponse({'nodes': nodes, 'edges': edges})
+if (selected > 0) and replace_default and our_device_selected:
+    selLinks = {'me': {}, 'other': []}
+    for row in own['all']:
+        if row['id'] == selected:
+            selLinks['me']['id'] = row['id']
+            selLinks['me']['device'] = row['name']
+            selLinks['me']['sync0'] = row['sync0']
+            selLinks['me']['sync1'] = row['sync1']
+            selLinks['me']['sync2'] = row['sync2']
+            selLinks['me']['sync3'] = row['sync3']
+            break
+
+    for row in linked['in']['link']:
+        if (row['src'] == selected):
+            obj = {}
+            obj['id'] = row['src']
+            obj['dst'] = row['dst']
+            obj['device'] = linked['names'][row['dst']]['device']
+            obj['user'] = linked['names'][row['dst']]['user']
+            obj['sync0'] = row['sync0']
+            obj['sync1'] = row['sync1']
+            obj['sync2'] = row['sync2']
+            obj['sync3'] = row['sync3']
+            selLinks['other'].append(obj)
+
+    for row in linked['out']['link']:
+        if (row['src'] == selected):
+            obj = {}
+            obj['id'] = row['src']
+            obj['dst'] = row['dst']
+            obj['device'] = linked['names'][row['dst']]['device']
+            obj['user'] = linked['names'][row['dst']]['user']
+            obj['sync0'] = row['sync0']
+            obj['sync1'] = row['sync1']
+            obj['sync2'] = row['sync2']
+            obj['sync3'] = row['sync3']
+            selLinks['other'].append(obj)
+
+    headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': selLinks})
+else:
+    headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': {}})

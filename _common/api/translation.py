@@ -73,6 +73,7 @@ lang = {
         'notes': 'Notes',
         'geo': 'Locations',
         'links': 'Sharing',
+        'remove': 'Remove',
 
     },
     'ru': {
@@ -145,6 +146,7 @@ lang = {
         'notes': 'Заметки',
         'geo': 'Локации',
         'links': 'Пересылка',
+        'remove': 'Удалить',
 
     },
     'de': {

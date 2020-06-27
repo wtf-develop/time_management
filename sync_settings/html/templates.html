@@ -1,50 +1,34 @@
 NextTemplateName: page_structure
 <div class="row align-middle text-center nowrap w-100">
-    <center class="align-middle text-center nowrap w-100 mt-1">
+    <center class="align-middle small text-center nowrap w-100 mt-1">
         <nobr>
-            <div class="form-check form-check-inline">
-                <label for="inlineCheckbox0" class="form-check-label">@str.timers</label>
-                <input class="toggles" id="inlineCheckbox0" class="form-check-input" type="checkbox"
-                       data-toggle="toggle"
-                       data-style="ml-1" data-onstyle="success" data-size="xs">
-
+            <div class="form-check form-check-inline m-0">
+                <input class="toggles" id="inlineCheckbox0" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.timers" data-off="<small>@str.timers</small>" data-offstyle="outline-secondary" data-style="ml-1"
+                    data-onstyle="success" data-size="xs">
             </div>
-            <div class="form-check form-check-inline">
-                <label for="inlineCheckbox1" class="form-check-label">@str.dates</label>
-                <input class="toggles" id="inlineCheckbox1" class="form-check-input" type="checkbox"
-                       data-toggle="toggle"
-                       data-style="ml-1" data-onstyle="success" data-size="xs">
-
+            <div class="form-check form-check-inline m-0">
+                <input class="toggles" id="inlineCheckbox1" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.dates" data-off="<small>@str.dates</small>" data-offstyle="outline-secondary" data-style="ml-1"
+                    data-onstyle="success" data-size="xs">
             </div>
-            <div class="form-check form-check-inline">
-                <label for="inlineCheckbox2" class="form-check-label">@str.notes</label>
-                <input class="toggles" id="inlineCheckbox2" class="form-check-input" type="checkbox"
-                       data-toggle="toggle"
-                       data-style="ml-1" data-onstyle="success" data-size="xs">
-
+            <div class="form-check form-check-inline m-0">
+                <input class="toggles" id="inlineCheckbox2" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.notes" data-off="<small>@str.notes</small>" data-offstyle="outline-secondary" data-style="ml-1"
+                    data-onstyle="success" data-size="xs">
             </div>
-            <div class="form-check form-check-inline">
-                <label for="inlineCheckbox3" class="form-check-label">@str.geo</label>
-                <input class="toggles" id="inlineCheckbox3" class="form-check-input" type="checkbox"
-                       data-toggle="toggle"
-                       data-style="ml-1" data-onstyle="success" data-size="xs">
-
+            <div class="form-check form-check-inline m-0">
+                <input class="toggles" id="inlineCheckbox3" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.geo" data-off="<small>@str.geo</small>" data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="success"
+                    data-size="xs">
             </div>
-            <div class="form-check form-check-inline">
-                <label for="inlineCheckboxl" class="form-check-label">@str.links</label>
-                <input class="toggles" id="inlineCheckboxl" class="form-check-input" type="checkbox"
-                       data-toggle="toggle"
-                       data-style="ml-1" checked data-onstyle="success" data-size="xs">
-
+            <div class="form-check form-check-inline m-0">
+                <input class="toggles" id="inlineCheckboxl" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.links" data-off="<small>@str.links</small>" data-offstyle="outline-secondary" data-style="ml-1" checked
+                    data-onstyle="success" data-size="xs">
             </div>
         </nobr>
     </center>
 </div>
 <div class="row p-0 m-0">
-    <div class="col-lg-2 col-md-3 col-sm-12 p-0 m-0">
-        hello!!
+    <div id="editor" class="col-lg-2 col-md-3 col-sm-12 p-0 m-0" style="display:none; heigth:400px;overflow-y: auto;">
+        {{editor}}
     </div>
-
     <div class="col-lg-10 col-md-9 col-sm-12 p-0 m-0">
         <canvas class="p-0 m-0" id="viewport" width="100%" height="100%" style="width:100%;height:100%;"></canvas>
     </div>

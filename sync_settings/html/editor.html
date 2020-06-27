@@ -1,0 +1,37 @@
+NextTemplateName: editor
+<div class="col-lg-2 col-md-3 col-sm-12 p-0 m-0">
+    {{edit_row,data.links.me}}
+    [!edit_row,data.links.other!]
+</div>
+
+NextTemplateName: edit_row
+<div class="w-100">
+    <b class="ml-1">[*user*] [*device*]</b><br>
+    <div class="form-check form-check-inline m-0">
+        <input class="devs" id="a[*id*]box0" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.timers" data-off="<small>@str.timers</small>" data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+            {{checked_item,sync0}} data-size="xs">
+    </div>
+    <div class="form-check form-check-inline m-0">
+        <input class="devs" id="a[*id*]box1" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.dates" data-off="<small>@str.dates</small>" data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+            {{checked_item,sync1}} data-size="xs">
+    </div>
+    <div class="form-check form-check-inline m-0">
+        <input class="devs" id="a[*id*]box2" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.notes" data-off="<small>@str.notes</small>" data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+            {{checked_item,sync2}} data-size="xs">
+    </div>
+    <div class="form-check form-check-inline m-0">
+        <input class="devs" id="a[*id*]box3" class="form-check-input" type="checkbox" data-toggle="toggle" data-on="@str.geo" data-off="<small>@str.geo</small>" data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+            {{checked_item,sync3}} data-size="xs">
+    </div>
+
+    [*dst,ift=`0||`then``else`remove_btn`*]
+
+</div>
+
+NextTemplateName: checked_item
+[*this,if=`0||1||2||3`then`checked`else``*]
+
+NextTemplateName: remove_btn
+<div class="form-check form-check-inline m-0">
+    <button type="button" class="small btn btn-xs btn-outline-danger ml-1"><small>@str.remove</small></button>
+</div>

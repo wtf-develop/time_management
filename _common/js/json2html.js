@@ -53,6 +53,13 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         var error_parcer = '';
 
         function get_from_data(temp_data, name_var) {
+            if (name_var === undefined) {
+                if (DEBUG) {
+                    alert('Json2Html: CRITICAL error. Varialble name is undefined. Check your loop templates')
+                }
+                console.log('Json2Html: CRITICAL error. Varialble name is undefined. Check your loop templates');
+                return '';
+            }
             var i = 0;
             var name_vars = name_var.split('.');
             for (i = 0; i < name_vars.length; i++) {
