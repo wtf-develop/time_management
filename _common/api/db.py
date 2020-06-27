@@ -100,7 +100,7 @@ def saveTask(data: dict, uid: int) -> int:
     else:
         return -100  # not possible
 
-    if (data['id'] == 0) and (('created' not in data) or (data['created'] is None)):
+    if (data['id'] == 0) and (('created' not in data) or (data['created'] is None) or (int(data['created']) < 10)):
         data['created'] = timestampstr  # dont change this later never!
 
     # always update time after any changes
