@@ -41,11 +41,11 @@ function updateData() {
         var filterl = 'filterl=' + (document.getElementById('inlineCheckboxl').checked ? '0' : '1')
         J2H.getJSON('api/get_devices.py?' + filter0 + '&' + filter1 + '&' + filter2 + '&' + filter3 + '&' + filterl + '&selected=' + graph.getSelectedId(), function(json) {
             if (isGoodResponse(json)) {
-                if (typeof(json.data.links.me) == 'undefined') {
-                    $('#editor').hide()
+                if (json.data.links.length<1) {
+                    $('#editor').html(J2H.process('editor_title',{}))
                 } else {
                     $('#editor').html(J2H.process('editor', json))
-                    $('#editor').fadeIn(500)
+                    $('#editor').fadeIn(300)
                     $('.devs').bootstrapToggle();
                     $('.devs').change(set_new_func);
                 }

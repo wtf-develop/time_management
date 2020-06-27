@@ -136,15 +136,17 @@ for k in range(5):
             edges[src][dst] = {}
 
 if (selected > 0) and replace_default and our_device_selected:
-    selLinks = {'me': {}, 'other': []}
+    selLinks = []
     for row in own['all']:
         if row['id'] == selected:
-            selLinks['me']['id'] = row['id']
-            selLinks['me']['device'] = row['name']
-            selLinks['me']['sync0'] = row['sync0']
-            selLinks['me']['sync1'] = row['sync1']
-            selLinks['me']['sync2'] = row['sync2']
-            selLinks['me']['sync3'] = row['sync3']
+            obj = {}
+            obj['id'] = row['id']
+            obj['device'] = row['name']
+            obj['sync0'] = row['sync0']
+            obj['sync1'] = row['sync1']
+            obj['sync2'] = row['sync2']
+            obj['sync3'] = row['sync3']
+            selLinks.append(obj)
             break
 
     for row in linksIn:
@@ -158,7 +160,7 @@ if (selected > 0) and replace_default and our_device_selected:
             obj['sync1'] = row['sync1']
             obj['sync2'] = row['sync2']
             obj['sync3'] = row['sync3']
-            selLinks['other'].append(obj)
+            selLinks.append(obj)
 
     for row in linksOut:
         if (row['src'] == selected):
@@ -171,8 +173,36 @@ if (selected > 0) and replace_default and our_device_selected:
             obj['sync1'] = row['sync1']
             obj['sync2'] = row['sync2']
             obj['sync3'] = row['sync3']
-            selLinks['other'].append(obj)
-
+            selLinks.append(obj)
     headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': selLinks})
-else:
-    headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': {}})
+
+if (selected > 0) and not our_device_selected:
+    selLinks = []
+    for row in linksIn:
+        if (row['dst'] == selected):
+            if (row['src'] in own['names']):
+                obj = {}
+                obj['id'] = row['src']
+                obj['dst'] = row['dst']
+                obj['device'] = own['names'][row['src']]
+                obj['sync0'] = row['sync0']
+                obj['sync1'] = row['sync1']
+                obj['sync2'] = row['sync2']
+                obj['sync3'] = row['sync3']
+                selLinks.append(obj)
+
+    for row in linksOut:
+        if (row['dst'] == selected):
+            if (row['src'] in own['names']):
+                obj = {}
+                obj['id'] = row['src']
+                obj['dst'] = row['dst']
+                obj['device'] = own['names'][row['src']]
+                obj['sync0'] = row['sync0']
+                obj['sync1'] = row['sync1']
+                obj['sync2'] = row['sync2']
+                obj['sync3'] = row['sync3']
+                selLinks.append(obj)
+    headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': selLinks})
+
+headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': []})

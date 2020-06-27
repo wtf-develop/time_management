@@ -1,11 +1,15 @@
+
 NextTemplateName: editor
-<div class="col-lg-2 col-md-3 col-sm-12 p-0 m-0">
-    {{edit_row,data.links.me}}
-    [!edit_row,data.links.other!]
+<div class="w-100 m-0 p-0 bg-light pt-0 pb-2 pl-1 pr-1 border">
+    {{editor_title}}
+    [!edit_row,data.links!]
 </div>
 
+NextTemplateName: editor_title
+<center><h6 class="pt-2 pb-2 m-0">@str.editor</h6></center>
+
 NextTemplateName: edit_row
-<div class="w-100" id="src[*id*]dst[*dst*]">
+<div class="w-100 border rounded mb-2 bg-white shadow-sm" id="src[*id*]dst[*dst*]">
     <div class="ml-1"><b><small><i>[*user*]</i></small> [*device*]</b></div>
     <div class="form-check form-check-inline m-0">
         <input class="devs form-check-input" id="id[*id*]box0[*dst*]" data-src="[*id*]" data-dst="[*dst*]"

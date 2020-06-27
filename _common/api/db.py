@@ -363,7 +363,7 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
     if (devid == 0) and cache and (not (__ownDevices is None)):
         return __ownDevices.copy()
 
-    result = {'0': [], '1': [], '2': [], '3': [], 'link': [], 'all': []}
+    result = {'0': [], '1': [], '2': [], '3': [], 'link': [], 'all': [], 'names': {}}
 
     sql = '''select d.id,d.name,d.sync0,d.sync1,d.sync2,d.sync3, d.`default`
     from devices d
@@ -388,6 +388,7 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
     for row in rows:
         result['all'].append(row)
         result['link'].append(row['id'])
+        result['names'][row['id']] = row['name']
         if (row['sync0'] == 0):
             result['0'].append(row['id'])
         if (row['sync1'] == 1):

@@ -75,6 +75,7 @@ lang = {
         'links': 'Sharing',
         'remove': 'Remove',
         'permission_denied': 'Permission denied',
+        'editor': 'Editor',
 
     },
     'ru': {
@@ -149,6 +150,7 @@ lang = {
         'links': 'Пересылка',
         'remove': 'Удалить',
         'permission_denied': 'Доступ запрещен',
+        'editor': 'Редактор',
 
     },
     'de': {
