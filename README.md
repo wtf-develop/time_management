@@ -5,10 +5,11 @@ OpenSource self-hosted personal time management system. Server source code was c
 # Installation
 
 1) Setup server environment (look "Server requirements")
-2) Save the settings file (3) and remove old source files if they exists.
-3) Open file **/_common/api/_settings.py** and change settings.
-4) Run script **/zzz_install_and_then_remove_it.sh** as files owner
-5) Remove all files with name **zzz_install_and_then_remove_it**.* with any extensions
+2) Create database structure from file **zzz_database.sql**
+3) Save the settings file (3) and remove old source files if they exists.
+4) Open file **/_common/api/_settings.py** and change settings.
+5) Run script **/zzz_run_once.sh** as files owner
+6) Remove all files with name prefix **zzz_** and with any extensions
 
 For update process please start from step 2
 
