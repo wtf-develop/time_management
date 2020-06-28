@@ -17,6 +17,7 @@ print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>
 <head>
     <meta charset="utf-8" />
+    <title>""" + translation.getAppName(auth.user_lang) + """</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -29,11 +30,8 @@ print("""<!DOCTYPE html>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Full Screen" />
-
-
     <link rel="manifest" href="manifest.json" />
     <meta name="author" content="Arefev Leonid" />
-    <title>PlanMe</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <link href="_common/css/bootstrap.min.css" rel="stylesheet" />
     <link href="_common/css/custom.css" rel="stylesheet" />

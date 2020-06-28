@@ -40,6 +40,9 @@ And install recommended mysql client for Python
 ### Apache2
 Must be with CGI folder (**mod_cgi** must be enabled)
 ```xml
+AddDefaultCharset UTF-8
+SetEnv PYTHONIOENCODING utf8
+
 <VirtualHost *:80>
     <Directory /var/www/html>
         Options +ExecCGI
