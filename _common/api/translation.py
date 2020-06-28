@@ -155,7 +155,7 @@ lang = {
         "application": 'MachEs!',
         'login': 'Benutzer',
         'password': 'Passwort',
-        'remember': 'Erinnere mich',
+        'remember': 'Speichern',
         'submit_login': 'Anmelden',
         'error': 'Fehler',
         'bad_request': 'Ungültige Anforderung',
