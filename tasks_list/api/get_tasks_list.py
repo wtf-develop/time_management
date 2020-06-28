@@ -45,7 +45,7 @@ items_30 = panels[1]['items']
 items_40 = panels[2]['items']
 
 sql_filter = db.buildSqlPermissionfilter(auth.user_id, devid, True)
-sql = 'select * from tasks t where t.type=2 and ' + sql_filter + ' order by t.state, t.priority desc,t.update_time desc limit 600'
+sql = 'select * from tasks t where t.type=2 and ' + sql_filter + ' order by t.state, t.priority desc,t.created desc limit 600'
 db.sql_request(sql)
 rows = mydb.fetchall()
 json_result = []

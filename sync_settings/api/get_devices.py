@@ -25,7 +25,14 @@ selected = safeGETint('selected')
 #    filterl = False
 nodes = {}
 edges = {}
-own = db.getUserOwnDevices(auth.user_id, 0, True)
+own = db.getUserOwnDevices(user_id=auth.user_id)
+our_device_selected = False
+for value in own['all']:
+    if selected == value['id']:
+        our_device_selected = True
+        break
+if(our_device_selected):
+    own = db.getUserOwnDevices(user_id=auth.user_id, devid=selected, myself=True, cache=True)
 linked = db.getUserLinkedDevices(auth.user_id, 0, True)
 linksIn = linked['in']['link'].copy()
 linksOut = linked['out']['link'].copy()
@@ -53,11 +60,6 @@ if filterl:
 
 default_id = '0'
 replace_default = False
-our_device_selected = False
-for value in own['all']:
-    if selected == value['id']:
-        our_device_selected = True
-        break
 
 for value in own['all']:
     isDef = ('default' in value) and (int(value['default']) == 1)

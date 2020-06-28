@@ -16,7 +16,7 @@ if ('share' in auth._GET):
     in_bool = False
 links = db.getUserLinkedDevices(user_id=auth.user_id, devid=auth.user_some_state, incomming=in_bool, outgoing=True,
                                 cache=False)
-own = db.getUserOwnDevices(user_id=auth.user_id, devid=auth.user_some_state, cache=False)  # except myself
+own = db.getUserOwnDevices(user_id=auth.user_id, devid=auth.user_some_state, myself=False, cache=False)  # except myself
 result = {'own': [], 'in': [], 'out': []}
 def_id = db.getDefaultDevice(auth.user_id)
 for dev in own['all']:

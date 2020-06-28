@@ -31,7 +31,8 @@ out_arr = []
 your_arr = []
 tasks_arr = []
 tasks = getTotalIdsString(user_id=auth.user_id, devid=auth.user_some_state, cross=tasks, extendType=0)['info']['ids']
-
+if len(tasks) < 1:
+    headers.errorResponse('Please sync your device')
 sql = "select group_concat(id,',') as int_tasks from tasks where globalid in ('" + "','".join(tasks.split(',')) + "')"
 sql_request(sql)
 tasks_row = mydb.fetchone()
@@ -62,7 +63,7 @@ if len(all_devices) < 1:
     headers.errorResponse(
             "You can't share to your current or default devices")
 
-own_dict = db.getUserOwnDevices(user_id=auth.user_id, devid=auth.user_some_state)
+own_dict = db.getUserOwnDevices(user_id=auth.user_id, myself=False, devid=auth.user_some_state)
 out_dict = db.getUserLinkedDevices(user_id=auth.user_id, devid=auth.user_some_state, incomming=False, outgoing=True)
 check_list = (set().union(list(x['id'] for x in own_dict['all']), out_dict['out']['all']))  # integers
 to_remove_from = []

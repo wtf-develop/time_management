@@ -111,7 +111,7 @@ def saveTask(data: dict, uid: int) -> int:
     if ('serial' not in data) or (data['serial'] is None):
         data['serial'] = random.randint(1, 50000)
 
-    tags = str(data.pop('tags', None))
+    tags = data.pop('tags', None)
     temp_global_id = data['globalid']  # store value before unset
     temp_dev_id = data['devid']
     data['update_devid'] = data['devid']
@@ -147,11 +147,12 @@ def saveTask(data: dict, uid: int) -> int:
     tags_db_ids = []
     tags_db_ids.append('0')
     if not (tags is None):
-        tags_arr = tags.split(',')
+        tags_arr = str(tags).split(',')
         if len(tags_arr) > 0:
             for tag in tags_arr:
-                tags_db_ids.append(str(setTaskTag(data['id'], tag, uid)))
-                pass
+                if (tag is not None) and (len(tag) > 0):
+                    tags_db_ids.append(str(setTaskTag(data['id'], tag, uid)))
+
     sql = 'delete from tasks_tags where taskid=' + str(data['id']) + ' and tagid not in (' + ','.join(tags_db_ids) + ')'
     try:
         mydb.execute(sql)
@@ -358,7 +359,7 @@ def getDefaultDevice(user_id: int) -> int:
     return int(row['id'])
 
 
-def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
+def getUserOwnDevices(user_id: int, devid: int = 0, myself: bool = False, cache: bool = True) -> dict:
     global __ownDevices
     if (devid == 0) and cache and (not (__ownDevices is None)):
         return __ownDevices.copy()
@@ -371,6 +372,22 @@ def getUserOwnDevices(user_id: int, devid: int = 0, cache: bool = True) -> dict:
     '''
 
     if devid > 0:
+        if (myself):
+            sql = '''select d.id,d.name,d.sync0,d.sync1,d.sync2,d.sync3, d.`default`
+            from devices d
+            where d.uid=''' + str(user_id) + ''' and id=''' + str(devid) + ''' and d.state>0
+            '''
+            mydb.execute(sql)
+            rows = mydb.fetchall()
+            for row in rows:
+                result['all'].append(row)
+                result['link'].append(row['id'])
+                result['names'][row['id']] = row['name']
+                result['0'].append(row['id'])
+                result['1'].append(row['id'])
+                result['2'].append(row['id'])
+                result['3'].append(row['id'])
+
         sql = '''select d.id,d.name,d.`default`,
             CASE WHEN d.sync0<d2.sync0 then d.sync0 else d2.sync0 end as sync0,
             CASE WHEN d.sync1<d2.sync1 then d.sync1 else d2.sync1 end as sync1,
@@ -430,34 +447,50 @@ def getUserLinkedTasks(user_id: int, devid: int = 0, cache: bool = True) -> list
 __sql_permission_cache = {}
 
 
+def __arrLinkOwnUnite(links: list, owns: list) -> list:
+    b1 = len(links) < 1
+    b2 = len(owns) < 1
+    if b1 and b2:
+        return []
+    elif b1 and not b2:
+        return (str(x) for x in owns)
+    elif not (b1) and (b2):
+        return (str(x['src']) for x in links)
+    else:
+        return list(set().union((str(x['src']) for x in links), (str(x) for x in owns)))
+
+
 def buildSqlPermissionfilter(user_id: int, devid: int, cache: bool = True) -> str:
     if (cache) and (devid in __sql_permission_cache) and (not (__sql_permission_cache[devid] is None)):
         return __sql_permission_cache[devid]
     links = getUserLinkedDevices(user_id=user_id, devid=devid, incomming=True, outgoing=False, cache=False)
-    own = getUserOwnDevices(user_id=user_id, devid=devid, cache=cache)
+    own = getUserOwnDevices(user_id=user_id, myself=False, devid=devid, cache=cache)
     tasks = getUserLinkedTasks(user_id=user_id, devid=devid, cache=cache)
     tasks_links = ','.join(str(x) for x in tasks)
-    dev_0 = ','.join(str(x) for x in list(set().union(links['in']['0'], own['0'])))
-    dev_1 = ','.join(str(x) for x in list(set().union(links['in']['1'], own['1'])))
-    dev_2 = ','.join(str(x) for x in list(set().union(links['in']['2'], own['2'])))
-    dev_3 = ','.join(str(x) for x in list(set().union(links['in']['3'], own['3'])))
+    dev_0 = ','.join(__arrLinkOwnUnite(links['in']['0'], own['0']))
+    dev_1 = ','.join(__arrLinkOwnUnite(links['in']['1'], own['1']))
+    dev_2 = ','.join(__arrLinkOwnUnite(links['in']['2'], own['2']))
+    dev_3 = ','.join(__arrLinkOwnUnite(links['in']['3'], own['3']))
 
-    sql_filter = '( '
-
+    sql_filter = ''
+    arr = []
     if (devid > 0):
-        sql_filter += '(t.devid=' + str(devid) + ') or '
+        arr.append(' (t.devid=' + str(devid) + ') ')
     if len(tasks_links) > 0:
-        sql_filter += '(t.id in (' + tasks_links + ')) or '
+        arr.append(' (t.id in (' + tasks_links + ')) ')
     if len(dev_0) > 0:
-        sql_filter += '(t.type=0 and t.devid in (' + dev_0 + ')) or '
+        arr.append(' (t.type=0 and t.devid in (' + dev_0 + ')) ')
     if len(dev_1) > 0:
-        sql_filter += '(t.type=1 and t.devid in (' + dev_1 + ')) or '
+        arr.append(' (t.type=1 and t.devid in (' + dev_1 + ')) ')
     if len(dev_2) > 0:
-        sql_filter += '(t.type=2 and t.devid in (' + dev_2 + ')) or '
+        arr.append(' (t.type=2 and t.devid in (' + dev_2 + ')) ')
     if len(dev_3) > 0:
-        sql_filter += '(t.type=3 and t.devid in (' + dev_3 + ')) '
+        arr.append(' (t.type=3 and t.devid in (' + dev_3 + ')) ')
 
-    sql_filter += ')'
+    # for sql request syntax
+    if len(arr) < 1:
+        arr.append(' (t.devid=0) ')
+    sql_filter = '(' + ' or '.join(arr) + ')'
     if cache:
         __sql_permission_cache[devid] = sql_filter
     return sql_filter
