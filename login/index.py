@@ -17,9 +17,8 @@ headers.htmlPage(False)
 print("""<!DOCTYPE html>
 <html lang='""" + auth.user_lang + """'>
 <head>
-    <title>""" + translation.getAppName(auth.user_lang) + """ - Android application</title>
+    <title>PlanMe - Android application</title>
     <meta name="description" content="The application will notify the user about various events. Widgets: Week, Colored Notes, Microphone, Calendar. Time and place reminder">
-    <meta name="keywords" content="Reminder, Android, Time and Place, Запоминатор, Напоминалка, Напоминатор, MachEs!">
     <meta name="author" content="Arefev Leonid" />
     <meta charset="utf-8" />
     <meta name="referrer" content="no-referrer" />

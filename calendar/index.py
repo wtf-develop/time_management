@@ -23,7 +23,7 @@ print("""<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Reminder web application" />
     <meta name="author" content="Arefev Leonid" />
-    <title>""" + translation.getAppName(auth.user_lang) + """: Calendar</title>
+    <title>PlanMe: Calendar</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <meta name="referrer" content="no-referrer" />
     <link href="css/calendar.css" rel="stylesheet" />

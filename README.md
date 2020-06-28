@@ -34,11 +34,11 @@ sudo apt-get install mariadb-server
 ```
 And install recommended mysql client for Python
 ```bash
-pip3 install PyMySQL
+/usr/local/bin/python3 -m pip install PyMySQL
 ```
 
 ### Apache2
-Must be with CGI folder
+Must be with CGI folder (**mod_cgi** must be enabled)
 ```xml
 <VirtualHost *:80>
     <Directory /var/www/html>

@@ -103,7 +103,7 @@ def goodResponse(outputData: dict, toastMessage: str = None, toastTitle: str = N
         'timezone': time.timezone,
         'dst': time.daylight,
         'timeoffset': toffset,
-        'isotime': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat(),
+        # 'isotime': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat(),
         'info': datetime.datetime.now().timetuple(),
         'version': utils.getServerVersion()
     }
