@@ -18,10 +18,6 @@ CREATE TABLE `devices` (
   `selected` tinyint(11) DEFAULT 0 COMMENT 'not used now',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_dev_uniq` (`uid`,`name`),
-  KEY `ch0_index` (`sync0`),
-  KEY `ch1_index` (`sync1`),
-  KEY `ch2_index` (`sync2`),
-  KEY `ch3_index` (`sync3`),
   KEY `state_index` (`state`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -43,10 +39,6 @@ CREATE TABLE `sync_devices` (
   `invite` varchar(7) DEFAULT NULL COMMENT 'invite from user',
   PRIMARY KEY (`id`),
   UNIQUE KEY `src_dst_uniq` (`src`,`dst`),
-  KEY `ch0_index` (`sync0`),
-  KEY `ch1_index` (`sync1`),
-  KEY `ch2_index` (`sync2`),
-  KEY `ch3_index` (`sync3`),
   KEY `dest_index` (`dst`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
