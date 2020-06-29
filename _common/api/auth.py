@@ -15,6 +15,7 @@ from _common.api._settings import server_token_key
 
 
 def safeGET(param: str) -> str:
+    global _GET
     if (_GET is not None) and (param in _GET) and (_GET[param] is not None) and (
             _GET[param][0] is not None):
         return str(_GET[param][0])
@@ -24,7 +25,9 @@ def safeGET(param: str) -> str:
 
 def safeGETint(param: str) -> int:
     result = 0
-    string = safeGET(param)
+    string = utils.clearInt(safeGET(param))
+    if len(string) < 1:
+        return result
     try:
         result = int(string)
     except Exception:

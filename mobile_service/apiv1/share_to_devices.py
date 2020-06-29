@@ -20,6 +20,7 @@ if (auth._POST is None):
 out = ''
 your = ''
 tasks = ''
+duplicate = (auth.safeGETint('dublicate') == 1)
 if ('out' in auth._POST) and not (auth._POST['out'] is None):
     out = utils.clearStringHard(auth._POST['out'])
 if ('your' in auth._POST) and not (auth._POST['your'] is None):
@@ -74,18 +75,21 @@ for device in all_devices:
         to_remove_from.append(device)
 
 for remover in to_remove_from:
-    all_devices.remove(remover)
+    all_devices.remove(remover)  # TODO
 
 # tids_str = "'" + "','".join(tasks_arr) + "'"
 # sql_request("delete from sync_tasks where tid in ("+tids_str+") and dst in ("++")")
 
-sql_request_ignore_error('START TRANSACTION')
-for device in all_devices:
-    for task in tasks_arr:
-        sql = 'insert ignore into sync_tasks (dst,tid,sender) values (' + str(device) + ',' + str(task) + ',' + str(
-                auth.user_id) + ')'
-        sql_request_ignore_error(sql)
+if duplicate:
 
-sql_request_ignore_error('COMMIT')
+    headers.goodResponse({'status': True}, translation.getValue('duplicate_complete'))
+else:
+    sql_request_ignore_error('START TRANSACTION')
+    for device in all_devices:
+        for task in tasks_arr:
+            sql = 'insert ignore into sync_tasks (dst,tid,sender) values (' + str(device) + ',' + str(task) + ',' + str(
+                    auth.user_id) + ')'
+            sql_request_ignore_error(sql)
 
-headers.goodResponse({'status': True}, translation.getValue('sharing_complete'))
+    sql_request_ignore_error('COMMIT')
+    headers.goodResponse({'status': True}, translation.getValue('sharing_complete'))

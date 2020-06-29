@@ -75,6 +75,7 @@ lang = {
         'remove': 'Remove',
         'permission_denied': 'Permission denied',
         'editor': 'Editor',
+        'duplicate_complete': 'Selected tasks are copied to this devices\nYou can remove this tasks on your side',
 
     },
     'ru': {
@@ -140,7 +141,7 @@ lang = {
         'sync_success': 'Данные синхронизированы',
         'confirm_invite': 'Приглашение подтверждено. Это устройство теперь может присылать вам задачи.',
         'device_link_removed': 'Устройство было удалено из вашей области видимости',
-        'sharing_complete': 'Выбранные задачи теперь доступны для этих устройств',
+        'sharing_complete': 'Задачи теперь доступны для этих устройств',
         'timers': 'Таймеры',
         'dates': 'Даты',
         'notes': 'Заметки',
@@ -149,6 +150,7 @@ lang = {
         'remove': 'Удалить',
         'permission_denied': 'Доступ запрещен',
         'editor': 'Редактор',
+        'duplicate_complete': 'Задачи были скопированы на устройства\nУ себя вы их теперь можете удалить',
 
     },
     'de': {
@@ -222,6 +224,7 @@ lang = {
         'remove': 'Entfernen',
         'permission_denied': 'Zugang verweigert',
         'editor': 'Editor',
+        'duplicate_complete': 'Ausgewählte Aufgaben wurden auf Geräte kopiert\nSie können jetzt diese Aufgaben entfernen',
     }
 
 }
