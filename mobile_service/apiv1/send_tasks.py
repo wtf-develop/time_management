@@ -53,7 +53,7 @@ if len(tasks) > 0:
     for task in tasks:
         task['devid'] = auth.user_some_state
         # headers.errorResponse(str(task))
-        save_result = db.saveTask(task, auth.user_id)
+        save_result = db.saveTask(task)
         counter = counter + 1
         if (save_result > 0):
             saved_ids.append(task['globalid'])

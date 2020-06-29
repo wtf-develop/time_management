@@ -1,6 +1,7 @@
 import random
 import time
 
+from _common.api import auth
 from _common.api import headers
 from _common.api import utils
 from _common.api._settings import mydb
@@ -25,7 +26,7 @@ tasks_keymap = {
 
 
 # return id or 0 - error, anything < 0 is  also error
-def saveTask(data: dict, uid: int) -> int:
+def saveTask(data: dict) -> int:
     # do all necessary checks and convert types
     data = utils.replace_keys(data, tasks_keymap)
     required = {'devid', 'title', 'desc', 'type'}
@@ -39,17 +40,23 @@ def saveTask(data: dict, uid: int) -> int:
     for key in data:
         value = data[key]
         if (key in int_fields):
-            if not (isinstance(value, int)):
-                try:
-                    data[key] = int(value)
-                except Exception:
-                    return -2
+            if value is None:
+                data[key] = 0
+            else:
+                if not (isinstance(value, int)):
+                    try:
+                        data[key] = int(value)
+                    except Exception:
+                        return -2
         else:
             if not (isinstance(value, str)):
-                try:
-                    data[key] = str(value)
-                except Exception:
-                    return -3
+                if value is None:
+                    data[key] = ''
+                else:
+                    try:
+                        data[key] = str(value)
+                    except Exception:
+                        return -3
 
     if (data['devid'] < 1):
         return -4
@@ -151,7 +158,7 @@ def saveTask(data: dict, uid: int) -> int:
         if len(tags_arr) > 0:
             for tag in tags_arr:
                 if (tag is not None) and (len(tag) > 0):
-                    tags_db_ids.append(str(setTaskTag(data['id'], tag, uid)))
+                    tags_db_ids.append(str(setTaskTag(data['id'], tag)))
 
     sql = 'delete from tasks_tags where taskid=' + str(data['id']) + ' and tagid not in (' + ','.join(tags_db_ids) + ')'
     try:
@@ -161,7 +168,7 @@ def saveTask(data: dict, uid: int) -> int:
     return data['id']
 
 
-def setTaskTag(tid: int, tag: str, uid: int):
+def setTaskTag(tid: int, tag: str):
     tag = utils.removeDoubleSpaces(
             utils.removeQuotes(utils.removeNonUTF(utils.stripTags(tag.replace(',', ''))))).title()[:50]
     tag_id = 0
@@ -173,7 +180,8 @@ def setTaskTag(tid: int, tag: str, uid: int):
     row = mydb.fetchone()
     str_time = str(int(time.time() * 1000))
     if row is None:
-        sql = 'insert into tags (name,created_user,created) values ("' + tag + '",' + str(uid) + ',' + str_time + ')'
+        sql = 'insert into tags (name,created_user,created) values ("' + tag + '",' + str(
+                auth.user_id) + ',' + str_time + ')'
         try:
             mydb.execute(sql)
         except Exception:
@@ -182,7 +190,19 @@ def setTaskTag(tid: int, tag: str, uid: int):
     else:
         tag_id = int(row['id'])
     if (tag_id is None) or (tag_id < 1):
+        return 0
+    sql = 'insert into tasks_tags set taskid=' + str(tid) + ', tagid=' + str(tag_id) + ', created=' + str_time
+    try:
+        mydb.execute(sql)
+    except Exception:
+        pass
+    return tag_id
+
+
+def __setTaskTagId(tid: int, tag_id: int):
+    if (tag_id is None) or (tag_id < 1):
         return
+    str_time = str(int(time.time() * 1000))
     sql = 'insert into tasks_tags set taskid=' + str(tid) + ', tagid=' + str(tag_id) + ', created=' + str_time
     try:
         mydb.execute(sql)
@@ -509,3 +529,27 @@ def sql_request_ignore_error(sql: str):
         mydb.execute(sql)
     except Exception:
         pass
+
+
+def duplicateTask(tid: int, devid: int) -> bool:
+    if devid < 1:
+        return False
+    sql_request('select * from tasks where id=' + str(tid))
+    row = mydb.fetchone()
+    if row is None:
+        return False
+    gid = row['globalid']
+    if '&' in gid:
+        g_arr = gid.split('&', 2)
+        gid = g_arr[0]
+    gid = gid + '&' + str(devid)
+    row['globalid'] = gid
+    row['id'] = 0
+    row.pop('id', None)
+    row['devid'] = devid
+    newtid = saveTask(row)
+    sql_request('select tagid from tasks_tags where taskid=' + str(tid))
+    rows = mydb.fetchall()
+    for row in rows:
+        __setTaskTagId(newtid, row['tagid'])
+    return False

@@ -9,7 +9,7 @@ from _common.api import auth
 
 
 def getServerVersion() -> str:
-    return "0.1-beta"
+    return "0.2-beta"
 
 
 def removeDoubleSpaces(s: str) -> str:
@@ -35,7 +35,8 @@ def clearUserLogin(login: str) -> str:
     return login
 
 
-__hard_chars = set(string.ascii_letters + string.digits + ',-_')
+__hard_chars = set(string.ascii_letters + string.digits + ',-_&')
+__global_ids_chars = set(string.ascii_letters + string.digits + ',-&')
 __float_chars = set(string.digits + '-.')
 __int_chars = set(string.digits + '-')
 __digits_chars = set(string.digits)
@@ -53,6 +54,13 @@ def clearStringHard(s: str) -> str:
     if len(s) < 1:
         return ''
     s = ''.join(filter(lambda x: x in __hard_chars, s))
+    return s
+
+def clearGlobalIds(s: str) -> str:
+    global __global_ids_chars
+    if len(s) < 1:
+        return ''
+    s = ''.join(filter(lambda x: x in __global_ids_chars, s))
     return s
 
 

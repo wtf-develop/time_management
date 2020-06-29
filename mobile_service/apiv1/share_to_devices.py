@@ -20,13 +20,13 @@ if (auth._POST is None):
 out = ''
 your = ''
 tasks = ''
-duplicate = (auth.safeGETint('dublicate') == 1)
+duplicate = (auth.safeGETint('duplicate') == 1)
 if ('out' in auth._POST) and not (auth._POST['out'] is None):
     out = utils.clearStringHard(auth._POST['out'])
 if ('your' in auth._POST) and not (auth._POST['your'] is None):
     your = utils.clearStringHard(auth._POST['your'])
 if ('tasks' in auth._POST) and not (auth._POST['tasks'] is None):
-    tasks = utils.clearStringHard(auth._POST['tasks'])
+    tasks = utils.clearGlobalIds(auth._POST['tasks'])
 
 out_arr = []
 your_arr = []
@@ -81,7 +81,11 @@ for remover in to_remove_from:
 # sql_request("delete from sync_tasks where tid in ("+tids_str+") and dst in ("++")")
 
 if duplicate:
-
+    sql_request_ignore_error('START TRANSACTION')
+    for device in all_devices:
+        for task in tasks_arr:
+            db.duplicateTask(task, device)
+    sql_request_ignore_error('COMMIT')
     headers.goodResponse({'status': True}, translation.getValue('duplicate_complete'))
 else:
     sql_request_ignore_error('START TRANSACTION')
