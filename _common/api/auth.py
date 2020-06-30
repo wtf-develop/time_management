@@ -1,17 +1,22 @@
 import hashlib
 import http.cookies
+import inspect
 import json
 import os
 import sys
 import time
 from urllib import parse
 
-from _common.api import db
-from _common.api import utils
+currentdir = os.path.dirname(os.path.abspath(
+        inspect.getfile(inspect.currentframe())))
+sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
+
 from _common.api._settings import debug
 from _common.api._settings import logs_path
 from _common.api._settings import mydb
 from _common.api._settings import server_token_key
+from _common.api import db
+from _common.api import utils
 
 
 def safeGET(param: str) -> str:

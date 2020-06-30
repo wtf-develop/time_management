@@ -105,5 +105,5 @@ def sql_request_ignore_error(sql: str):
 
 if not auth.isMobile:  # check that this request from mobile application
     headers.jsonAPI(False)
-    elog('Only from mobile uid:' + auth.user_id)
+    elog('Only from mobile uid:' + str(auth.user_id))
     headers.errorResponse('Wrong type')

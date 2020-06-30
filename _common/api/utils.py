@@ -1,8 +1,15 @@
+import inspect
+import os
 import random
 import re
 import string
+import sys
 import time
 import zlib
+
+currentdir = os.path.dirname(os.path.abspath(
+        inspect.getfile(inspect.currentframe())))
+sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
 
 from _common.api import _settings
 from _common.api import auth
