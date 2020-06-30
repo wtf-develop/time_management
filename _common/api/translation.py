@@ -96,7 +96,7 @@ lang = {
         'not_found': 'Не найдено',
         'logout': 'Выход',
         'search': 'Поиск',
-        'video_link': 'https://youtu.be/cv3NzFa1VyU',
+        'video_link': 'https://youtu.be/HJK4xLVLZ-0',
         'information': 'Информация',
         'settings': 'Настройки',
         'device_sync': 'Ваши устройства',

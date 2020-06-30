@@ -98,7 +98,7 @@ var graph = {};
                     }
                     if (node.data.selected) {
                         node.mass = 2.5;
-                        ctx.fillStyle = "#dc3545";
+                        ctx.fillStyle = "#bc3545";
                     } else {
                         node.mass = 2;
                     }
