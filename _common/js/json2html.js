@@ -581,7 +581,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 //debug_log('some data is left from datasource \n'+error_parcer);
                 error_parcer = '';
             };
-            return str;
+            return my_trim(str);
         }
 
         //replace substring by another substring
@@ -610,45 +610,10 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
             if (str === undefined || str === null) {
                 return '';
             };
-            var changed = true;
-            var controlcount = 5;
-            while (changed) {
-                controlcount--;
-                if (controlcount < 1) break;
-                changed = false;
-                while (str.charAt(str.length - 1) == " ") {
-                    str = str.slice(0, str.length - 1);
-                    changed = true;
-                }
-                while (str.charAt(0) == " ") {
-                    str = str.slice(1, str.length);
-                    changed = true;
-                }
-                while (str.charAt(str.length - 1) == "\n") {
-                    str = str.slice(0, str.length - 1);
-                    changed = true;
-                }
-                while (str.charAt(0) == "\n") {
-                    str = str.slice(1, str.length);
-                    changed = true;
-                }
-                while (str.charAt(str.length - 1) == "\r") {
-                    str = str.slice(0, str.length - 1);
-                    changed = true;
-                }
-                while (str.charAt(0) == "\r") {
-                    str = str.slice(1, str.length);
-                    changed = true;
-                }
-                while (str.charAt(str.length - 1) == "\t") {
-                    str = str.slice(0, str.length - 1);
-                    changed = true;
-                }
-                while (str.charAt(0) == "\t") {
-                    str = str.slice(1, str.length);
-                    changed = true;
-                }
-            }
+            if(str.length<1)return '';
+            str=str.replace(/^\s+/g, '')
+            if(str.length<1)return '';
+            str=str.replace(/\s+$/g, '')
             return str
         }
 

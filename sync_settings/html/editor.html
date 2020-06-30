@@ -14,28 +14,33 @@ NextTemplateName: edit_row
     <div class="form-check form-check-inline m-0">
         <input class="devs form-check-input" id="id[*id*]box0[*dst*]" data-src="[*id*]" data-dst="[*dst*]"
                type="checkbox" data-toggle="toggle" data-on="@str.timers" data-off="<small>@str.timers</small>"
-               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="{{color_type}}"
                {{checked_item,sync0}} data-size="xs">
     </div>
     <div class="form-check form-check-inline m-0">
         <input class="devs form-check-input" id="id[*id*]box1[*dst*]" data-src="[*id*]" data-dst="[*dst*]"
                type="checkbox" data-toggle="toggle" data-on="@str.dates" data-off="<small>@str.dates</small>"
-               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="{{color_type}}"
                {{checked_item,sync1}} data-size="xs">
     </div>
     <div class="form-check form-check-inline m-0">
         <input class="devs form-check-input" id="id[*id*]box2[*dst*]" data-src="[*id*]" data-dst="[*dst*]"
                type="checkbox" data-toggle="toggle" data-on="@str.notes" data-off="<small>@str.notes</small>"
-               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="{{color_type}}"
                {{checked_item,sync2}} data-size="xs">
     </div>
     <div class="form-check form-check-inline m-0">
         <input class="devs form-check-input" id="id[*id*]box3[*dst*]" data-src="[*id*]" data-dst="[*dst*]"
                type="checkbox" data-toggle="toggle" data-on="@str.geo" data-off="<small>@str.geo</small>"
-               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="primary"
+               data-offstyle="outline-secondary" data-style="ml-1" data-onstyle="{{color_type}}"
                {{checked_item,sync3}} data-size="xs">
     </div>
 </div>
 
 NextTemplateName: checked_item
 [*this,if=`0||1||2||3`then`checked`else``*]
+
+NextTemplateName: color_type
+[*color,if=`0||`then`primary`else``*]
+[*color,if=`1`then`danger`else``*]
+[*color,if=`2`then`success`else``*]

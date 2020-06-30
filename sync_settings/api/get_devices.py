@@ -31,7 +31,7 @@ for value in own['all']:
     if selected == value['id']:
         our_device_selected = True
         break
-if(our_device_selected):
+if (our_device_selected):
     own = db.getUserOwnDevices(user_id=auth.user_id, devid=selected, myself=True, cache=True)
 linked = db.getUserLinkedDevices(auth.user_id, 0, True)
 linksIn = linked['in']['link'].copy()
@@ -141,69 +141,59 @@ if (selected > 0) and replace_default and our_device_selected:
     selLinks = []
     for row in own['all']:
         if row['id'] == selected:
-            obj = {}
-            obj['id'] = row['id']
-            obj['device'] = row['name']
-            obj['sync0'] = row['sync0']
-            obj['sync1'] = row['sync1']
-            obj['sync2'] = row['sync2']
-            obj['sync3'] = row['sync3']
+            obj = {'id': row['id'],
+                   'color': 1,
+                   'device': row['name'],
+                   'sync0': row['sync0'], 'sync1': row['sync1'],
+                   'sync2': row['sync2'], 'sync3': row['sync3']}
             selLinks.append(obj)
             break
 
     for row in linksIn:
-        if (row['src'] == selected):
-            obj = {}
-            obj['id'] = row['src']
-            obj['dst'] = row['dst']
-            obj['device'] = linked['names'][row['dst']]['device']
-            obj['user'] = linked['names'][row['dst']]['user']
-            obj['sync0'] = row['sync0']
-            obj['sync1'] = row['sync1']
-            obj['sync2'] = row['sync2']
-            obj['sync3'] = row['sync3']
+        if row['src'] == selected:
+            obj = {'color': 0,
+                   'id': row['src'],
+                   'dst': row['dst'],
+                   'device': linked['names'][row['dst']]['device'],
+                   'user': linked['names'][row['dst']]['user'],
+                   'sync0': row['sync0'], 'sync1': row['sync1'],
+                   'sync2': row['sync2'], 'sync3': row['sync3']}
             selLinks.append(obj)
 
     for row in linksOut:
-        if (row['src'] == selected):
-            obj = {}
-            obj['id'] = row['src']
-            obj['dst'] = row['dst']
-            obj['device'] = linked['names'][row['dst']]['device']
-            obj['user'] = linked['names'][row['dst']]['user']
-            obj['sync0'] = row['sync0']
-            obj['sync1'] = row['sync1']
-            obj['sync2'] = row['sync2']
-            obj['sync3'] = row['sync3']
+        if row['src'] == selected:
+            obj = {'color': 0,
+                   'id': row['src'],
+                   'dst': row['dst'],
+                   'device': linked['names'][row['dst']]['device'],
+                   'user': linked['names'][row['dst']]['user'],
+                   'sync0': row['sync0'], 'sync1': row['sync1'],
+                   'sync2': row['sync2'], 'sync3': row['sync3']}
             selLinks.append(obj)
     headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': selLinks})
 
 if (selected > 0) and not our_device_selected:
     selLinks = []
     for row in linksIn:
-        if (row['dst'] == selected):
-            if (row['src'] in own['names']):
-                obj = {}
-                obj['id'] = row['src']
-                obj['dst'] = row['dst']
-                obj['device'] = own['names'][row['src']]
-                obj['sync0'] = row['sync0']
-                obj['sync1'] = row['sync1']
-                obj['sync2'] = row['sync2']
-                obj['sync3'] = row['sync3']
+        if row['dst'] == selected:
+            if row['src'] in own['names']:
+                obj = {'id': row['src'],
+                       'color': 2,
+                       'dst': row['dst'],
+                       'device': own['names'][row['src']],
+                       'sync0': row['sync0'], 'sync1': row['sync1'],
+                       'sync2': row['sync2'], 'sync3': row['sync3']}
                 selLinks.append(obj)
 
     for row in linksOut:
-        if (row['dst'] == selected):
-            if (row['src'] in own['names']):
-                obj = {}
-                obj['id'] = row['src']
-                obj['dst'] = row['dst']
-                obj['device'] = own['names'][row['src']]
-                obj['sync0'] = row['sync0']
-                obj['sync1'] = row['sync1']
-                obj['sync2'] = row['sync2']
-                obj['sync3'] = row['sync3']
+        if row['dst'] == selected:
+            if row['src'] in own['names']:
+                obj = {'id': row['src'],
+                       'color': 2,
+                       'dst': row['dst'],
+                       'device': own['names'][row['src']],
+                       'sync0': row['sync0'], 'sync1': row['sync1'],
+                       'sync2': row['sync2'], 'sync3': row['sync3']}
                 selLinks.append(obj)
     headers.goodResponse({'nodes': nodes, 'edges': edges, 'links': selLinks})
 
