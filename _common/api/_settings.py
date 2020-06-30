@@ -37,6 +37,12 @@ enable_gzip = True
 # All mobile and web-users will need to re-login
 server_token_key = 'WASSUP!'
 
+# How many month server will keep information
+# about not active user. If he don't connect from app
+# and don't open login form longer then this count
+# of month. This is not exact time, but this is minimum
+keep_history_month = 12
+
 #
 #
 # ---------------- Don't change code below ----------------

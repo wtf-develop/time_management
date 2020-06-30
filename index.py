@@ -2,6 +2,7 @@
 
 import inspect
 import os
+import random
 import sys
 
 currentdir = os.path.dirname(os.path.abspath(
@@ -10,7 +11,10 @@ sys.path.insert(0, currentdir)
 from _common.api import translation
 from _common.api import headers
 from _common.api import auth
+from _common.api import db
 
+if (random.randint(1, 3000) == 100):
+    db.clearDatabaseGarbage()
 headers.htmlPage(True, "login/index.py")
 
 print("""<!DOCTYPE html>

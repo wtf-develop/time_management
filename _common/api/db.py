@@ -1,6 +1,7 @@
 import random
 import time
 
+from _common.api import _settings
 from _common.api import auth
 from _common.api import headers
 from _common.api import utils
@@ -527,7 +528,7 @@ def sql_request(sql: str):
 def sql_request_ignore_error(sql: str):
     try:
         mydb.execute(sql)
-    except Exception:
+    except Exception as ex:
         pass
 
 
@@ -553,3 +554,73 @@ def duplicateTask(tid: int, devid: int) -> bool:
     for row in rows:
         __setTaskTagId(newtid, row['tagid'])
     return False
+
+
+def clearDatabaseGarbage():
+    date_limit = str(int((time.time() - (_settings.keep_history_month * 31 * 24 * 60 * 60)) * 1000))
+    sql = 'select group_concat(u.id separator ",") as ids  from users as u '\
+          ' left join ('\
+          '     select uid,max(lastconnect) as lastconnect, max(created) as created '\
+          '     from devices group by uid'\
+          '     ) as d on d.uid=u.id '\
+          ' where '\
+          ' ('\
+          '     ('\
+          '     d.lastconnect<' + date_limit +\
+          '     and d.created<' + date_limit +\
+          '     )'\
+          ' or d.uid is NULL'\
+          ' ) '\
+          ' and u.lastlogin<' + date_limit +\
+          ' and u.created<' + date_limit +\
+          ' limit 350'
+    sql_request_ignore_error(sql)
+    row = mydb.fetchone()
+    if (row is not None) and ('ids' in row) and (row['ids'] is not None) and (len(row['ids']) > 0):
+        ids = row['ids']
+        sql = 'delete from users where id in (' + ids + ')'
+        sql_request_ignore_error(sql)
+        sql = 'delete from devices where uid in (' + ids + ')'
+        sql_request_ignore_error(sql)
+
+    sql = 'delete devices '\
+          ' from devices '\
+          ' left join users on users.id=devices.uid '\
+          ' where users.id is Null'
+    sql_request_ignore_error(sql)
+
+    sql = 'delete sync_devices '\
+          ' from sync_devices '\
+          ' left join devices on devices.id=sync_devices.src '\
+          ' where devices.id is Null'
+    sql_request_ignore_error(sql)
+
+    sql = 'delete sync_devices '\
+          ' from sync_devices '\
+          ' left join devices on devices.id=sync_devices.dst '\
+          ' where devices.id is Null'
+    sql_request_ignore_error(sql)
+
+    sql = 'delete sync_tasks '\
+          ' from sync_tasks '\
+          ' left join devices on devices.id=sync_tasks.dst '\
+          ' where devices.id is Null'
+    sql_request_ignore_error(sql)
+
+    sql = 'delete tasks '\
+          ' from tasks '\
+          ' left join devices on devices.id=tasks.devid '\
+          ' where devices.id is Null'
+    sql_request_ignore_error(sql)
+
+    sql = 'delete tasks_tags '\
+          ' from tasks_tags '\
+          ' left join tasks on tasks.id=tasks_tags.taskid '\
+          ' where tasks.id is Null'
+    sql_request_ignore_error(sql)
+
+    sql = 'delete tags '\
+          ' from tags '\
+          ' left join (select tagid from tasks_tags group by tagid) as tagger on tags.id=tagger.tagid '\
+          ' where tagger.tagid is Null'
+    sql_request_ignore_error(sql)
