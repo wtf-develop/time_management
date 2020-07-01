@@ -563,6 +563,19 @@ def duplicateTask(tid: int, devid: int) -> bool:
     return False
 
 
+def getTotalUsersCount() -> int:
+    sql = 'select count(*) as users_count from users'
+    sql_request_ignore_error(sql)
+    row = mydb.fetchone()
+    count = 0
+    if (row is not None) and ('users_count' in row) and (row['users_count'] is not None):
+        try:
+            count = int(row['users_count'])
+        except Exception:
+            count = 0
+    return count
+
+
 def clearDatabaseGarbage():
     date_limit = str(int((time.time() - (_settings.keep_history_month * 31 * 24 * 60 * 60)) * 1000))
     sql = 'select group_concat(u.id separator ",") as ids  from users as u '\

@@ -35,7 +35,7 @@ print("""<!DOCTYPE html>
 </head>
 
 <body>
-<div id="particles-js" style="position: absolute;left:0;top:0;"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1829" height="429"></canvas></div>
+<div id="particles-js" style="position: absolute;left:0;top:0;z-index:-100"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1829" height="429"></canvas></div>
     <div id="content">
     </div>
 
@@ -63,6 +63,7 @@ print("""<!DOCTYPE html>
             if(isGoodResponse(json)){
                 J2H.setTranslationArray(json.data.data);
                 extLang=json.data.code;
+                users_count=json.data.users_count;
                 version=json.server.version;
                 storeLang(extLang);
                 J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
@@ -75,8 +76,9 @@ print("""<!DOCTYPE html>
 
     var extLang='en';
     var version='';
+    var users_count=0;
     function buildWebUI() { //create all elements inside page (Structure of page)
-        $("#content").html(J2H.process("page",{code:extLang,version:version}));
+        $("#content").html(J2H.process("page",{code:extLang,version:version,users:users_count}));
         feather.replace();        
         $("#content").fadeIn(150);
     }

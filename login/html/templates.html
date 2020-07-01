@@ -45,6 +45,7 @@ NextTemplateName: page
                                 id="inlineLanguageSelect">
                             <option value="en" [*code,if=`en`then`selected`else``*]>English</option>
                             <option value="ru" [*code,if=`ru`then`selected`else``*]>Русский</option>
+                            <option value="uk" [*code,if=`uk`then`selected`else``*]>Український</option>
                             <option value="de" [*code,if=`de`then`selected`else``*]>Deutsch</option>
                         </select>
                     </div>
@@ -71,4 +72,5 @@ NextTemplateName: page
             </table>
         </div>
     </div>
+    <span class="text-secondary" style="position:absolute; bottom:10px;opacity:0.5;"><small>@str.registered_users [*users*]</small></span>
 </div>
