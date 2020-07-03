@@ -576,6 +576,32 @@ def getTotalUsersCount() -> int:
     return count
 
 
+# >0 - exact id
+# ==0 - new task
+# <0 must be removed
+def checkOneTaskRestoreAccessPermission(global_id: str, uid: int) -> int:
+    sql = 'select t.id,d.uid from tasks as t'\
+          ' left join devices as d on d.id=t.devid and d.uid=' + str(uid) +\
+          ' where t.globalid="' + global_id + '"'
+    sql_request(sql)
+    row = mydb.fetchone()
+    if (row is None):
+        return 0
+
+    if 'uid' not in row:
+        return -1
+    if row['uid'] is None:
+        return -1
+    if int(row['uid']) != uid:
+        return -1
+
+    if 'id' not in row:
+        return 0
+    if row['id'] is None:
+        return 0
+    return int(row['id'])
+
+
 def clearDatabaseGarbage():
     date_limit = str(int((time.time() - (_settings.keep_history_month * 31 * 24 * 60 * 60)) * 1000))
     sql = 'select group_concat(u.id separator ",") as ids  from users as u '\

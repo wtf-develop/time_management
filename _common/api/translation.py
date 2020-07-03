@@ -303,7 +303,7 @@ lang = {
         'sharing_complete': 'Ausgewählte Aufgaben sind jetzt auf diesen Geräten verfügbar',
         'timers': 'Timer',
         'dates': 'Datum',
-        'notes': 'Notiz',
+        'notes': 'Notizen',
         'geo': 'Standorte',
         'links': 'Teilen',
         'remove': 'Entfernen',

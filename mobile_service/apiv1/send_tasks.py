@@ -42,8 +42,8 @@ if len(tasks) > 0:
     for task in tasks:
         if ('globalid' in task) and (not (task['globalid'] is None)) and len(task['globalid']) > 5:
             if not (task['globalid'] in set_ids):  # check that its not exists in access area
-                task['id'] = db.getIdFromGlobal(task['globalid'])
-                if task['id'] > 0:  # check that this id exists in DB
+                task['id'] = db.checkOneTaskRestoreAccessPermission(task['globalid'], auth.user_id)
+                if task['id'] < 0:  # check that this id exists in DB and its not your own task
                     remove_ids.append(task['globalid'])  # if so - remove this from mobile
                     remove_objects.append(task)  # and remove from tasks
 
