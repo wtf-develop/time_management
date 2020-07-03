@@ -21,7 +21,7 @@ lang = {
         'not_found': 'Not found',
         'logout': 'LogOut',
         'search': 'Search',
-        'video_link': 'https://youtu.be/J_iGJ9E2TtU',
+        'video_link': 'https://youtu.be/UxVq5HxkFCQ',
         'information': 'Information',
         'settings': 'Settings',
         'device_sync': 'Your devices',
@@ -319,7 +319,7 @@ lang = {
 
 def get_array(lang_code: str):  # for injecting into HTML pages
     if lang is None:
-        return json.dumps(lang['en'])
+        return json.dumps({})
     if lang_code == 'en':
         return json.dumps(lang['en'])
     if (not (lang_code in lang)) or (lang[lang_code] is None):
