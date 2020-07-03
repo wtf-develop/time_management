@@ -249,6 +249,7 @@ lang = {
         'not_found': 'Nicht gefunden',
         'logout': 'Ausloggen',
         'search': 'Suche',
+        'video_link': 'https://youtu.be/nkx5uzt0nBk',
         'information': 'Information',
         'settings': 'Einstellungen',
         'device_sync': 'Ihre Geräte',
