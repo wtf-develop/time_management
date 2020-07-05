@@ -46,7 +46,8 @@ if len(tasks) > 0:
                 if task['id'] < 0:  # check that this id exists in DB and its not your own task
                     remove_ids.append(task['globalid'])  # if so - remove this from mobile
                     remove_objects.append(task)  # and remove from tasks
-
+            else: # if global id exists in yoyr area and active = state=20
+                pass
     for toremove in remove_objects:
         tasks.remove(toremove)
 

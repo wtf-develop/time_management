@@ -207,6 +207,7 @@ if (debug):
     # if run from console or start from debuger< there is no User-Agent
     load_debug_config = (len(req_agent) == 0)
     if load_debug_config:
+        enable_gzip = False
         dfile = open(logs_path + prefix + '_debug_headers_dump.json', "r")
         req_headers = json.load(dfile)
         req_ip = req_headers['req_ip']

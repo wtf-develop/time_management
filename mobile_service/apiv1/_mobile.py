@@ -7,14 +7,16 @@ from _common.api._settings import mydb
 
 # SQL query MUST be optimized - later
 # extendType = 0 - only array of current ids in ['info']['ids']
-# extendType = 1 - current records directly from database in ['db'] field Only DATABASE
+# extendType = 1 - with completed tasks!!!!! current records directly from database in ['db'] field Only DATABASE
 # extendType = 2 - array of current ids, serials, updates - ['val']['ids','serials','updates']
 def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int = 0) -> dict:
     sql_tasks_permission_string = db.buildSqlPermissionfilter(user_id=user_id, devid=devid, cache=False)
     cross = utils.clearGlobalIds(cross)
     add_fields = ''  # when extendType==0
     add_condition = ''
-    if extendType == 1:
+    state_filter = ' t.state=20 '
+    if extendType == 1:  # get exact tasks from database
+        state_filter = ' true '
         add_fields = " GROUP_CONCAT(tgs.name SEPARATOR ',') as tags,t.*,"
         add_condition = '''
         left join tasks_tags as tt on tt.taskid=t.id 
@@ -28,7 +30,7 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
     sql = '''
     select ''' + add_fields + ''' t.globalid as fval, t.update_time as ftime, t.`serial` as fserial from tasks as t 
     ''' + add_condition + '''    
-    where t.state=20 ''' + cross + ''' and
+    where ''' + state_filter + cross + ''' and
     (
     ''' + sql_tasks_permission_string + '''
     )
