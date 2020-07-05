@@ -49,9 +49,12 @@ def jsonAPI(check_auth: bool = True):
         sys.stdout.flush()
         if check_auth:
             if auth.access_levels == 0:
+                mess = 'Please open login page'
+                if auth.isMobile:
+                    mess = 'Click REGISTER again'
                 sys.stdout.buffer.write(__compress_string(
                         '{"error":{"state":true,"code":401,"title":"Login session failed",' +
-                        '"message":"Please open login page"}}'))
+                        '"message":"' + mess + '"}}'))
                 sys.exit()
     else:
         print("Content-type: application/json;charset=utf-8")
@@ -65,9 +68,12 @@ def jsonAPI(check_auth: bool = True):
         print("")
         if check_auth:
             if auth.access_levels == 0:
+                mess = 'Please open login page'
+                if auth.isMobile:
+                    mess = 'Click REGISTER again'
                 print(
                         '{"error":{"state":true,"code":401,"title":"Login session failed",' +
-                        '"message":"Please open login page"}}')
+                        '"message":"' + mess + '"}}')
                 sys.exit()
 
 
