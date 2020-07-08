@@ -11,10 +11,7 @@ currentdir = os.path.dirname(os.path.abspath(
         inspect.getfile(inspect.currentframe())))
 sys.path.insert(0, os.path.dirname(os.path.dirname(currentdir)))
 
-from _common.api._settings import debug
-from _common.api._settings import logs_path
-from _common.api._settings import mydb
-from _common.api._settings import server_token_key
+from _common.api import _settings
 from _common.api import db
 from _common.api import utils
 
@@ -52,7 +49,7 @@ def buildCredentials(uid: int, login: str, passwd: str, remember: int, some_stat
         timestamp = int(time.time()) + 30 * 60
     hashstr = hashlib.md5(
             (str(timestamp) + str(some_state) + login + str(remember) + str(
-                    uid) + passwd + server_token_key + req_agent + req_scheme + req_language).encode(
+                    uid) + passwd + _settings.server_token_key + req_agent + req_scheme + req_language).encode(
                     'utf-8')).hexdigest().lower()
     return str(timestamp) + '_' + str(remember) + '_' + str(uid) + '_' + str(some_state) + '_' + hashstr
 
@@ -116,9 +113,9 @@ def checkCredentials(arr: list):
     myhash = arr[4]
     # TODO SQL request to database for login and password with selected uid
     if uid > 0:
-        mydb.execute('select id,login,password,role from users where id=' +
-                     str(uid) + ' and state>0')
-        row = mydb.fetchone()
+        _settings.mydb.execute('select id,login,password,role from users where id=' +
+                               str(uid) + ' and state>0')
+        row = _settings.mydb.fetchone()
         if row is None:
             return __resetAuth()
         else:
@@ -133,7 +130,7 @@ def checkCredentials(arr: list):
 
     hash2 = hashlib.md5(
             (str(timestamp) + str(some_state) + login + str(remember) + str(
-                    uid) + passwd + server_token_key + req_agent + req_scheme + req_language).encode(
+                    uid) + passwd + _settings.server_token_key + req_agent + req_scheme + req_language).encode(
                     'utf-8')).hexdigest().lower()
     if myhash != hash2:
         return __resetAuth()
@@ -146,9 +143,10 @@ def checkCredentials(arr: list):
         user_some_state = some_state
         return True
     else:  # if mobile need to check device id in database
-        mydb.execute('select id,sync0,sync1,sync2,sync3 from devices where id=' + str(some_state) + ' and uid=' +
-                     str(uid) + ' and state>0')
-        dev = mydb.fetchone()
+        _settings.mydb.execute(
+            'select id,sync0,sync1,sync2,sync3 from devices where id=' + str(some_state) + ' and uid=' +
+            str(uid) + ' and state>0')
+        dev = _settings.mydb.fetchone()
         if row is None:
             return __resetAuth()
         else:
@@ -201,14 +199,14 @@ else:
 # --- debug part start ---
 # --- debug part start ---
 load_debug_config = False
-if (debug):
+if (_settings.debug):
     prefix = sys.modules['__main__'].__file__.replace('\\', '/').split('/')
     prefix = prefix[len(prefix) - 1].split('.')[0]
     # if run from console or start from debuger< there is no User-Agent
     load_debug_config = (len(req_agent) == 0)
     if load_debug_config:
-        enable_gzip = False
-        dfile = open(logs_path + prefix + '_debug_headers_dump.json', "r")
+        _settings.enable_gzip = False
+        dfile = open(_settings.logs_path + prefix + '_debug_headers_dump.json', "r")
         req_headers = json.load(dfile)
         req_ip = req_headers['req_ip']
         req_method = req_headers['req_method']
@@ -219,7 +217,7 @@ if (debug):
         isMobile = req_headers['isMobile']
         dfile.close()
     else:
-        dfile = open(logs_path + prefix + '_debug_headers_dump.json', "w")
+        dfile = open(_settings.logs_path + prefix + '_debug_headers_dump.json', "w")
         dfile.write(json.dumps(
                 {'req_ip': req_ip, 'req_method': req_method, 'req_agent': req_agent, 'req_language': req_language,
                  'req_scheme': req_scheme, 'req_query': req_query, 'isMobile': isMobile}))
@@ -238,7 +236,7 @@ _POST = None
 # --- debug part start ---
 # --- debug part start ---
 # --- debug part start ---
-if (debug and load_debug_config):
+if (_settings.debug and load_debug_config):
     pass
 # --- debug part ends ---
 # --- debug part ends ---
@@ -255,18 +253,18 @@ else:
 # --- debug part start ---
 # --- debug part start ---
 # --- debug part start ---
-if (debug):
+if (_settings.debug):
     prefix = sys.modules['__main__'].__file__.replace('\\', '/').split('/')
     prefix = prefix[len(prefix) - 1].split('.')[0]
     if load_debug_config:
-        dfile = open(logs_path + prefix + '_debug_post_dump.json', "r")
+        dfile = open(_settings.logs_path + prefix + '_debug_post_dump.json', "r")
         try:
             _POST = json.load(dfile)
         except Exception:
             _POST = None
         dfile.close()
     else:
-        dfile = open(logs_path + prefix + '_debug_post_dump.json', "w")
+        dfile = open(_settings.logs_path + prefix + '_debug_post_dump.json', "w")
         if (_POST is None):
             dfile.write('')
         else:
@@ -308,18 +306,18 @@ if not (isMobile):
 # --- debug part start ---
 # --- debug part start ---
 # --- debug part start ---
-if (debug):
+if (_settings.debug):
     prefix = sys.modules['__main__'].__file__.replace('\\', '/').split('/')
     prefix = prefix[len(prefix) - 1].split('.')[0]
     if load_debug_config:
-        dfile = open(logs_path + prefix + '_debug_extra_dump.json', "r")
+        dfile = open(_settings.logs_path + prefix + '_debug_extra_dump.json', "r")
         extra = json.load(dfile)
         user_indx = extra['user_indx']
         user_lang = extra['user_lang']
         credentials = extra['credentials']
         dfile.close()
     else:
-        dfile = open(logs_path + prefix + '_debug_extra_dump.json', "w")
+        dfile = open(_settings.logs_path + prefix + '_debug_extra_dump.json', "w")
         dfile.write(json.dumps({'user_indx': user_indx, 'user_lang': user_lang, 'credentials': credentials}))
         dfile.close()
 # --- debug part ends ---
@@ -357,15 +355,15 @@ else:
         access_levels = 1
         timestamp_string = str(int(time.time() * 1000))
         if isMobile:
-            mydb.execute('update devices set ' +
-                         db.__build_update({'lastconnect': timestamp_string,
-                                            'last_ip': utils.clearIp(req_ip)}) +
-                         ' where uid=' + str(user_id) + ' and id=' + str(user_some_state))
+            _settings.mydb.execute('update devices set ' +
+                                   db.__build_update({'lastconnect': timestamp_string,
+                                                      'last_ip': utils.clearIp(req_ip)}) +
+                                   ' where uid=' + str(user_id) + ' and id=' + str(user_some_state))
         else:
-            mydb.execute('update users set ' +
-                         db.__build_update({'lastlogin': timestamp_string,
-                                            'last_ip': utils.clearIp(req_ip)}) +
-                         ' where id=' + str(user_id))
+            _settings.mydb.execute('update users set ' +
+                                   db.__build_update({'lastlogin': timestamp_string,
+                                                      'last_ip': utils.clearIp(req_ip)}) +
+                                   ' where id=' + str(user_id))
     else:
         access_levels = 0
         credentials = buildCredentials(0, '', '', 0, 0)
