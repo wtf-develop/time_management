@@ -65,8 +65,8 @@ def saveTask(data: dict) -> int:
                         data[key] = str(value)
                     except Exception:
                         return -3
-
-    if (data['devid'] < 1):
+    data['title'] = data['title'][:350]
+    if data['devid'] < 1:
         return -4
 
     if data['type'] == 0:  # timer
