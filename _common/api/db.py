@@ -603,7 +603,7 @@ def checkOneTaskRestoreAccessPermission(global_id: str, uid: int) -> int:
 
 
 def clearDatabaseGarbage():
-    date_limit = str(int((time.time() - (_settings.keep_history_month * 31 * 24 * 60 * 60)) * 1000))
+    date_limit = str(int((time.time() - (_settings.keep_user_data_month * 31 * 24 * 60 * 60)) * 1000))
     sql = 'select group_concat(u.id separator ",") as ids  from users as u '\
           ' left join ('\
           '     select uid,max(lastconnect) as lastconnect, max(created) as created '\

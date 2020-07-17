@@ -10,6 +10,7 @@ mydb_connection = pymysql.connect(
         passwd=""
 )
 
+# ATTENTION ! ACHTUNG ! ВНИМАНИЕ !
 # Must be ALWAYS "False" on real server
 # For developers only to special debug
 # last request that was send to some api
@@ -40,8 +41,9 @@ server_token_key = 'WASSUP!'
 # How many month server will keep information
 # about not active user. If he don't connect from app
 # and don't open login form longer then this count
-# of month. This is not exact time, but this is minimum
-keep_history_month = 12
+# of month all information about user will be removed.
+# This is not exact time, but this is minimum
+keep_user_data_month = 12
 
 #
 #

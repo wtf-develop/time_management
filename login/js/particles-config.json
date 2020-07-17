@@ -1,7 +1,7 @@
 {
   "particles": {
     "number": {
-      "value": 35,
+      "value": 20,
       "density": {
         "enable": true,
         "value_area": 236.74802907265777
@@ -49,9 +49,9 @@
     },
     "move": {
       "enable": true,
-      "speed": 1,
+      "speed": 1.2,
       "direction": "none",
-      "random": false,
+      "random": true,
       "straight": false,
       "out_mode": "bounce",
       "bounce": true,
@@ -87,7 +87,7 @@
         "size": 3,
         "duration": 1.8380443208426227,
         "opacity": 0.43953233759280114,
-        "speed": 3
+        "speed": 2
       },
       "repulse": {
         "distance": 39.95748523570919,

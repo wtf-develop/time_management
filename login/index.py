@@ -35,7 +35,9 @@ print("""<!DOCTYPE html>
 </head>
 
 <body>
-<div id="particles-js" style="position: absolute;left:0;top:0;z-index:-100"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1829" height="429"></canvas></div>
+    <div id="particles-js" style="position: absolute;left:0;top:0;">
+        <canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1829" height="429"></canvas>
+    </div>
     <div id="content">
     </div>
 
