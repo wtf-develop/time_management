@@ -69,8 +69,10 @@ if len(in_arr) > 0:
 if len(your_arr) > 0:
     req_filter = ",".join(list(your_arr))
     sql_request(
-            "update tasks set devid=" + str(auth.user_some_state) + " where devid in (" + req_filter + ") and devid in (select id from devices where uid=" + str(auth.user_id) + ")")
+            "update tasks set devid=" + str(
+                auth.user_some_state) + " where devid in (" + req_filter + ") and devid in (select id from devices where uid=" + str(
+                auth.user_id) + ")")
     sql_request(
-            "delete from devices where id in (" + req_filter + ") and id in (select id from devices where uid=" + str(auth.user_id) + ")")
+            "delete from devices where id in (" + req_filter + ") and uid=" + str(auth.user_id))
 
-headers.goodResponse({'status': True},translation.getValue('device_link_removed'))
+headers.goodResponse({'status': True}, translation.getValue('device_link_removed'))
