@@ -5,6 +5,8 @@ OpenSource self-hosted personal time management system. Server source code was c
 [Current link https://wtf-dev.ru/sync/](https://wtf-dev.ru/sync/)
 But you can install this sources in any other place.
 
+[>> PayPal Donate <<](https://paypal.me/LeonidDonate)
+
 # Installation
 
 1) Setup server environment (look "Server requirements")
