@@ -81,7 +81,7 @@ body {
 #formFooter a.underlineHoverRed {
   color: #d66;
   display:inline-block;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: 600;
 }
 
