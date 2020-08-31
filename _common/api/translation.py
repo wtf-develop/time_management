@@ -84,6 +84,8 @@ lang = {
         'editor': 'Editor',
         'duplicate_complete': 'Selected tasks are copied to this devices\nYou can remove this tasks on your side',
         'registered_users': 'Users:',
+        'invest': 'Investor?',
+        'invest_link': 'http://wtf-dev.ru/investors_en.html',
 
     },
     'ru': {
@@ -160,6 +162,8 @@ lang = {
         'editor': 'Редактор',
         'duplicate_complete': 'Задачи были скопированы на устройства\nУ себя вы их теперь можете удалить',
         'registered_users': 'Пользователей:',
+        'invest': 'Инвестор?',
+        'invest_link': 'http://wtf-dev.ru/investors_ru.html',
 
     },
 
