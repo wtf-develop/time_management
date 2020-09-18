@@ -2,10 +2,10 @@
 
 OpenSource self-hosted personal time management system. Server source code was created for [this Reminder application](https://play.google.com/store/apps/details?id=ru.mcsar.schedule) from GooglePlay
 
-[Current link https://wtf-dev.ru/sync/](https://wtf-dev.ru/sync/)
+Official working instance: [https://wtf-dev.ru/sync/](https://wtf-dev.ru/sync/)
 But you can install this sources in any other place.
 
-[>> PayPal Donate <<](https://paypal.me/LeonidDonate)
+Donate: [>> PayPal <<](https://paypal.me/LeonidDonate)
 
 # Installation
 
