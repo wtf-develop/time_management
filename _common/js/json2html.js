@@ -12,24 +12,29 @@
 if ((J2H === undefined) || (Json2Html === undefined)) {
     var J2H = (function($) {
         "use strict";
-        var DEBUG = false;
-        var translate_prefix = '@str.';
+        let DEBUG = false;
+        const translate_prefix = '@str.';
 
         // Recommended to keep current values of j_var, j_loop and j_templ.
         // But if you want, you can change it. Then test everything again.
         // 2 simbols for open tag and 2 simbols for closing tag.
-        var j_var = ['[*', '*]']; // 2 simbols for each not more, not less
-        var j_loop = ['[!', '!]']; // 2 simbols for each not more, not less
-        var j_templ = ['{{', '}}']; // 2 simbols for each not more, not less
+        const j_var = ['[*', '*]']; // 2 simbols for each not more, not less
+        const j_loop = ['[!', '!]']; // 2 simbols for each not more, not less
+        const j_templ = ['{{', '}}']; // 2 simbols for each not more, not less
 
 
         /**
         // [!template,array,if=`(expression)`!] - content filter
-        // example like JavaScript boolen expression.
-        // [!template_name,"jsonArray",if=`((in_array(test.arr;;"777"))&&(test.data=="555")||(test.data>>"444"))&&(test.subj!="fff")`!]
-        // can use: == , != ,() , || , &&, in_array
-        // more: >>
-        // less: <<
+        // expression: JavaScript boolen expression. + can be used: in_array(arr,value)
+        // - TRUE item will be processed
+        // - FALSE item will be ignored
+        // - use prefix "obj." to access item properties
+        // - Javascript expression will run in eval() function if there is something
+        // - was undefined - result will be FALSE
+        // - use this fix UNDEFINED problem:
+             (("prop" in obj) ? obj.prop : "default")
+
+        // - or be sure than this field always exists in response from server
         */
 
         /**
@@ -48,9 +53,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         }
 
 
-
-
-        var error_parcer = '';
+        let error_parcer = '';
 
         function get_from_data(temp_data, name_var) {
             if (name_var === undefined) {
@@ -60,8 +63,8 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 console.log('Json2Html: CRITICAL error. Varialble name is undefined. Check your loop templates');
                 return '';
             }
-            var i = 0;
-            var name_vars = name_var.split('.');
+            let i = 0;
+            let name_vars = name_var.split('.');
             for (i = 0; i < name_vars.length; i++) {
                 name_vars[i] = removeSq(my_trim(name_vars[i]));
                 if (name_vars[i] == 'this') {
@@ -117,73 +120,35 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
             return ((num >> bit) % 2 != 0)
         }
 
-        var level_parce = 0; //stack overflow protection
+        let level_parce = 0; //stack overflow protection
         //function change HTML code with templates to HTML code with data.
         function process(name, data) {
             //check stack overflow
             ///********************** loop part ***************************
-            var global_filter = '';
-            var templates = shadow_templates_object;
+            let global_filter = '';
+            let templates = shadow_templates_object;
 
             function set_filter(f) {
                 global_filter = f;
                 global_filter = str_replace('if=`', '', global_filter);
                 global_filter = str_replace('`', '', global_filter);
                 global_filter = my_trim(global_filter);
-                if (global_filter == '') {
+                if (global_filter.length < 1) {
                     return false;
                 };
-                var temp = global_filter;
-                temp = str_replace('&&', '~~', temp);
-                temp = str_replace('||', '~~', temp);
-                temp = str_replace(';;', '~~', temp);
-                temp = str_replace('==', '~~', temp);
-                temp = str_replace('!=', '~~', temp);
-                temp = str_replace('in_array', '~~', temp);
-                temp = str_replace('<<', '~~', temp);
-                temp = str_replace('>>', '~~', temp);
-                temp = str_replace('(', '~~', temp);
-                temp = str_replace(')', '~~', temp);
-                while (temp.indexOf('~~~') != -1) {
-                    temp = str_replace('~~~', '~~', temp);
-                }
-                temp = temp.split('~~');
-                var c = temp.length;
-                var i = 0;
-                var str = '';
-                var tt = true;
-                var start = 0;
-                for (i = 0; i < c; i++) {
-                    temp[i] = my_trim(temp[i]);
-                    if (temp[i] == '') {
-                        continue;
-                    };
-                    if (tt) {
-                        str = 'data["' + str_replace('.', '"]["', temp[i]) + '"]';
-                        global_filter = str_replace_first(temp[i], str, global_filter, start);
-                        start = global_filter.indexOf(str, start) + str.length - 2;
-                    }; //if tt
-                    tt = !tt;
-                }; //for
-                global_filter = str_replace('>>', '>', global_filter);
-                global_filter = str_replace('<<', '<', global_filter);
-                global_filter = str_replace(';;', ',', global_filter);
-                return false;
+                return true;
             }
 
-            function check_filter(data) {
-                if (global_filter == '') {
+            function check_filter(obj) {
+                if (global_filter.length < 1) {
                     return true;
                 };
-                var ret = false;
                 try {
-                    ret = eval('(' + global_filter + ')');
+                    return Boolean(eval('(' + global_filter + ')'));
                 } catch (e) {
                     debug_log('debug error in filter!' + "\n" + global_filter + "\n" + e.name);
-                    ret = false;
                 };
-
-                return ret;
+                return false;
             }
             //*********************** loop end ****************************
 
@@ -191,10 +156,10 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
 
             name = removeSq(name)
-            var limits = -1;
-            var defaults = '';
-            var page = 0;
-            var variable = '';
+            let limits = -1;
+            let defaults = '';
+            let page = 0;
+            let variable = '';
             if (DEBUG && (level_parce == 0)) {
                 error_parcer = '';
             }
@@ -207,16 +172,16 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 return '';
             };
             level_parce++;
-            var str = templates[name];
-            var ind_s = 0;
-            var ind_e = 0;
-            var name_template, crop, then_v, else_v, name_var, name_var2, name_vars, temp, i, temp_template, temp_str, temp_data;
+            let str = templates[name];
+            let ind_s = 0;
+            let ind_e = 0;
+            let name_template, crop, then_v, else_v, name_var, name_var2, name_vars, temp, i, temp_template, temp_str, temp_data;
             crop = -1;
-            var replace = -1;
-            var replaceFrom = '';
-            var replaceTo = '';
-            var hash = -1;
-            var if_type = -1;
+            let replace = -1;
+            let replaceFrom = '';
+            let replaceTo = '';
+            let hash = -1;
+            let if_type = -1;
 
             ///parse JSON data variables
             ///parse JSON data variables
@@ -353,12 +318,12 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                     } else if (crop > 0) {
                         if (temp.length > crop) temp = temp.substr(0, crop) + "...";
                     } else if ((if_type == 1 || if_type == 2) && variable[1] !== undefined) {
-                        var checkWithThis = variable[1].toString().toUpperCase();
-                        var eqWithThis = false;
+                        let checkWithThis = variable[1].toString().toUpperCase();
+                        let eqWithThis = false;
                         if (checkWithThis.indexOf('||') != -1) {
 
-                            var checkArr = checkWithThis.split('||');
-                            var checkFor = 0;
+                            let checkArr = checkWithThis.split('||');
+                            let checkFor = 0;
                             for (checkFor = 0; checkFor < checkArr.length; checkFor++) {
                                 if (eqWithThis) continue;
                                 eqWithThis = temp.toString().toUpperCase() == (checkArr[checkFor]);
@@ -391,16 +356,16 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                             };
                         }
                     } else if ((if_type == 3) && variable[1] !== undefined) { // check bits
-                        var checkWithThis = variable[1].toString();
-                        var checkFor = 0;
-                        var eqWithThis = true;
-                        var testbit = parseInt(temp);
+                        let checkWithThis = variable[1].toString();
+                        let checkFor = 0;
+                        let eqWithThis = true;
+                        let testbit = parseInt(temp);
                         if (isNaN(testbit)) {
                             eqWithThis = false;
                         } else {
                             for (checkFor = 0; checkFor < checkWithThis.length; checkFor++) {
                                 if (!eqWithThis) continue;
-                                var ch = checkWithThis.charAt(checkFor);
+                                let ch = checkWithThis.charAt(checkFor);
                                 if (ch != '1' && ch != '0') continue;
                                 if (bit_test(testbit, checkFor)) {
                                     if (ch == '0') {
@@ -450,7 +415,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
             ///parse JSON arrays
             ind_s = 0;
             ind_e = 0;
-            var filter = '';
+            let filter = '';
             while (str.indexOf(j_loop[0], ind_s) != -1) {
                 crop = -1;
                 limits = -1;
@@ -465,8 +430,8 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                     temp_template = name_template.split(',');
                     temp_str = '';
 
-                    var ttt = 2;
-                    var pars_new = '';
+                    let ttt = 2;
+                    let pars_new = '';
                     for (ttt = 2; ttt < temp_template.length; ttt++) {
                         pars_new = temp_template[ttt];
                         if (pars_new.indexOf('if=`') != -1) {
@@ -486,9 +451,9 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                     temp_data = data;
                     name_var = temp_template[1];
                     temp_data = get_from_data(data, removeSq(name_var));
-                    var k = 0;
-                    var ccc = temp_data.length - 1;
-                    var pagindex = 0;
+                    let k = 0;
+                    let ccc = temp_data.length - 1;
+                    let pagindex = 0;
                     if (ccc < 0) {
                         temp_str = temp_str + defaults + '';
                         debug_log('No data in this array! ' + name_var);
@@ -496,21 +461,22 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
 
 
-                    var key = 0;
-                    var elements_arr_length = temp_data.length;
-                    var total_elem_arr = elements_arr_length;
+                    let key = 0;
+                    let elements_arr_length = temp_data.length;
+                    let total_elem_arr = elements_arr_length;
                     for (key in temp_data) {
                         elements_arr_length--;
                         //filter
                         if ((limits > 0) && (k >= limits)) {
                             break;
                         };
+
                         if (!check_filter(temp_data[key])) {
                             continue;
                         };
                         //filter_end
 
-                        if ((temp_data[key] instanceof Object)) {
+                        if ((typeof temp_data[key] == "object")) {
                             temp_data[key]['j2h_counter'] = k + '';
                             temp_data[key]['j2h_key'] = key + '';
                             //k=parseInt(k);
@@ -534,6 +500,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         k++;
                     }
 
+
                     str = str_replace(j_loop[0] + name_template + j_loop[1], temp_str, str);
 
                 } else {
@@ -552,13 +519,13 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 if_type = -1;
                 ind_s = str.indexOf(j_templ[0], ind_s);
                 ind_e = str.indexOf(j_templ[1], ind_s + j_templ[0].length);
-                var curData = data;
+                let curData = data;
                 if ((ind_e != -1) && ((ind_e - ind_s) < 95) && ((ind_e - ind_s) > 0)) {
                     name_template = str.substr(ind_s + j_templ[0].length, ind_e - (ind_s + j_templ[0].length));
-                    var name_template_all = name_template;
+                    let name_template_all = name_template;
                     if (name_template.includes(',')) {
                         name_template = name_template.split(',', 2);
-                        var dataindex = name_template[1];
+                        let dataindex = name_template[1];
                         name_template = name_template[0];
                         curData = get_from_data(curData, dataindex);
                     }
@@ -594,11 +561,11 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
         //special function for filter
         function str_replace_first(search, replace, osubject, start) {
-            var i = osubject.indexOf(search, start);
+            let i = osubject.indexOf(search, start);
             if (i == -1) {
                 return osubject;
             };
-            var temp = [
+            let temp = [
                 osubject.substr(0, i),
                 osubject.substr(i + search.length, osubject.length - (i + search.length))
             ]
@@ -610,10 +577,8 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
             if (str === undefined || str === null) {
                 return '';
             };
-            if(str.length<1)return '';
-            str=str.replace(/^\s+/g, '')
-            if(str.length<1)return '';
-            str=str.replace(/\s+$/g, '')
+            if (str.length < 1) return '';
+            str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
             return str
         }
 
@@ -636,13 +601,13 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
         //for debug
         function printObject(arr, level = 1) {
-            var print_red_text = "";
+            let print_red_text = "";
             if (!level) level = 0;
-            var level_padding = "";
+            let level_padding = "";
             for (var j = 0; j < level + 1; j++) level_padding += "    ";
             if (typeof(arr) == 'object') {
                 for (var item in arr) {
-                    var value = arr[item];
+                    let value = arr[item];
                     if (typeof(value) == 'object') {
                         print_red_text += level_padding + "'" + item + "' :\n";
                         print_red_text += printObject(value, level + 1);
@@ -654,7 +619,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         };
 
         function getJSON(url, mycallback_func) {
-            var mycallback = mycallback_func;
+            let mycallback = mycallback_func;
             $.getJSON({
                 url: url,
                 type: 'GET',
@@ -674,11 +639,11 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
 
         function postJSON(url, data, mycallback_func) {
-            var mycallback = mycallback_func;
+            let mycallback = mycallback_func;
             /*var wrapperdata = {
                 'postedData': data
             };*/
-            var wrapperdata = data;
+            let wrapperdata = data;
             $.post({
                 url: url,
                 data: JSON.stringify(wrapperdata),
@@ -698,7 +663,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
         }
 
-        var all_templates_loaded = 0;
+        let all_templates_loaded = 0;
 
         function lockTemplateCallback() {
             all_templates_loaded++;
@@ -741,7 +706,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 return;
             }
             all_templates_loaded++; //increace template requests counter
-            var myParam = url.substring(url.lastIndexOf('/') + 1);
+            let myParam = url.substring(url.lastIndexOf('/') + 1);
             myParam = my_trim(myParam.substring(0, myParam.lastIndexOf('.')));
             $.get({
                 processData: false,
@@ -749,12 +714,12 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 success: function(data) {
                     if (data.match(/^ *?NextTemplateName: *?\S{1,100} *?$/m)) {
                         debug_log('File with templates detected: ' + myParam)
-                        var temlArr = data.split('NextTemplateName:');
-                        var i = 0;
+                        let temlArr = data.split('NextTemplateName:');
+                        let i = 0;
                         for (i = 0; i < temlArr.length; i++) {
-                            var nIndex = temlArr[i].indexOf('\n');
-                            var tParam = '';
-                            var tData = '';
+                            let nIndex = temlArr[i].indexOf('\n');
+                            let tParam = '';
+                            let tData = '';
                             if (i > 0) {
                                 if (nIndex < 0 || nIndex > 100) {
                                     debug_log('Strange template loaded from file ' + myParam + '. All templates should be starter with line "NextTemplateName: name_of_template"');
@@ -772,7 +737,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                                 tParam = myParam;
                             }
                             /*var tParam = my_trim(temlArr[i].substring(0, nIndex));
-                            var tData = my_trim(temlArr[i].substring(nIndex + 1));*/
+let tData = my_trim(temlArr[i].substring(nIndex + 1));*/
                             if (tData.length == 0) {
                                 debug_log('thete is nothing in one of the content ' + i);
                                 continue;
@@ -804,13 +769,13 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         function serializeHtmlForm(formObj) {
 
             function updatejsonformat(obj, o) {
-                var n = o.name,
+                let n = o.name,
                     v = o.value;
                 if ((/\[.*?\]/).test(n)) {
-                    var firstN = n.split('[')[0];
-                    var indexes = n.match(/\[.*?\]/g);
-                    var c = indexes.length;
-                    var numerisArraFinal = n.includes('[]');
+                    let firstN = n.split('[')[0];
+                    let indexes = n.match(/\[.*?\]/g);
+                    let c = indexes.length;
+                    let numerisArraFinal = n.includes('[]');
                     if (obj[firstN] === undefined) {
                         if (c == 1 && numerisArraFinal) {
                             obj[firstN] = new Array();
@@ -819,11 +784,11 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                         }
                     }
 
-                    var i = 0;
+                    let i = 0;
 
-                    var curObj = obj[firstN];
+                    let curObj = obj[firstN];
                     for (i = 0; i < c; i++) {
-                        var index = str_replace('[', '', str_replace(']', '', indexes[i]));
+                        let index = str_replace('[', '', str_replace(']', '', indexes[i]));
                         if (i == c - 1) {
                             if (index == '') {
                                 if ($.isArray(curObj)) {
@@ -848,9 +813,9 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 }
             }
 
-            var object = {},
+            let object = {},
                 names = {};
-            var sarray = formObj.serializeArray();
+            let sarray = formObj.serializeArray();
             $.each(sarray, function(index, o) {
                 updatejsonformat(object, o);
             });
@@ -892,8 +857,8 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         }
 
 
-        var templates_callback_function = 0;
-        var shadow_templates_object = {};
+        let templates_callback_function = 0;
+        let shadow_templates_object = {};
 
         function shadow_templates_callback() {
             if (!isAllTemplatesLoaded()) return false;
@@ -906,7 +871,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
             if (!isAllTemplatesLoaded()) {
                 alert('Critical error.\nTrying to load templates before previous templates request is completed');
             }
-            var i = 0;
+            let i = 0;
             shadow_templates_object = {};
             templates_callback_function = func;
             lockTemplateCallback();
@@ -933,11 +898,11 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
          * @return {number} 32-bit positive integer hash
          */
 
-        var murmurSeed = Math.round(((Math.random() * 10000) + 10000));
+        const murmurSeed = Math.round(((Math.random() * 10000) + 10000));
 
         function murmurhash3_32_gc(key) {
-            var seed = murmurSeed;
-            var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
+            let seed = murmurSeed;
+            let remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
 
             remainder = key.length & 3; // key.length % 4
             bytes = key.length - remainder;
@@ -993,12 +958,12 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
 
 
 
-        var level = 10;
+        let level = 10;
 
         function translate(obj, keys = []) {
             if (obj === undefined) return '';
             if (obj === null || Number.isInteger(obj)) return obj;
-            if ((translation_strings === undefined) || (translation_strings === null) || (!(translation_strings instanceof Object))) return obj;
+            if ((translation_strings === undefined) || (translation_strings === null) || (!(typeof translation_strings == "object"))) return obj;
             if (typeof obj === 'string') {
                 return translateString(obj);
             }
@@ -1010,7 +975,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 return obj;
             }
 
-            var customKeys = false;
+            let customKeys = false;
             if (Array.isArray(keys) && (keys.length > 0)) {
                 customKeys = true;
             }
@@ -1033,10 +998,10 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         }
 
         function minStopSimbol(arr, index, str) {
-            var i = 0;
-            var ch = '';
-            var temp = -1;
-            var len = str.length;
+            let i = 0;
+            let ch = '';
+            let temp = -1;
+            let len = str.length;
             for (i = 0; i < 41; i++) {
                 temp = index + i;
                 if (temp >= len) return len;
@@ -1049,7 +1014,7 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         }
 
         /* json object direct echo to JavaScript */
-        var translation_strings = null;
+        let translation_strings = null;
 
         function setTranslationArray(jsonObject) {
             if (jsonObject === undefined) {
@@ -1063,20 +1028,20 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
         }
 
 
-        var stopSimbols = [' ', '<', '[', '{', '(', "\n", "\t", "\r", '*', ')', '}', ']', '>', '.', ',', '?', ':', ';', '-', '"', '`', "'", '!', '@', '#', '%', '&', '$', '^', '~', '+', '/', '\\', '='];
+        const stopSimbols = [' ', '<', '[', '{', '(', "\n", "\t", "\r", '*', ')', '}', ']', '>', '.', ',', '?', ':', ';', '-', '"', '`', "'", '!', '@', '#', '%', '&', '$', '^', '~', '+', '/', '\\', '='];
 
         function translateString(str) {
             if (str === undefined) return '';
-            if ((translation_strings === undefined) || (translation_strings === null) || (!(translation_strings instanceof Object))) return str;
-            var indexEnd = -1;
-            var movedIndex = -1;
-            var prefix_length = translate_prefix.length;
-            var checklen = str.length - (prefix_length + 2);
+            if ((translation_strings === undefined) || (translation_strings === null) || (!(typeof translation_strings == "object"))) return str;
+            let indexEnd = -1;
+            let movedIndex = -1;
+            let prefix_length = translate_prefix.length;
+            let checklen = str.length - (prefix_length + 2);
             if (checklen < 0) return str;
-            var key = '';
-            var keyLen = 0;
-            var index = str.indexOf(translate_prefix);
-            var counter_protector = 300;
+            let key = '';
+            let keyLen = 0;
+            let index = str.indexOf(translate_prefix);
+            let counter_protector = 300;
             while (index != -1) {
                 counter_protector--;
                 if (counter_protector < 0) {

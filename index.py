@@ -56,10 +56,12 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="main/js/functions.js"></script>
 
     <script type="text/javascript">
-        var templates = {};
-
+        const translation_strings = """ + translation.get_array(auth.user_lang) + """;
+        function getTranslations(){
+            return translation_strings;
+        }
         function init() {
-            J2H.setTranslationArray(""" + translation.get_array(auth.user_lang) + """); // optional
+            J2H.setTranslationArray(getTranslations()); // optional
             J2H.loadTemplatesArray( ["_common/html/templates.html", "main/html/navigation.html"], loadingCallback);
         }
 

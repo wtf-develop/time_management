@@ -47,10 +47,8 @@ print("""<!DOCTYPE html>
     <script type="text/javascript" src="js/timeline.js"></script>
 
     <script type="text/javascript">
-        var templates = {};
-
         function init() {
-            J2H.setTranslationArray(""" + translation.get_array(auth.user_lang) + """); // optional
+            J2H.setTranslationArray(parent.getTranslations()); // optional
             J2H.loadTemplatesArray( ["html/date_parts.html","../_common/html/templates.html", "html/templates.html", "html/timeline.html"], loadingCallback);
         }
 

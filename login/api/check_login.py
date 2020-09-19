@@ -105,5 +105,6 @@ else:
 auth.credentials = auth.buildCredentials(
         auth.user_id, usr['login'], usr['password'], jsonpost['remember'], auth.user_some_state)
 headers.jsonAPI(False)  # New cookie always there
+utils.log(usr['login'] + ' Logged in', 'auth')
 headers.goodResponse({'accepted': True})
-utils.log(usr['login'] + ' Logged in', 'Auth')
+

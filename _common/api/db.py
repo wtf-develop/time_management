@@ -146,7 +146,7 @@ def saveTask(data: dict) -> int:
         try:
             mydb.execute(sql)
         except Exception as ex:
-            utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+            utils.log(utils.clearUserLogin(str(ex)), 'error')
             return -11
     else:
         sql = 'insert into tasks ' + __build_insert(data)
@@ -155,7 +155,7 @@ def saveTask(data: dict) -> int:
         try:
             mydb.execute(sql)
         except Exception as ex:
-            utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+            utils.log(utils.clearUserLogin(str(ex)), 'error')
             return -12
         data['id'] = mydb_connection.insert_id()
 
@@ -528,7 +528,7 @@ def sql_request(sql: str):
     try:
         mydb.execute(sql)
     except Exception as ex:
-        utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+        utils.log(utils.clearUserLogin(str(ex)), 'error')
         headers.errorResponse('SQL error')
 
 

@@ -41,7 +41,7 @@ def getTotalIdsString(user_id: int, devid: int, cross: str = '', extendType: int
     try:
         mydb.execute(sql)
     except Exception as ex:
-        utils.log(utils.clearUserLogin(str(ex)), 'error', 'sql')
+        utils.log(utils.clearUserLogin(str(ex)), 'error', 'mobile')
         return None
 
     rows = mydb.fetchall()
@@ -94,7 +94,7 @@ def log(message: str, tag: str = '  info'):
 
 
 def elog(message: str, tag: str = 'error'):
-    utils.log(message, tag, 'mobile_error')
+    utils.log(message, tag, 'mobile')
 
 
 def sql_request(sql: str):
