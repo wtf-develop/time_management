@@ -9,7 +9,6 @@ currentdir = os.path.dirname(os.path.abspath(
 sys.path.insert(0, os.path.dirname(currentdir))
 from _common.api import auth
 from _common.api import headers
-from _common.api import translation
 
 headers.htmlPage()
 
