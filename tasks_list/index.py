@@ -52,8 +52,8 @@ print("""<!DOCTYPE html>
         var templates = {};
 
         function init() {
-            J2H.setTranslationArray(parent.getTranslations()); // optional
-            J2H.loadTemplatesArray( ["../_common/html/templates.html", "html/templates.html", "html/todo.html"], loadingCallback);
+            jth.setTranslationArray(parent.getTranslations()); // optional
+            jth.loadTemplatesArray( ["../_common/html/templates.html", "html/templates.html", "html/todo.html"], loadingCallback);
         }
 
         function loadingCallback() {

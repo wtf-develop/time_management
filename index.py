@@ -61,8 +61,8 @@ print("""<!DOCTYPE html>
             return translation_strings;
         }
         function init() {
-            J2H.setTranslationArray(getTranslations()); // optional
-            J2H.loadTemplatesArray( ["_common/html/templates.html", "main/html/navigation.html"], loadingCallback);
+            jth.setTranslationArray(getTranslations()); // optional
+            jth.loadTemplatesArray( ["_common/html/templates.html", "main/html/navigation.html"], loadingCallback);
         }
 
         function loadingCallback() {

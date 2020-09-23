@@ -47,8 +47,8 @@ print("""<!DOCTYPE html>
 
     <script type="text/javascript">
         function init() {
-            J2H.setTranslationArray(parent.getTranslations()); // optional
-            J2H.loadTemplatesArray( ["html/date_parts.html","../_common/html/templates.html", "html/templates.html", "html/timeline.html"], loadingCallback);
+            jth.setTranslationArray(parent.getTranslations()); // optional
+            jth.loadTemplatesArray( ["html/date_parts.html","../_common/html/templates.html", "html/templates.html", "html/timeline.html"], loadingCallback);
         }
 
         function loadingCallback() {

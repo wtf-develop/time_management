@@ -8,8 +8,8 @@ function isGoodResponse(json) {
             return true;
     }
     if($('#error_modal').length>0) return false;
-    J2H.translate(json.error);
-    $('body').append(J2H.process('error_message',json));
+    jth.translate(json.error);
+    $('body').append(jth.process('error_message',json));
     $('#error_modal').fadeIn(50);
     return false;
 }
@@ -98,8 +98,8 @@ function showToastIfExists(json){
             return false;
     }
     if($('#toast_modal').length>0) return false;
-    J2H.translate(json.toast);
-    $('body').append(J2H.process('toast_message',json));
+    jth.translate(json.toast);
+    $('body').append(jth.process('toast_message',json));
     $('#toast_modal').show();
     setTimeout(function(){
         $('#toast_modal').remove();

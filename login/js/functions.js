@@ -7,7 +7,7 @@ function storeLang(cvalue) {
 
 function checkLogin(data) {
     showProgressIn($('#submit_login'));
-    J2H.postJSON('api/check_login.py', data, function(json) {
+    jth.postJSON('api/check_login.py', data, function(json) {
         if (isGoodResponse(json)) {
             if (json.data.accepted !== undefined) {
                 window.location.href = "../index.py"

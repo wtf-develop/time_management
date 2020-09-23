@@ -2,8 +2,8 @@ var todo = {};
 (function(todo, $) {
 
     todo.init = function(element, json) {
-        J2H.translate(json, ['pname']);
-        element.html(J2H.process('all_panels', json));
+        jth.translate(json, ['pname']);
+        element.html(jth.process('all_panels', json));
         // Adding drop function to each category of task
         /*$('.todo_content').droppable({
             classes: {

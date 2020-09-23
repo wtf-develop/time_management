@@ -61,16 +61,16 @@ print("""<!DOCTYPE html>
 
     function setLanguage(selectedLang) {
         storeLang(selectedLang);
-        J2H.getJSON('api/get_login_translation.py',function(json){
+        jth.getJSON('api/get_login_translation.py',function(json){
             if(isGoodResponse(json)){
-                J2H.setTranslationArray(json.data.data);
+                jth.setTranslationArray(json.data.data);
                 extLang=json.data.code;
                 users_count=json.data.users_count;
                 version=json.server.version;
                 storeLang(extLang);
-                J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
+                jth.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }else{
-                J2H.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
+                jth.loadTemplatesArray( ["../_common/html/templates.html","html/templates.html"], buildWebUI);
             }
         });
         return selectedLang;
@@ -80,7 +80,7 @@ print("""<!DOCTYPE html>
     var version='';
     var users_count=0;
     function buildWebUI() { //create all elements inside page (Structure of page)
-        $("#content").html(J2H.process("page",{code:extLang,version:version,users:users_count}));
+        $("#content").html(jth.process("page",{code:extLang,version:version,users:users_count}));
         feather.replace();        
         $("#content").fadeIn(150);
     }

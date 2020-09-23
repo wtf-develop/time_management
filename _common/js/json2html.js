@@ -9,8 +9,8 @@
 // Wrap all widget code into anonymous function expression to avoid conflicts
 // that may occur with another code on the page (module pattern).
 
-if ((J2H === undefined) || (Json2Html === undefined)) {
-    var J2H = (function($) {
+if ((jth === undefined) || (json2html === undefined)) {
+    var json2html = (function($) {
         "use strict";
         let DEBUG = false;
         const translate_prefix = '@str.';
@@ -578,8 +578,8 @@ if ((J2H === undefined) || (Json2Html === undefined)) {
                 return '';
             };
             if (str.length < 1) return '';
-            str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
-            return str
+            //str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+            return str.trim();
         }
 
         function del_dub_space(str) {
@@ -1083,5 +1083,5 @@ let tData = my_trim(temlArr[i].substring(nIndex + 1));*/
             serializeHtmlForm: serializeHtmlForm //extend JQuery.serializeArray() with unchecked checkboxes and arrays. You can use JQuery.serializeHtmlForm()
         }
     }(jQuery));
-    var Json2Html = J2H; //alternative name
+    var jth = json2html; //alternative name
 }

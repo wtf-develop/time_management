@@ -80,10 +80,10 @@ May be next code will solve some problems after update. This is not necessary an
 Please set auto-format tool to ignore "E24, E402" - look **pycodestyle.ini** for examples. And follow current code structure.
 
 # Links
+- [**Json2Html**](https://github.com/wtf-develop/JSONtemplate)
 - [PyMySQL](https://github.com/PyMySQL/PyMySQL)
 - [JQuery](https://jquery.com/)
 - [Bootstrap](https://getbootstrap.com/)
-- [Json2Html](https://github.com/wtf-develop/JSONtemplate)
 - [Calendar](https://github.com/fullcalendar/fullcalendar)
 - [Arbor.js](https://github.com/samizdatco/arbor)
 - [Timeline](https://github.com/CodyHouse/vertical-timeline)
