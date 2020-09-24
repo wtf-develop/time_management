@@ -10,9 +10,10 @@
 // that may occur with another code on the page (module pattern).
 
 if ((jth === undefined) || (json2html === undefined)) {
-    var json2html = (function($) {
+    var json2html = (function() {
         "use strict";
         let DEBUG = false;
+        let CORS = false; //cross origin requests
         const translate_prefix = '@str.';
 
         // Recommended to keep current values of j_var, j_loop and j_templ.
@@ -538,12 +539,6 @@ if ((jth === undefined) || (json2html === undefined)) {
 
 
             level_parce--;
-            str = str_replace('~{', '{', str);
-            str = str_replace('~}', '}', str);
-            str = str_replace('~[', '[', str);
-            str = str_replace('~]', ']', str);
-            str = str_replace('~*', '*', str);
-            str = str_replace('~!', '!', str);
             if (DEBUG && (error_parcer != '') && (level_parce == 0)) {
                 //debug_log('some data is left from datasource \n'+error_parcer);
                 error_parcer = '';
@@ -578,8 +573,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                 return '';
             };
             if (str.length < 1) return '';
-            //str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-            return str.trim();
+            return str.trim(); //str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
         }
 
         function del_dub_space(str) {
@@ -618,49 +612,123 @@ if ((jth === undefined) || (json2html === undefined)) {
             return print_red_text;
         };
 
-        function getJSON(url, mycallback_func) {
-            let mycallback = mycallback_func;
-            $.getJSON({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json',
-                success: function(data) {
-                    mycallback(data);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    if (DEBUG) {
-                        debug_log('Network: ' + textStatus + "\n" + printObject(errorThrown));
-                    }
-                    mycallback(JSON.parse('{"error":{"state":true,"title":"Network error","message":"' + str_replace("'", '', str_replace('"', '', textStatus)) + '","code":500}}'));
-                }
-            });
+
+
+        function net_error(mycallback, text, error, code = 500) {
+            if (DEBUG) {
+                debug_log('Network: ' + text + "\n" + printObject(error));
+            }
+            mycallback(JSON.parse('{"error":{"state":true,"title":"Network error","message":"' + str_replace("'", '', str_replace('"', '', text)) + '","code":' + code + '}}'));
         }
 
-
-        function postJSON(url, data, mycallback_func) {
+        function fetchRequest(method, rtype, url, postdata, mycallback_func) {
             let mycallback = mycallback_func;
-            /*var wrapperdata = {
-                'postedData': data
-            };*/
-            let wrapperdata = data;
-            $.post({
-                url: url,
-                data: JSON.stringify(wrapperdata),
-                type: 'POST',
-                dataType: 'json',
-                contentType: 'application/json',
-                success: function(data) {
-                    mycallback(data);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    if (DEBUG) {
-                        debug_log(textStatus + "\n" + printObject(errorThrown));
+            let options = {
+                mode: CORS ? 'cors' : 'same-origin', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: CORS ? 'include' : 'same-origin',
+                redirect: 'follow',
+            };
+            let is_json_result = rtype.trim().toUpperCase() == 'JSON';
+            if (method.trim().toUpperCase() == 'POST') {
+                options.method = 'POST';
+                options.body = JSON.stringify(postdata);
+                options.headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': is_json_result ? 'application/json' : 'text/html'
+                };
+            } else {
+                options.method = 'GET';
+                options.headers = {
+                    'Accept': is_json_result ? 'application/json' : 'text/html'
+                };
+            }
+            fetch(url, options)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
                     }
-                    mycallback(JSON.parse('{"error":{"state":true,"title":"Network error","message":"' + str_replace("'", '', str_replace('"', '', textStatus)) + '","code":500}}'));
-                }
-            });
+                    if (is_json_result) {
+                        return response.json();
+                    }
+                    return response.text();
+                })
+                .then(function(data) {
+                    mycallback(data);
+                })
+                .catch(function(error) {
+                    if (is_json_result) {
+                        net_error(mycallback, error.message, error);
+                    } else {
+                        if (DEBUG) {
+                            debug_log(textStatus + "\n" + printObject(errorThrown));
+                        }
+                        alert('json2html: "' + url + '" ' + error.message);
+                    }
+                });
+        }
 
+        function xhrRequest(method, rtype, url, postdata, mycallback_func) {
+            let mycallback = mycallback_func;
+            let oAjaxReq = new XMLHttpRequest();
+            oAjaxReq.withCredentials = true;
+            let is_json_result = rtype.trim().toUpperCase() == 'JSON';
+            let is_post = method.trim().toUpperCase() == 'POST';
+            if (is_post) {
+                method = 'POST';
+            } else {
+                method = 'GET';
+            }
+            oAjaxReq.onload = function(evt) {
+                if (oAjaxReq.readyState == 4) {
+                    if (oAjaxReq.status == 200) {
+                        var text = oAjaxReq.responseText;
+                        if (is_json_result) {
+                            try {
+                                mycallback(JSON.parse(text));
+                            } catch (e) {
+                                net_error(mycallback, e.name, e, oAjaxReq.status);
+                            }
+                        } else {
+                            mycallback(text);
+                        }
+                    } else {
+                        net_error(mycallback, 'Wrong status ' + oAjaxReq.status, {
+                            error: 'XMLHttpRequest',
+                            status: oAjaxReq.status
+                        }, oAjaxReq.status);
+                    }
+                }
+            };
+            oAjaxReq.onerror = function(evt) {
+                net_error(mycallback, oAjaxReq.statusText, evt, oAjaxReq.status);
+            };
+            oAjaxReq.open(method, url, true);
+            if (is_post) {
+                oAjaxReq.setRequestHeader("Content-Type", "application/json");
+                oAjaxReq.setRequestHeader("Accept", is_json_result ? 'application/json' : 'text/html');
+                oAjaxReq.send(JSON.stringify(postdata));
+            } else {
+                oAjaxReq.setRequestHeader("Accept", is_json_result ? 'application/json' : 'text/html');
+                oAjaxReq.send();
+            }
+        }
+
+        function getJSON(url, mycallback_func) {
+            if ('fetch' in window) {
+                fetchRequest('get', 'json', url, null, mycallback_func);
+            } else {
+                xhrRequest('get', 'json', url, null, mycallback_func);
+            }
+        }
+
+        function postJSON(url, postdata, mycallback_func) {
+            if ('fetch' in window) {
+                fetchRequest('post', 'json', url, postdata, mycallback_func);
+                return;
+            } else {
+                xhrRequest('post', 'json', url, postdata, mycallback_func);
+            }
         }
 
         let all_templates_loaded = 0;
@@ -706,151 +774,147 @@ if ((jth === undefined) || (json2html === undefined)) {
                 return;
             }
             all_templates_loaded++; //increace template requests counter
+
+            if ('fetch' in window) {
+                fetchRequest('get', 'text', url, null, function(data) {
+                    __build_templates(data, to_template, common_func, url)
+                });
+                return;
+            } else {
+                xhrRequest('get', 'text', url, null, function(data) {
+                    __build_templates(data, to_template, common_func, url)
+                });
+            }
+        }
+
+
+        function __build_templates(data, to_template, common_func, url) {
             let myParam = url.substring(url.lastIndexOf('/') + 1);
             myParam = my_trim(myParam.substring(0, myParam.lastIndexOf('.')));
-            $.get({
-                processData: false,
-                url: url,
-                success: function(data) {
-                    if (data.match(/^ *?NextTemplateName: *?\S{1,100} *?$/m)) {
-                        debug_log('File with templates detected: ' + myParam)
-                        let temlArr = data.split('NextTemplateName:');
-                        let i = 0;
-                        for (i = 0; i < temlArr.length; i++) {
-                            let nIndex = temlArr[i].indexOf('\n');
-                            let tParam = '';
-                            let tData = '';
-                            if (i > 0) {
-                                if (nIndex < 0 || nIndex > 100) {
-                                    debug_log('Strange template loaded from file ' + myParam + '. All templates should be starter with line "NextTemplateName: name_of_template"');
-                                    debug_log(temlArr[i]);
-                                    continue;
-                                }
-                                tParam = my_trim(temlArr[i].substring(0, nIndex));
-                                tData = my_trim(temlArr[i].substring(nIndex + 1));
-                            } else {
-                                tData = my_trim(temlArr[i]);
-                                if (tData.length == 0) {
-                                    debug_log('thete is nothing in first "' + myParam + '" of the content ' + i);
-                                    continue;
-                                }
-                                tParam = myParam;
-                            }
-                            /*var tParam = my_trim(temlArr[i].substring(0, nIndex));
-let tData = my_trim(temlArr[i].substring(nIndex + 1));*/
-                            if (tData.length == 0) {
-                                debug_log('thete is nothing in one of the content ' + i);
-                                continue;
-                            }
-                            if (tParam.length == 0) {
-                                debug_log('thete is no title in one of the templates ' + i);
-                                tParam = myParam;
-                            }
-                            to_template[tParam] = tData;
-                            debug_log('Loaded template ' + tParam + ' from file ' + myParam);
+            if (data.match(/^\s*?NextTemplateName:\s*?\S{1,100}\s*?$/m)) {
+                debug_log('File with templates detected: ' + myParam)
+                let temlArr = data.split('NextTemplateName:');
+                let i = 0;
+                for (i = 0; i < temlArr.length; i++) {
+                    let nIndex = temlArr[i].indexOf('\n');
+                    let tParam = '';
+                    let tData = '';
+                    if (i > 0) {
+                        if (nIndex < 0 || nIndex > 100) {
+                            debug_log('Strange template loaded from file ' + myParam + '. All templates should be starter with line "NextTemplateName: name_of_template"');
+                            debug_log(temlArr[i]);
+                            continue;
                         }
+                        tParam = my_trim(temlArr[i].substring(0, nIndex));
+                        tData = my_trim(temlArr[i].substring(nIndex + 1));
                     } else {
-                        to_template[myParam] = data;
-                        debug_log('Loaded file ' + myParam);
-                    }
-
-                    all_templates_loaded--; //decrease template requests counter
-                    if (all_templates_loaded == 0) common_func(); //sending inital requests
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    if (DEBUG) {
-                        debug_log(textStatus + "\n" + printObject(errorThrown));
-                    }
-                }
-            });
-        }
-
-
-        function serializeHtmlForm(formObj) {
-
-            function updatejsonformat(obj, o) {
-                let n = o.name,
-                    v = o.value;
-                if ((/\[.*?\]/).test(n)) {
-                    let firstN = n.split('[')[0];
-                    let indexes = n.match(/\[.*?\]/g);
-                    let c = indexes.length;
-                    let numerisArraFinal = n.includes('[]');
-                    if (obj[firstN] === undefined) {
-                        if (c == 1 && numerisArraFinal) {
-                            obj[firstN] = new Array();
-                        } else {
-                            obj[firstN] = {};
+                        tData = my_trim(temlArr[i]);
+                        if (tData.length == 0) {
+                            debug_log('thete is nothing in first "' + myParam + '" of the content ' + i);
+                            continue;
                         }
+                        tParam = myParam;
                     }
 
-                    let i = 0;
-
-                    let curObj = obj[firstN];
-                    for (i = 0; i < c; i++) {
-                        let index = str_replace('[', '', str_replace(']', '', indexes[i]));
-                        if (i == c - 1) {
-                            if (index == '') {
-                                if ($.isArray(curObj)) {
-                                    curObj.push(v)
-                                }
-                            } else {
-                                curObj[index] = v;
-                            }
-                        } else {
-                            if (curObj[index] === undefined) {
-                                if ((i == (c - 2)) && numerisArraFinal) {
-                                    curObj[index] = new Array();
-                                } else {
-                                    curObj[index] = {};
-                                }
-                            }
-                            curObj = curObj[index]
-                        }
+                    if (tData.length == 0) {
+                        debug_log('thete is nothing in one of the content ' + i);
+                        continue;
                     }
-                } else if (obj[n] === undefined) {
-                    obj[n] = v;
+                    if (tParam.length == 0) {
+                        debug_log('thete is no title in one of the templates ' + i);
+                        tParam = myParam;
+                    }
+                    to_template[tParam] = tData;
+                    debug_log('Loaded template ' + tParam + ' from file ' + myParam);
                 }
+            } else {
+                to_template[myParam] = data;
+                debug_log('Loaded file ' + myParam);
             }
 
-            let object = {},
-                names = {};
-            let sarray = formObj.serializeArray();
-            $.each(sarray, function(index, o) {
-                updatejsonformat(object, o);
-            });
-            $(formObj).find('input[type="checkbox"]:not(:checked)').each(function(ind, elem) { //insert all unchecked values too
-                updatejsonformat(object, {
-                    'name': elem.name,
-                    'value': elem.value + '__false'
-                }) //value of unchecked elements will be ended with "__false"
-            });
-
-            $(formObj).find('input[type="checkbox"]:checked').each(function(ind, elem) { //insert all unchecked values too
-                updatejsonformat(object, {
-                    'name': elem.name,
-                    'value': elem.value
-                }) //value of unchecked elements will be ended with "__false"
-            });
-
-
-            $(formObj).find('input[type="checkbox"]:disabled:checked').each(function(ind, elem) { //insert all unchecked values too
-                updatejsonformat(object, {
-                    'name': elem.name,
-                    'value': elem.value
-                }) //value of unchecked elements will be ended with "__false"
-            });
-
-
-            return object;
+            all_templates_loaded--; //decrease template requests counter
+            if (all_templates_loaded == 0) common_func(); //sending inital requests
         }
-        //add new function to JQuerry object
-        //add new function to JQuerry object
-        //add new function to JQuerry object
-        //add new function to JQuerry object
-        $.fn.serializeHtmlForm = function() {
-            return serializeHtmlForm(this)
-        };
+
+
+
+        function __updatejsonformat(obj, o) {
+            let n = o.name,
+                v = o.value;
+            if ((/\[.*?\]/).test(n)) {
+                let firstN = n.split('[')[0];
+                let indexes = n.match(/\[.*?\]/g);
+                let c = indexes.length;
+                let numerisArraFinal = n.includes('[]');
+                if (obj[firstN] === undefined) {
+                    if (c == 1 && numerisArraFinal) {
+                        obj[firstN] = new Array();
+                    } else {
+                        obj[firstN] = {};
+                    }
+                }
+
+                let i = 0;
+
+                let curObj = obj[firstN];
+                for (i = 0; i < c; i++) {
+                    let index = str_replace('[', '', str_replace(']', '', indexes[i]));
+                    if (i == c - 1) {
+                        if (index == '') {
+                            if (Array.isArray(curObj)) {
+                                curObj.push(v)
+                            }
+                        } else {
+                            curObj[index] = v;
+                        }
+                    } else {
+                        if (curObj[index] === undefined) {
+                            if ((i == (c - 2)) && numerisArraFinal) {
+                                curObj[index] = new Array();
+                            } else {
+                                curObj[index] = {};
+                            }
+                        }
+                        curObj = curObj[index]
+                    }
+                }
+            } else if (obj[n] === undefined) {
+                obj[n] = v;
+            }
+        }
+
+        function serializeHtmlForm(form) {
+            let obj = {};
+            let elements = form.querySelectorAll("input, select, textarea");
+            for (let i = 0; i < elements.length; ++i) {
+                let element = elements[i];
+                let name = element.name;
+
+                if (name) {
+                    let value = element.value;
+                    if (element.tagName.toUpperCase() == 'INPUT' && element.type.toUpperCase() == 'CHECKBOX') {
+                        if (!element.checked) {
+                            value = value + '__false';
+                        }
+
+                    }
+                    __updatejsonformat(obj, {
+                        name: name,
+                        value: value
+                    });
+                }
+            }
+            return obj;
+        }
+
+        //add new function to JQuerry object if it exists
+        if (jQuery !== undefined) {
+            try {
+                jQuery.fn.serializeHtmlForm = function() {
+                    return serializeHtmlForm(this[0])
+                };
+            } catch (e) {}
+        }
 
         function isAllTemplatesLoaded() {
             return all_templates_loaded < 1;
@@ -1082,6 +1146,6 @@ let tData = my_trim(temlArr[i].substring(nIndex + 1));*/
             setDebug: setDebug, //for console output of all library warnings and errors
             serializeHtmlForm: serializeHtmlForm //extend JQuery.serializeArray() with unchecked checkboxes and arrays. You can use JQuery.serializeHtmlForm()
         }
-    }(jQuery));
+    }());
     var jth = json2html; //alternative name
 }
