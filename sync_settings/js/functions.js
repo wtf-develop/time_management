@@ -6,7 +6,7 @@ function drawUI() {
     jth.getJSON('api/get_devices.py?filter0=1&filter1=1&filter2=1&filter3=1&filterl=0&selected=0', function(json) {
         if (isGoodResponse(json)) {
             if ($('#viewport').length < 1) {
-                $('#content').html(jth.process('page_structure', json))
+                $('#content').injectJSON(json, 'page_structure')
                 graph.init(json.data, updateData)
                 $('.toggles').bootstrapToggle();
                 $('.toggles').change(toggles_func);
@@ -42,9 +42,9 @@ function updateData() {
         jth.getJSON('api/get_devices.py?' + filter0 + '&' + filter1 + '&' + filter2 + '&' + filter3 + '&' + filterl + '&selected=' + graph.getSelectedId(), function(json) {
             if (isGoodResponse(json)) {
                 if (json.data.links.length<1) {
-                    $('#editor').html(jth.process('editor_title',{}))
+                    $('#editor').injectJSON({},'editor_title')
                 } else {
-                    $('#editor').html(jth.process('editor', json))
+                    $('#editor').injectJSON(json, 'editor')
                     $('#editor').fadeIn(300)
                     $('.devs').bootstrapToggle();
                     $('.devs').change(set_new_func);

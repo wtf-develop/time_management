@@ -64,6 +64,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                 console.log('Json2Html: CRITICAL error. Varialble name is undefined. Check your loop templates');
                 return '';
             }
+            name_var = my_trim(name_var);
             let i = 0;
             let name_vars = name_var.split('.');
             for (i = 0; i < name_vars.length; i++) {
@@ -123,7 +124,7 @@ if ((jth === undefined) || (json2html === undefined)) {
 
         let level_parce = 0; //stack overflow protection
         //function change HTML code with templates to HTML code with data.
-        function process(name, data) {
+        function inject(data, name) {
             //check stack overflow
             ///********************** loop part ***************************
             let global_filter = '';
@@ -156,7 +157,7 @@ if ((jth === undefined) || (json2html === undefined)) {
 
 
 
-            name = removeSq(name)
+            name = my_trim(removeSq(name));
             let limits = -1;
             let defaults = '';
             let page = 0;
@@ -338,7 +339,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         if (eqWithThis) {
                             if (then_v !== undefined && then_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(then_v, data);
+                                    temp = inject(data, then_v);
                                 } else {
                                     temp = my_trim(removeSq(then_v));
                                 }
@@ -348,7 +349,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         } else {
                             if (else_v !== undefined && else_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(else_v, data);
+                                    temp = inject(data, else_v);
                                 } else {
                                     temp = my_trim(removeSq(else_v));
                                 }
@@ -384,7 +385,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         if (eqWithThis) {
                             if (then_v !== undefined && then_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(then_v, data);
+                                    temp = inject(data, then_v);
                                 } else {
                                     temp = my_trim(removeSq(then_v));
                                 }
@@ -394,7 +395,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         } else {
                             if (else_v !== undefined && else_v != '') {
                                 if (if_type == 1) {
-                                    temp = process(else_v, data);
+                                    temp = inject(data, else_v);
                                 } else {
                                     temp = my_trim(removeSq(else_v));
                                 }
@@ -450,7 +451,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                     }
 
                     temp_data = data;
-                    name_var = temp_template[1];
+                    name_var = temp_template[0];
                     temp_data = get_from_data(data, removeSq(name_var));
                     let k = 0;
                     let ccc = temp_data.length - 1;
@@ -496,7 +497,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                             };
                         }
 
-                        temp_str = temp_str + process(temp_template[0], temp_data[key]);
+                        temp_str = temp_str + inject(temp_data[key], temp_template[1]);
 
                         k++;
                     }
@@ -530,7 +531,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         name_template = name_template[0];
                         curData = get_from_data(curData, dataindex);
                     }
-                    str = str_replace(j_templ[0] + name_template_all + j_templ[1], process(name_template, curData), str);
+                    str = str_replace(j_templ[0] + name_template_all + j_templ[1], inject(curData, name_template), str);
                 } else {
                     debug_log('too long or short template{{..}} in ' + name + ' on ' + str.substr(ind_s, ind_e - (ind_s)));
                     ind_s = ind_s + 1;
@@ -546,6 +547,25 @@ if ((jth === undefined) || (json2html === undefined)) {
             return my_trim(str);
         }
 
+
+        function inject2DOM(data, name, selector) {
+            let elements = null;
+            try {
+                elements = document.querySelectorAll(selector);
+            } catch (e) {}
+            if (elements === undefined || elements == null) {
+                return '';
+            }
+            let html = inject(data, name);
+            for (let i = 0; i < elements.length; ++i) {
+                let element = elements[i];
+                if ('innerHTML' in element) {
+                    element.innerHTML = html;
+                }
+            }
+            return html;
+
+        }
         //replace substring by another substring
         //usefull for templates
         function str_replace(search, replace, osubject) {
@@ -629,8 +649,8 @@ if ((jth === undefined) || (json2html === undefined)) {
                 credentials: CORS ? 'include' : 'same-origin',
                 redirect: 'follow',
             };
-            let is_json_result = rtype.trim().toUpperCase() == 'JSON';
-            if (method.trim().toUpperCase() == 'POST') {
+            let is_json_result = my_trim(rtype).toUpperCase() == 'JSON';
+            if (my_trim(method).toUpperCase() == 'POST') {
                 options.method = 'POST';
                 options.body = JSON.stringify(postdata);
                 options.headers = {
@@ -672,8 +692,8 @@ if ((jth === undefined) || (json2html === undefined)) {
             let mycallback = mycallback_func;
             let oAjaxReq = new XMLHttpRequest();
             oAjaxReq.withCredentials = true;
-            let is_json_result = rtype.trim().toUpperCase() == 'JSON';
-            let is_post = method.trim().toUpperCase() == 'POST';
+            let is_json_result = my_trim(rtype).toUpperCase() == 'JSON';
+            let is_post = my_trim(method).toUpperCase() == 'POST';
             if (is_post) {
                 method = 'POST';
             } else {
@@ -883,8 +903,16 @@ if ((jth === undefined) || (json2html === undefined)) {
             }
         }
 
-        function serializeHtmlForm(form) {
-            let obj = {};
+        function serializeHtmlForm(selector) {
+            let form = document.querySelector(selector);
+            if (form === undefined || form == null) {
+                return {};
+            }
+            return serializeDOM(form);
+        }
+
+        function serializeDOM(form) {
+            let obj={};
             let elements = form.querySelectorAll("input, select, textarea");
             for (let i = 0; i < elements.length; ++i) {
                 let element = elements[i];
@@ -911,8 +939,15 @@ if ((jth === undefined) || (json2html === undefined)) {
         if (jQuery !== undefined) {
             try {
                 jQuery.fn.serializeHtmlForm = function() {
-                    return serializeHtmlForm(this[0])
+                    return serializeDOM(this[0])
                 };
+                jQuery.fn.injectJSON = function(data, template) {
+                    let html = inject(data, template);
+                    this.each(function() {
+                        $(this).html(html);
+                    });
+                    return this;
+                }
             } catch (e) {}
         }
 
@@ -1136,7 +1171,8 @@ if ((jth === undefined) || (json2html === undefined)) {
         }
 
         return {
-            process: process, //parse loaded templates with JSON response from server - look documentation
+            inject: inject, //parse loaded templates with JSON response from server - look documentation
+            inject2DOM: inject2DOM, //parse loaded templates with JSON response from server - look documentation
             getJSON: getJSON, //send GET request with calback
             postJSON: postJSON, //send POST request  with calback
             loadTemplatesArray: loadTemplatesArray, //load multi-files templates with callback after all files loaded successfully

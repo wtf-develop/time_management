@@ -3,7 +3,7 @@ function buildWebUI() {
     jth.getJSON('main/api/base_info.py', function(json) {
         if (isGoodResponse(json)) {
             jth.translate(json,['name'])
-            $("#content").html(jth.process("page_structure", json));
+            $("#content").injectJSON(json, "page_structure");
             runMenuLink(json.data.some_state)
             selectLeftMenu(json.data.some_state);
             feather.replace();

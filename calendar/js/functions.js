@@ -4,7 +4,7 @@ var calendar;
 function buildWebUI() {
     jth.getJSON('api/get_month_plan.py?devid=' + getDevId()+'&'+getTimezoneParameter(), function(json) {
         if (isGoodResponse(json)) {
-            $('#content').html(jth.process('page_structure', json))
+            $('#content').injectJSON(json,'page_structure')
             drawCalendar(json.data.events);
         }
     })

@@ -9,7 +9,7 @@ function isGoodResponse(json) {
     }
     if($('#error_modal').length>0) return false;
     jth.translate(json.error);
-    $('body').append(jth.process('error_message',json));
+    $('body').append(jth.inject(json,'error_message'));
     $('#error_modal').fadeIn(50);
     return false;
 }
@@ -99,7 +99,7 @@ function showToastIfExists(json){
     }
     if($('#toast_modal').length>0) return false;
     jth.translate(json.toast);
-    $('body').append(jth.process('toast_message',json));
+    $('body').append(jth.inject(json,'toast_message'));
     $('#toast_modal').show();
     setTimeout(function(){
         $('#toast_modal').remove();

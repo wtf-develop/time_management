@@ -80,7 +80,7 @@ print("""<!DOCTYPE html>
     var version='';
     var users_count=0;
     function buildWebUI() { //create all elements inside page (Structure of page)
-        $("#content").html(jth.process("page",{code:extLang,version:version,users:users_count}));
+        $("#content").injectJSON({code:extLang,version:version,users:users_count},"page");
         feather.replace();        
         $("#content").fadeIn(150);
     }

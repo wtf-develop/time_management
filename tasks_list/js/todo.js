@@ -3,7 +3,7 @@ var todo = {};
 
     todo.init = function(element, json) {
         jth.translate(json, ['pname']);
-        element.html(jth.process('all_panels', json));
+        element.injectJSON(json, 'all_panels');
         // Adding drop function to each category of task
         /*$('.todo_content').droppable({
             classes: {
