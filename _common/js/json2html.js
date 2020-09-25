@@ -43,12 +43,28 @@ if ((jth === undefined) || (json2html === undefined)) {
          // {"error":{"state":true,"title":"ErrorTitle","message":"ErrorMessage","code":intErrorCode}}
          */
 
-        function in_array(arr, value) {
-            //return arr.includes(value)
+        function in_array(arr, value, wildcast = false) {
+            if (value === undefined || value == null || value.length == 0) {
+                return false;
+            }
+            let accepted = '';
             for (var key in arr) {
-                if (arr[key] == value) {
+                accepted = arr[key];
+                if (accepted == value) {
                     return true;
-                };
+                } else if (wildcast) {
+                    let ind = accepted.indexOf('*');
+                    if (ind == 0) {
+                        if (value.endsWith(accepted.substr(1))) {
+                            return true;
+                        }
+                    } else if (ind == accepted.length - 1) {
+                        if (value.startsWith(accepted.substr(0, accepted.length - 1))) {
+                            return true;
+                        }
+                    }
+
+                }
             }
             return false;
         }
@@ -126,7 +142,7 @@ if ((jth === undefined) || (json2html === undefined)) {
         //function change HTML code with templates to HTML code with data.
         function inject(data, name) {
             //check stack overflow
-            ///********************** loop part ***************************
+            ///********************** filter sub-functions start ***************************
             let global_filter = '';
             let templates = shadow_templates_object;
 
@@ -152,9 +168,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                 };
                 return false;
             }
-            //*********************** loop end ****************************
-
-
+            //*********************** filter sub-functions end ****************************
 
 
             name = my_trim(removeSq(name));
@@ -873,9 +887,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         obj[firstN] = {};
                     }
                 }
-
                 let i = 0;
-
                 let curObj = obj[firstN];
                 for (i = 0; i < c; i++) {
                     let index = str_replace('[', '', str_replace(']', '', indexes[i]));
@@ -912,7 +924,7 @@ if ((jth === undefined) || (json2html === undefined)) {
         }
 
         function serializeDOM(form) {
-            let obj={};
+            let obj = {};
             let elements = form.querySelectorAll("input, select, textarea");
             for (let i = 0; i < elements.length; ++i) {
                 let element = elements[i];
@@ -924,7 +936,6 @@ if ((jth === undefined) || (json2html === undefined)) {
                         if (!element.checked) {
                             value = value + '__false';
                         }
-
                     }
                     __updatejsonformat(obj, {
                         name: name,
@@ -944,7 +955,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                 jQuery.fn.injectJSON = function(data, template) {
                     let html = inject(data, template);
                     this.each(function() {
-                        $(this).html(html);
+                        jQuery(this).html(html);
                     });
                     return this;
                 }
@@ -980,9 +991,6 @@ if ((jth === undefined) || (json2html === undefined)) {
             unlockTemplateCallback();
             shadow_templates_callback();
         }
-
-        //public functions
-
 
         /**
          * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
@@ -1056,8 +1064,7 @@ if ((jth === undefined) || (json2html === undefined)) {
         }
 
 
-
-        let level = 10;
+        let translate_level = 10;
 
         function translate(obj, keys = []) {
             if (obj === undefined) return '';
@@ -1066,11 +1073,11 @@ if ((jth === undefined) || (json2html === undefined)) {
             if (typeof obj === 'string') {
                 return translateString(obj);
             }
-            level--;
-            if (level < 0) {
-                level++;
+            translate_level--;
+            if (translate_level < 0) {
+                translate_level++;
                 alert('Stackoverflow protection triggered');
-                level = 10;
+                translate_level = 10;
                 return obj;
             }
 
@@ -1084,7 +1091,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                     translate(obj[key], keys)
                 } else if (typeof obj[key] === 'string' || obj[key] instanceof String) {
                     if (customKeys) {
-                        if (keys.includes(key)) {
+                        if (in_array(keys, key, true)) {
                             obj[key] = translateString(obj[key]);
                         }
                     } else {
@@ -1092,7 +1099,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                     }
                 }
             }
-            level++;
+            translate_level++;
             return obj;
         }
 
@@ -1127,7 +1134,7 @@ if ((jth === undefined) || (json2html === undefined)) {
         }
 
 
-        const stopSimbols = [' ', '<', '[', '{', '(', "\n", "\t", "\r", '*', ')', '}', ']', '>', '.', ',', '?', ':', ';', '-', '"', '`', "'", '!', '@', '#', '%', '&', '$', '^', '~', '+', '/', '\\', '='];
+        const stopSimbols = [' ', '<', '[', '{', '(', "\n", "\t", "\r", '*', ')', '}', ']', '>', '.', ',', '?', ':', ';', '-', '"', '`', "'", '!', '|', '@', '#', '%', '&', '$', '^', '~', '+', '/', '\\', '='];
 
         function translateString(str) {
             if (str === undefined) return '';
