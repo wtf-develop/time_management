@@ -48,7 +48,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                 return false;
             }
             let accepted = '';
-            for (var key in arr) {
+            for (let key in arr) {
                 accepted = arr[key];
                 if (accepted == value) {
                     return true;
@@ -71,8 +71,9 @@ if ((jth === undefined) || (json2html === undefined)) {
 
 
         let error_parcer = '';
+        let template_instance_id = Math.floor((Math.random() * 999) + 1); //random inital value
 
-        function get_from_data(temp_data, name_var) {
+        function get_from_data(temp_data, name_var, uniq_instance_id) {
             if (name_var === undefined) {
                 if (DEBUG) {
                     alert('Json2Html: CRITICAL error. Varialble name is undefined. Check your loop templates')
@@ -96,6 +97,9 @@ if ((jth === undefined) || (json2html === undefined)) {
                 }
                 if (name_vars[i] == 'random') {
                     return Math.floor((Math.random() * 100000) + 1);
+                }
+                if (name_vars[i] == 'instance_id') {
+                    return uniq_instance_id;
                 }
 
                 if (temp_data !== undefined && temp_data !== null && temp_data[name_vars[i]] !== undefined) {
@@ -145,6 +149,8 @@ if ((jth === undefined) || (json2html === undefined)) {
             ///********************** filter sub-functions start ***************************
             let global_filter = '';
             let templates = shadow_templates_object;
+            let local_template_instance_id = template_instance_id;
+            template_instance_id++;
 
             function set_filter(f) {
                 global_filter = f;
@@ -326,7 +332,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                             variable = '';
                         }
                     }
-                    temp = get_from_data(data, name_var2);
+                    temp = get_from_data(data, name_var2, local_template_instance_id);
                     if (hash > 0) {
                         temp = murmurhash3_32_gc(temp);
                     } else if (replace > 0) {
@@ -466,7 +472,7 @@ if ((jth === undefined) || (json2html === undefined)) {
 
                     temp_data = data;
                     name_var = temp_template[0];
-                    temp_data = get_from_data(data, removeSq(name_var));
+                    temp_data = get_from_data(data, removeSq(name_var), local_template_instance_id);
                     let k = 0;
                     let ccc = temp_data.length - 1;
                     let pagindex = 0;
@@ -493,21 +499,21 @@ if ((jth === undefined) || (json2html === undefined)) {
                         //filter_end
 
                         if ((typeof temp_data[key] == "object")) {
-                            temp_data[key]['j2h_counter'] = k + '';
-                            temp_data[key]['j2h_key'] = key + '';
+                            temp_data[key]['json2html_counter'] = k + '';
+                            temp_data[key]['json2html_key'] = key + '';
                             //k=parseInt(k);
                             if (k == 0) {
-                                temp_data[key]['j2h_first'] = '1';
+                                temp_data[key]['json2html_first'] = '1';
                             };
                             if (k == ccc) {
-                                temp_data[key]['j2h_last'] = '1';
+                                temp_data[key]['json2html_last'] = '1';
                             };
                             //temp_data[key]['index_0'] = 'unused';
                             //temp_data[key]['index_1'] = 'unused';
                             if (((k + 1) % 2) == 0) {
-                                temp_data[key]['j2h_even'] = '1';
+                                temp_data[key]['json2html_even'] = '1';
                             } else {
-                                temp_data[key]['j2h_odd'] = '1';
+                                temp_data[key]['json2html_odd'] = '1';
                             };
                         }
 
@@ -543,7 +549,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                         name_template = name_template.split(',', 2);
                         let dataindex = name_template[1];
                         name_template = name_template[0];
-                        curData = get_from_data(curData, dataindex);
+                        curData = get_from_data(curData, dataindex, local_template_instance_id);
                     }
                     str = str_replace(j_templ[0] + name_template_all + j_templ[1], inject(curData, name_template), str);
                 } else {
@@ -561,6 +567,28 @@ if ((jth === undefined) || (json2html === undefined)) {
             return my_trim(str);
         }
 
+        function executeJS(element) {
+            let scripts = Array.prototype.slice.call(element.getElementsByTagName("script"));
+            for (let i = 0; i < scripts.length; i++) {
+                if (scripts[i].src != "") {
+                    let dochead = document.getElementsByTagName("head")[0];
+                    let url = my_trim(scripts[i].src);
+                    let id = str_replace('.', '_', str_replace(':', '_', str_replace('/', '_', url)));
+                    let js_exists = document.getElementById(id);
+                    if (js_exists) {
+                        //already was dinamically (NOT STATIC) injected
+                    } else {
+                        let tag = document.createElement("script");
+                        tag.src = url;
+                        tag.id = id;
+                        dochead.appendChild(tag);
+                    }
+                } else {
+                    eval(scripts[i].innerHTML);
+                }
+                scripts[i].parentElement.removeChild(scripts[i]);
+            }
+        }
 
         function inject2DOM(data, name, selector) {
             let elements = null;
@@ -575,11 +603,12 @@ if ((jth === undefined) || (json2html === undefined)) {
                 let element = elements[i];
                 if ('innerHTML' in element) {
                     element.innerHTML = html;
+                    executeJS(element);
                 }
             }
             return html;
-
         }
+
         //replace substring by another substring
         //usefull for templates
         function str_replace(search, replace, osubject) {
@@ -632,9 +661,9 @@ if ((jth === undefined) || (json2html === undefined)) {
             let print_red_text = "";
             if (!level) level = 0;
             let level_padding = "";
-            for (var j = 0; j < level + 1; j++) level_padding += "    ";
+            for (let j = 0; j < level + 1; j++) level_padding += "    ";
             if (typeof(arr) == 'object') {
-                for (var item in arr) {
+                for (let item in arr) {
                     let value = arr[item];
                     if (typeof(value) == 'object') {
                         print_red_text += level_padding + "'" + item + "' :\n";
@@ -716,7 +745,7 @@ if ((jth === undefined) || (json2html === undefined)) {
             oAjaxReq.onload = function(evt) {
                 if (oAjaxReq.readyState == 4) {
                     if (oAjaxReq.status == 200) {
-                        var text = oAjaxReq.responseText;
+                        let text = oAjaxReq.responseText;
                         if (is_json_result) {
                             try {
                                 mycallback(JSON.parse(text));
@@ -776,7 +805,13 @@ if ((jth === undefined) || (json2html === undefined)) {
         }
 
         function normalizeTemplates(arr) {
-            for (var item in arr) {
+            for (let item in arr) {
+                arr[item] = str_replace(j_var[0].charAt(0) + ' ' + j_var[0].charAt(1), j_var[0], arr[item]);
+                arr[item] = str_replace(j_loop[0].charAt(0) + ' ' + j_loop[0].charAt(1), j_loop[0], arr[item]);
+                arr[item] = str_replace(j_templ[0].charAt(0) + ' ' + j_templ[0].charAt(1), j_templ[0], arr[item]);
+                arr[item] = str_replace(j_var[1].charAt(0) + ' ' + j_var[1].charAt(1), j_var[1], arr[item]);
+                arr[item] = str_replace(j_loop[1].charAt(0) + ' ' + j_loop[1].charAt(1), j_loop[1], arr[item]);
+                arr[item] = str_replace(j_templ[1].charAt(0) + ' ' + j_templ[1].charAt(1), j_templ[1], arr[item]);
                 arr[item] = str_replace(j_var[0] + '  ', j_var[0], arr[item]);
                 arr[item] = str_replace(j_var[0] + ' ', j_var[0], arr[item]);
                 arr[item] = str_replace(j_loop[0] + '  ', j_loop[0], arr[item]);
@@ -956,6 +991,7 @@ if ((jth === undefined) || (json2html === undefined)) {
                     let html = inject(data, template);
                     this.each(function() {
                         jQuery(this).html(html);
+                        executeJS(jQuery(this)[0]);
                     });
                     return this;
                 }
@@ -1085,7 +1121,7 @@ if ((jth === undefined) || (json2html === undefined)) {
             if (Array.isArray(keys) && (keys.length > 0)) {
                 customKeys = true;
             }
-            for (var key in obj) {
+            for (let key in obj) {
                 if (obj[key] === undefined || obj[key] === null || Number.isInteger(obj[key])) continue;
                 if (Array.isArray(obj[key]) || (typeof obj[key]) == 'object') {
                     translate(obj[key], keys)
@@ -1185,6 +1221,7 @@ if ((jth === undefined) || (json2html === undefined)) {
             loadTemplatesArray: loadTemplatesArray, //load multi-files templates with callback after all files loaded successfully
             setTranslationArray: setTranslationArray, // set translation array with keys as part of "@str.key" in strings without prefix "@str."
             translate: translate, //if you need to translate JSON object manually. All templates are translated automatically
+            executeJS: executeJS, //run injected code inside components.
             printObject: printObject, //for debug to see contend of object. you can use "vardump" keyword - [*variable.vardump*]. If you want to see content in HTML
             setDebug: setDebug, //for console output of all library warnings and errors
             serializeHtmlForm: serializeHtmlForm //extend JQuery.serializeArray() with unchecked checkboxes and arrays. You can use JQuery.serializeHtmlForm()
