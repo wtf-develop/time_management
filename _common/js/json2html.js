@@ -609,25 +609,11 @@ if ((jth === undefined) || (json2html === undefined)) {
             return html;
         }
 
-        //replace substring by another substring
-        //usefull for templates
         function str_replace(search, replace, osubject) {
             if (osubject === undefined) return osubject;
+            return osubject.replaceAll(search, replace);
             //return osubject.replace(search,replace);//replaced only first simbol - can not be user here
-            return osubject.split(search).join(replace);
-        }
-
-        //special function for filter
-        function str_replace_first(search, replace, osubject, start) {
-            let i = osubject.indexOf(search, start);
-            if (i == -1) {
-                return osubject;
-            };
-            let temp = [
-                osubject.substr(0, i),
-                osubject.substr(i + search.length, osubject.length - (i + search.length))
-            ]
-            return temp[0] + replace + temp[1];
+            //return osubject.split(search).join(replace);
         }
 
         //trim function - remove first and last spaces
@@ -637,17 +623,6 @@ if ((jth === undefined) || (json2html === undefined)) {
             };
             if (str.length < 1) return '';
             return str.trim(); //str = str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-        }
-
-        function del_dub_space(str) {
-            if (str === undefined || str === null) {
-                return '';
-            };
-            str = my_trim(str);
-            while (str.indexOf('  ') != -1) {
-                str = str_replace('  ', ' ', str);
-            }
-            return str;
         }
 
         function debug_log(s) {
@@ -1013,12 +988,14 @@ if ((jth === undefined) || (json2html === undefined)) {
             templates_callback_function();
         }
 
-        function loadTemplatesArray(arr, func) {
+        function loadTemplatesArray(arr, func, reset = true) {
             if (!isAllTemplatesLoaded()) {
                 alert('Critical error.\nTrying to load templates before previous templates request is completed');
             }
             let i = 0;
-            shadow_templates_object = {};
+            if (reset) {
+                shadow_templates_object = {};
+            }
             templates_callback_function = func;
             lockTemplateCallback();
             for (i = 0; i < arr.length; i++) {
