@@ -611,9 +611,10 @@ if ((jth === undefined) || (json2html === undefined)) {
 
         function str_replace(search, replace, osubject) {
             if (osubject === undefined) return osubject;
-            return osubject.replaceAll(search, replace);
+            //return osubject.replaceAll(search, replace);
+            return osubject.split(search).join(replace);
             //return osubject.replace(search,replace);//replaced only first simbol - can not be user here
-            //return osubject.split(search).join(replace);
+            //
         }
 
         //trim function - remove first and last spaces
