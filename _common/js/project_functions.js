@@ -36,7 +36,8 @@ function getLang() {
 }
 
 
-function showProgressIn(element, mainPage = false) {
+function showProgressIn(element, tmainPage) {
+    var mainPage = (typeof tmainPage == 'undefined') ? false : tmainPage;
     var temp = $(element).attr("oldhtml");
     if (temp === undefined) temp = '';
     if (temp.length > 0) return;
