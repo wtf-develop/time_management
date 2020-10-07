@@ -1,43 +1,43 @@
 NextTemplateName: timeline
-[!data.timers,timeline_block!]
+{+data.timers,timeline_block+}
 
 
 NextTemplateName: event_type
-[*type,if=`0`then`@str.timer_event`else``*]
-[*type,if=`1`then`@str.date_event`else``*]
+{{type,if=`0`then`@str.timer_event`else``}}
+{{type,if=`1`then`@str.date_event`else``}}
 
 NextTemplateName: timeline_block
-<div class="w-100 mt-[*j2h_counter,if=`0`then`0`else`5`*] pb-0 mb-0">
-    [*data.length,ift=`0`then`timeline_free_day`else`timeline_day`*]
+<div class="w-100 mt-{{j2h_counter,if=`0`then`0`else`5`}} pb-0 mb-0">
+    {{data.length,ift=`0`then`timeline_free_day`else`timeline_day`}}
 </div>
 
 NextTemplateName: timeline_free_day
 <div clear="all"
-     class="text-sm-left text-md-left text-lg-center text-success p-3 text-xl-center mt-0 pb-0 mb-0 bg-light"><i>{{day_week_name}}</i>
+     class="text-sm-left text-md-left text-lg-center text-success p-3 text-xl-center mt-0 pb-0 mb-0 bg-light"><i>{:day_week_name:}</i>
 </div>
 
 NextTemplateName: timeline_day
-<div clear="all" class="text-sm-left text-md-left text-lg-center text-xl-center mt-0 pb-0 mb-0"><big><b>{{day_week_name}}</b></big>
+<div clear="all" class="text-sm-left text-md-left text-lg-center text-xl-center mt-0 pb-0 mb-0"><big><b>{:day_week_name:}</b></big>
 </div>
 <section class="cd-timeline js-cd-timeline pt-0 mt-0">
     <div class="tcontainer max-width-lg cd-timeline__container">
-        [!data,timeline_item!]
+        {+data,timeline_item+}
     </div>
 </section> <!-- cd-timeline -->
 
 NextTemplateName: timeline_item
 <div class="cd-timeline__block">
-    <div class="cd-timeline__img cd-timeline__img[*type,if=`1`then`--day`else``*]">
-        [*type,ift=`0`then`timeline_time`else`event_type`*]
+    <div class="cd-timeline__img cd-timeline__img{{type,if=`1`then`--day`else``}}">
+        {{type,ift=`0`then`timeline_time`else`event_type`}}
     </div> <!-- cd-timeline__img -->
 
     <div class="cd-timeline__content text-component">
-        <h4>[*title*]</h4>
-        <p class="color-contrast-medium"><big>[*desc*]</big></p>
-        <p class="color-contrast-medium">[*phone*]<br>[*email*]</p>
+        <h4>{{title}}</h4>
+        <p class="color-contrast-medium"><big>{{desc}}</big></p>
+        <p class="color-contrast-medium">{{phone}}<br>{{email}}</p>
 
         <div class="flex justify-between items-center">
-            <span class="cd-timeline__date">[*type,ift=`0`then`event_type`else``*]{{month_date}}</span>
+            <span class="cd-timeline__date">{{type,ift=`0`then`event_type`else``}}{:month_date:}</span>
         </div>
     </div> <!-- cd-timeline__content -->
 </div> <!-- cd-timeline__block -->

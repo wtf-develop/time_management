@@ -6,11 +6,11 @@ NextTemplateName: loader_big
 
 
 NextTemplateName: raw_value
-[*this*]
+{{this}}
 
 
 NextTemplateName: select_option
-<option value="[*id*]" [*selected,if=`true||1`then`selected`*]>[*name*]</option>
+<option value="{{id}}" {{selected,if=`true||1`then`selected`}}>{{name}}</option>
 
 
 NextTemplateName: toast_message
@@ -18,14 +18,14 @@ NextTemplateName: toast_message
      style="min-height: 100px; position: fixed; top: 20px;right:90px;display:block;z-index:10000;"
      data-autohide="false">
     <div class="toast-header bg-secondary">
-        <span class="mr-auto text-[*toast.title,ifc=``then`white`else`warning`*]">[*toast.title,ifc=``then`@str.information`*]</span>
+        <span class="mr-auto text-{{toast.title,ifc=``then`white`else`warning`}}">{{toast.title,ifc=``then`@str.information`}}</span>
         <button onClick="$('#toast_modal').remove();return false;" type="button" class="ml-2 mb-1 close"
                 data-dismiss="toast" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="toast-body text-dark">
-        [*toast.message*]
+        {{toast.message}}
     </div>
 </div>
 
@@ -34,13 +34,13 @@ NextTemplateName: error_message
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content mb-5">
             <div class="modal-header pt-3 pb-2" style="border-bottom: 0px solid #dee2e6;" onClick="$('#error_modal').remove();return false;">
-                <h5 class="modal-title">[*error.title,ifc=``then`@str.error`*]</h5>
+                <h5 class="modal-title">{{error.title,ifc=``then`@str.error`}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="pb-1 modal-body">
-                <p>[*error.message*]</p>
+                <p>{{error.message}}</p>
             </div>
             <div class="modal-footer" style="border-top: 0px solid #dee2e6;">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"

@@ -25,7 +25,7 @@ NextTemplateName: page
     <div id="login-row">
         <p align="right" style="position:absolute;top: 18px; right:26px;" class="small m-0 p-0 text-right"
            id="login-header"><a style="color:#bbb;" class="google-link"
-                                href="https://github.com/wtf-develop/time_management/releases" target="_blank">[*version*]</a>
+                                href="https://github.com/wtf-develop/time_management/releases" target="_blank">{{version}}</a>
         </p>
         <div id="login-column" class="pt-1">
             <div id="login-box">
@@ -36,16 +36,16 @@ NextTemplateName: page
                                                                                   width="40" height="40" border="0"/>
                         @str.application</a></h3>
                     <div id="formContainer">
-                        {{form}}
+                        {:form:}
                     </div>
                     <div class="form-group text-center mt-3 p-0 mb-0">
                         <select onchange="setLanguage($(this).val());" style="font-size: .85rem;"
                                 class="w-50 mb-0 custom-select custom-select-sm"
                                 id="inlineLanguageSelect">
-                            <option value="en" [*code,if=`en`then`selected`else``*]>English</option>
-                            <option value="ru" [*code,if=`ru`then`selected`else``*]>Русский</option>
-                            <option value="uk" [*code,if=`uk`then`selected`else``*]>Український</option>
-                            <option value="de" [*code,if=`de`then`selected`else``*]>Deutsch</option>
+                            <option value="en" {{code,if=`en`then`selected`else``}}>English</option>
+                            <option value="ru" {{code,if=`ru`then`selected`else``}}>Русский</option>
+                            <option value="uk" {{code,if=`uk`then`selected`else``}}>Український</option>
+                            <option value="de" {{code,if=`de`then`selected`else``}}>Deutsch</option>
                         </select>
                     </div>
                 </form>
@@ -74,5 +74,5 @@ NextTemplateName: page
             </table>
         </div>
     </div>
-    <span class="text-secondary" style="position:static; top:0px;opacity:0.4;"><small>@str.registered_users [*users*]</small></span>
+    <span class="text-secondary" style="position:static; top:0px;opacity:0.4;"><small>@str.registered_users {{users}}</small></span>
 </div>

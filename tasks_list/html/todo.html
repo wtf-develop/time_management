@@ -1,38 +1,38 @@
 NextTemplateName: all_panels
 <div class="row p-0 ml-1 mr-1">
-    [!data.panels,todo_panel!]
+    {+data.panels,todo_panel+}
 </div>
 
 NextTemplateName: todo_large_width
-[*state,if=`20`then`col-lg-5`else``*]
-[*state,if=`30`then`col-lg-4`else``*]
-[*state,if=`40`then`col-lg-3`else``*]
+{{state,if=`20`then`col-lg-5`else``}}
+{{state,if=`30`then`col-lg-4`else``}}
+{{state,if=`40`then`col-lg-3`else``}}
 
 NextTemplateName: todo_panel
-<div class="card col-sm-12 col-md-6 {{todo_large_width}} p-0 m-0" id="[*id*]">
+<div class="card col-sm-12 col-md-6 {:todo_large_width:} p-0 m-0" id="{{id}}">
     <div class="card-header bg-secondary align-middle text-light text-center pt-2 pb-2">
-        <span>[*pname*]</span>
+        <span>{{pname}}</span>
     </div>
     <ul class="list-group list-group-flush todo_content p0 bg-light" style="min-height:250px;height:100%;">
-        [!items,todo_item!]
+        {+items,todo_item+}
     </ul>
 </div>
 
 NextTemplateName: todo_item
-<li id-data="[*id*]" class="border bg-white shadow-sm rounded mb-1 list-group-item todo_item d-flex justify-content-between p-2 align-middle"
-    id="item[*id*]">
+<li id-data="{{id}}" class="border bg-white shadow-sm rounded mb-1 list-group-item todo_item d-flex justify-content-between p-2 align-middle"
+    id="item{{id}}">
 
-    <div class="text-center align-middle rounded border border-light {{priority_color}}" style="width:10px">&nbsp;</div>
-    <div class="p-2 pr-1 align-middle w-100"><b class="text-dark">[*title*]</b><div class="small text-secondary">[*desc*]</div></div>
+    <div class="text-center align-middle rounded border border-light {:priority_color:}" style="width:10px">&nbsp;</div>
+    <div class="p-2 pr-1 align-middle w-100"><b class="text-dark">{{title}}</b><div class="small text-secondary">{{desc}}</div></div>
 
     <div class="sub-draggable text-muted align-middle p-1 pt-2"
          style="opacity:0.4; height:100%; border: 0px solid black;"><span data-feather="move"></span></div>
 </li>
 
 NextTemplateName: priority_color
-[*priority,if=`0`then`bg-light`else``*]
-[*priority,if=`10`then`bg-secondary`else``*]
-[*priority,if=`20`then`bg-info`else``*]
-[*priority,if=`30`then`bg-success`else``*]
-[*priority,if=`40`then`bg-warning`else``*]
-[*priority,if=`50`then`bg-danger`else``*]
+{{priority,if=`0`then`bg-light`else``}}
+{{priority,if=`10`then`bg-secondary`else``}}
+{{priority,if=`20`then`bg-info`else``}}
+{{priority,if=`30`then`bg-success`else``}}
+{{priority,if=`40`then`bg-warning`else``}}
+{{priority,if=`50`then`bg-danger`else``}}

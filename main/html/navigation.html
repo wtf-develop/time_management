@@ -1,8 +1,8 @@
 NextTemplateName: page_structure
-{{top_navigation}}
+{:top_navigation:}
 <div class="container-fluid w-100 p-0 m-0" style="height: 100%; width:100%;" align="left" width="100%" height="100%">
     <div class="row p-0 m-0 w-100" style="height: 100%; width:100%;" align="left" width="100%" height="100%">
-        {{left_menu}}
+        {:left_menu:}
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 p-0 m-0">
             <iframe name="frame_content" id="frame_content" class="frame_content" src="_common/img/loader.gif"
                     scrolling="yes" noresize="noresize" title="frame_content" framespacing="0" frameborder="0"
@@ -15,7 +15,7 @@ NextTemplateName: page_structure
 NextTemplateName: top_navigation
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" onclick="return false;" href="#"><span
-            data-feather="user"></span> <span style="text-transform: capitalize;">[*data.login*]</span></a>
+            data-feather="user"></span> <span style="text-transform: capitalize;">{{data.login}}</span></a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
             data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -53,21 +53,21 @@ NextTemplateName: left_dropdown
         @str.all_devices
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        [!data.all_devices,left_dropdown_item!]
+        {+data.all_devices,left_dropdown_item+}
         <div class="dropdown-divider"></div>
-        [!data.own_devices,left_dropdown_item!]
+        {+data.own_devices,left_dropdown_item+}
         <div class="dropdown-divider"></div>
-        [!data.linked_devices,left_dropdown_item!]
+        {+data.linked_devices,left_dropdown_item+}
     </div>
 </div>
 
 NextTemplateName: left_dropdown_item
-<a id="dropdev[*id*]" onclick="return setDevId('[*id*]');" style="text-transform: none;"
-   class="dropdev_items dropdown-item [*selected,if=`true||1`then`active`else``*]" href="#">[*user,
-    ift=``then``else`user_name_dropdown`*][*name*]</a>
+<a id="dropdev{{id}}" onclick="return setDevId('{{id}}');" style="text-transform: none;"
+   class="dropdev_items dropdown-item {{selected,if=`true||1`then`active`else``}}" href="#">{{user,
+    ift=``then``else`user_name_dropdown`}}{{name}}</a>
 
 NextTemplateName: user_name_dropdown
-<b>[*user*]</b>&nbsp;-&nbsp;
+<b>{{user}}</b>&nbsp;-&nbsp;
 
 
 NextTemplateName: left_menu
@@ -75,7 +75,7 @@ NextTemplateName: left_menu
      style="overflow: hidden;width: 100%;height: 100%;">
     <div class="sidebar-sticky pt-0" style="width: 100%;overflow-y: auto;padding-right:17px;box-sizing: content-box;">
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-2 text-muted pb-0">
-            {{left_dropdown}}
+            {:left_dropdown:}
         </h6>
         <ul class="nav flex-column">
             <li class="nav-item nowrap">

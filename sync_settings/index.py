@@ -40,7 +40,7 @@ print("""<!DOCTYPE html>
 
     <script type="text/javascript" src="../_common/js/jquery.min.js"></script>
     <script type="text/javascript" src="../_common/js/jquery.mobile-events.min.js"></script>
-    <script type="text/javascript" src="../_common/js/json2html.js"></script>
+    <script type="text/javascript" src="../_common/js/json2html.min.js"></script>
     <script type="text/javascript" src="../_common/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_common/js/feather.min.js"></script>
     <script type="text/javascript" src="../_common/js/project_functions.js"></script>
