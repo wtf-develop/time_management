@@ -90,7 +90,7 @@ CREATE TABLE `tasks` (
   `created` bigint NOT NULL DEFAULT 0 COMMENT 'time when task was created',
   `repeat_type` tinyint DEFAULT 0 COMMENT '0 - without repeat, 1 every day, 2 every week, 3 few days of week, 4 monthly, 5 - quarterly, 6 - annulary',
   `repeat_value` int DEFAULT 0 COMMENT 'repeat_type =2,3: week bit mask. Sunday - bit number 1, 0 bit not used. repeat_type=7, count of days for repeat event',
-  `defered_interval` int DEFAULT 0 COMMENT 'task was defered',
+  `defered_interval` bigint DEFAULT 0 COMMENT 'task was defered',
   `year` smallint DEFAULT NULL,
   `month` tinyint DEFAULT 1,
   `day` tinyint DEFAULT 1,
