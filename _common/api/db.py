@@ -118,6 +118,9 @@ def saveTask(data: dict) -> int:
     if (data['id'] == 0) and (('created' not in data) or (data['created'] is None) or (int(data['created']) < 10)):
         data['created'] = timestampstr  # dont change this later never!
 
+    # internal update time field
+    data['srv_update_time'] = timestampstr
+
     # always update time after any changes
     if ('update_time' not in data) or (data['update_time'] is None):
         data['update_time'] = timestampstr

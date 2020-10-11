@@ -16,7 +16,7 @@ from _common.api import auth
 
 
 def getServerVersion() -> str:
-    return "0.5-beta"
+    return "0.6-beta"
 
 
 def removeDoubleSpaces(s: str) -> str:
