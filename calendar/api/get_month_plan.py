@@ -43,6 +43,10 @@ for row in rows:
         if (row['type'] == 1):
             event['color'] = '#193'
             event['allDay'] = True
+            if (row['day'] == 0):
+                bug_obj = date_utils.getHumanTime(row['timezone'], row['start_time'])
+                row['day'] = bug_obj['day']
+                row['month'] = bug_obj['month']
             task_time_obj = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'],
                                                     month=row['month'], day=row['day'], hour=0,
                                                     minute=0, seconds=0, ms=1)
@@ -64,6 +68,10 @@ for row in rows:
                 task_time_obj = date_utils.getHumanTime(timezone_offset=row['timezone'],
                                                         timestamp=row['start_time'])
             else:
+                if (row['day'] == 0):
+                    bug_obj = date_utils.getHumanTime(row['timezone'], row['start_time'])
+                    row['day'] = bug_obj['day']
+                    row['month'] = bug_obj['month']
                 task_time_obj = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'],
                                                         month=row['month'], day=row['day'], hour=row['hour'],
                                                         minute=row['minute'])

@@ -45,13 +45,17 @@ sql = 'select * from tasks t where (t.type=0 or t.type=1) and t.state=20 and t.s
         time_endweek) + ' and ' + sql_filter + ' order by t.type, t.start_time'
 db.sql_request(sql)
 rows = mydb.fetchall()
-toastMessage=None
+toastMessage = None
 if (rows is None) or len(rows) < 1:
-    toastMessage='@str.no_tasks_week'
+    toastMessage = '@str.no_tasks_week'
 for row in rows:
     task_time_obj = {}
     timestamp = 0
     if (row['type'] == 1):
+        if (row['day'] == 0):
+            bug_obj = date_utils.getHumanTime(row['timezone'],row['start_time'])
+            row['day'] = bug_obj['day']
+            row['month'] = bug_obj['month']
         task_time_obj = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'],
                                                 month=row['month'], day=row['day'], hour=row['hour'],
                                                 minute=row['minute'])
@@ -64,6 +68,10 @@ for row in rows:
         if (row['utc_flag'] != 0):
             timestamp = row['start_time']
         else:
+            if (row['day'] == 0):
+                bug_obj = date_utils.getHumanTime(row['timezone'], row['start_time'])
+                row['day'] = bug_obj['day']
+                row['month'] = bug_obj['month']
             task_time_obj = date_utils.getTimestamp(timezone_offset=row['timezone'], year=row['year'],
                                                     month=row['month'], day=row['day'], hour=row['hour'],
                                                     minute=row['minute'])
@@ -72,6 +80,6 @@ for row in rows:
             if (timestamp < days_time[i]):
                 timers[i]['data'].append(row)
                 break
-    #row['hour']=str(row['hour']).rjust(2, '0')
+    # row['hour']=str(row['hour']).rjust(2, '0')
     row['minute'] = str(row['minute']).rjust(2, '0')
-headers.goodResponse({'timers': timers},toastMessage)
+headers.goodResponse({'timers': timers}, toastMessage)
