@@ -9,6 +9,7 @@ Donate: [>> PayPal <<](https://paypal.me/LeonidDonate)
 You can install this sources in any other place and change settings inside Application to use your installation.
 
 # Installation
+Why Python? Just for fun, I wanted to get acquainted with this language.  I think it's good when learning from the beginning can benefit many people.  But PHP would actually be better here.
 
 1) Setup server environment (look "Server requirements")
 2) Create database structure from file **zzz_database.sql**
