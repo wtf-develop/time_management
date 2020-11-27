@@ -1,0 +1,17 @@
+_common/js/*.min.js linguist-vendored
+_common/css/*.min.css linguist-vendored
+calendar/js/calendar.js linguist-vendored
+calendar/js/day_grid.js linguist-vendored
+calendar/js/calendar*.js linguist-vendored
+calendar/js/*.min.js linguist-vendored
+login/js/*.min.js linguist-vendored
+*.min.js linguist-detectable=false
+*.min.css linguist-detectable=false
+_common/js/*.min.js linguist-detectable=false
+_common/css/*.min.css linguist-detectable=false
+calendar/js/calendar.js linguist-detectable=false
+calendar/js/day_grid.js linguist-detectable=false
+calendar/js/calendar*.js linguist-detectable=false
+calendar/js/*.min.js linguist-detectable=false
+login/js/*.min.js linguist-detectable=false
+sync_settings/js/graph_lib.js linguist-detectable=false
